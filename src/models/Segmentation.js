@@ -1,16 +1,26 @@
-var m = require("mithril")
+import m from 'mithril';
 
-var Segmentation = {
-    data: [],
-    loadData: function(deid, bending) {
-        return m.request({
-            method: "GET",
-            url: "http://localhost:8080/dualsampas?deid=" + deid + "&" + "bending=" + bending,
-        }).then(function(result) {
-            console.log(result)
-            Segmentation.data = result.DualSampas
-        })
-    }
-}
+const server = 'http://localhost:8080';
 
-module.exports = Segmentation
+const request = (deid, bending, what) => {
+  const url= server + '/' + what + '?deid=' + deid + '&' + 'bending=' + bending;
+  return m.request({
+    method: 'GET',
+    url: url
+  });
+};
+
+const Segmentation = {
+  degeo: {},
+  dualSampas: [],
+  loadData: (deid, bending) => {
+    const ds = request(deid, bending, 'dualsampas');
+    const geo = request(deid, bending, 'degeo');
+    Promise.all([ds, geo]).then((result) => {
+      Segmentation.dualSampas = result[0].DualSampas;
+      Segmentation.degeo = result[1];
+    });
+  }
+};
+
+export default Segmentation;

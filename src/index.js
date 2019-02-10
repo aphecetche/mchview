@@ -1,26 +1,19 @@
-const m = require('mithril');
+import m from 'mithril';
+import TopBar from './views/TopBar';
+import MchViewPort from './views/MchViewPort';
 
-// const DetectionElement = require('./views/DetectionElement.js');
-
-const Help = {
-  /** Default view
-   * @return {object} a default H1
-   * */
-  view: function() {
-    return m('h1', 'help');
+const Header = {
+  view: () => {
+    return m(TopBar, 'header');
   }
 };
 
-const root = document.body;
-
-m.route(root, '/help', {
-  '/help': Help,
-  '/de': {
-  /** Default view
-   * @return {object} a default p
-   * */
-    view: function() {
-      return m('p', 'de');
-    }
+const mchviewApp = {
+  view: () => {
+    return m('mchview',
+      m(Header),
+      m(MchViewPort));
   }
-});
+};
+
+m.mount(document.body, mchviewApp);

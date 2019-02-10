@@ -1,0 +1,6 @@
+@import "./common.css";
+
+header.topbar {
+    background: var(--background-color);
+    display: flex;
+}
