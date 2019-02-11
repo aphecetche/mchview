@@ -1,6 +1,6 @@
 
 const path = require('path');
-
+const webpack = require('webpack');
 module.exports = {
   mode: 'development',
   entry: './src/index.js',
@@ -28,4 +28,8 @@ module.exports = {
       }
     ]
   },
+
+  plugins: [
+    new webpack.EnvironmentPlugin({APIURL: 'http://localhost:8080'})
+  ]
 };

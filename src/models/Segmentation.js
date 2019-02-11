@@ -1,6 +1,6 @@
 import m from 'mithril';
 
-const server = 'http://localhost:8080';
+const server = process.env.APIURL;
 
 const request = (deid, bending, what) => {
   const url= server + '/' + what + '?deid=' + deid + '&' + 'bending=' + bending;
