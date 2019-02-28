@@ -1,31 +1,31 @@
 @import "./common.css";
 
 ul.outlineselector {
-  padding: 0;
-  margin: 0;
   display: flex;
+  margin: 0;
+  padding: 0;
 
   & li {
+    display: flex;
     margin: 10px 0;
     padding: 0 0 0 10px;
-    display: flex;
 
     & input[type="checkbox"] {
       display: none;
 
       & ~ label {
-        border: 1px solid var(--disabled-color);
-        border-radius: 10px;
         display: flex;
         margin: auto 0;
         padding: 10px;
         color: var(--disabled-color);
+        border: 1px solid var(--disabled-color);
+        border-radius: 10px;
         user-select: none;
       }
 
       &:checked ~ label {
-        border: 1px solid var(--text-color);
         color: var(--text-color);
+        border: 1px solid var(--text-color);
       }
     }
   }
@@ -37,11 +37,11 @@ ul.outlineselector {
   & button {
     width: 48px;
     height: 48px;
+    margin: auto 0 auto 10px;
     color: var(--text-color);
+    background: none;
     border: 1px solid var(--text-color);
     border-radius: 100%;
-    margin: auto 0 auto 10px;
-    background: none;
 
     &:disabled {
       color: var(--disabled-color);

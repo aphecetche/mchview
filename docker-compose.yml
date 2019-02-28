@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  mchview:
+    build: . 
+    ports:
+      - "5678:80"
+
+  ccdb-api:
+    build: 
+      context: ./ccdb-api
+    volumes:
+      - /Users/laurent/alice/ccdb/local-repo:/ccdb/data
+    ports:
+      - ${CCDB_API_PORT}:${CCDB_API_PORT}
+
+  ccdb-json-api:
+    # build: ./ccdb-json-api
+    image: serve-ocdb:latest
+    entrypoint:
+      - /serve-ocdb
+    command:
+      - --ccdb
+      - http://ccdb-api:${CCDB_API_PORT}
+      - --port
+      - ${CCDB_JSON_API_PORT}
+    depends_on:
+      - ccdb-api
+    ports:
+      - ${CCDB_JSON_API_PORT}:${CCDB_JSON_API_PORT}
+
+  # mapping-api:
+  #   build: ./mapping-api
