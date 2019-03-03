@@ -15,3 +15,5 @@ const mchviewApp = {
 };
 
 m.mount(document.body, mchviewApp);
+
+console.log(`port is ${process.env.MCH_MAPPING_API_PORT}`);

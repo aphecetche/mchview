@@ -1,7 +1,7 @@
 const path = require("path");
-const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -21,7 +21,7 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(["dist/*"]),
-    new webpack.EnvironmentPlugin({ APIURL: "http://localhost:8080" }),
+    new Dotenv(),
     new HtmlWebpackPlugin({ title: "MchView 2.0 Proto" })
   ]
 };
