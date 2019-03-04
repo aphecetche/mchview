@@ -1,6 +1,8 @@
 import m from "mithril";
 import TopBar from "./views/TopBar";
 import MchViewPort from "./views/MchViewPort";
+import BottomBar from "./views/BottomBar";
+import Modal from "./views/Modal";
 
 const Header = {
   view: () => {
@@ -8,12 +10,16 @@ const Header = {
   }
 };
 
+const Footer = {
+  view: () => {
+    return m(BottomBar, "footer");
+  }
+};
+
 const mchviewApp = {
   view: () => {
-    return m("mchview", m(Header), m(MchViewPort));
+    return m("mchview", m(Header), m(MchViewPort), m(Footer), m(Modal));
   }
 };
 
 m.mount(document.body, mchviewApp);
-
-console.log(`port is ${process.env.MCH_MAPPING_API_PORT}`);

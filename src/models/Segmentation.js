@@ -1,7 +1,7 @@
 import m from "mithril";
 
 const server = () => {
-  return "http://localhost:" + process.env.MCH_MAPPING_API_PORT;
+  return process.env.MCH_MAPPING_API_URL;
 };
 
 const request = (deid, bending, what) => {

@@ -1,0 +1,6 @@
+@import "./common.css";
+
+.bottombar {
+  min-height: 48px;
+  background: var(--background-color);
+}
