@@ -12,5 +12,6 @@
     background: none;
     border: 1px solid var(--text-color);
     border-radius: 10px;
+    cursor: pointer;
   }
 }

@@ -4,15 +4,12 @@ import m from "mithril";
 
 const dataSourceCreateButton = {
   view: () => {
-    return m(
-      "button.dataSourceCreateButton",
-      {
-        onclick: () => {
-          ShowModal.visible = !ShowModal.visible;
-        }
-      },
-      "New Data Source"
-    );
+    return m("button.dataSourceCreateButton", {
+      innerHTML: "New Data Source",
+      onclick: () => {
+        ShowModal.visible = true;
+      }
+    });
   }
 };
 
@@ -21,7 +18,7 @@ const BottomBar = {
    * @return {vnode} the bottom bar UI
    * */
   view: function() {
-    return m("footer", { class: "bottombar" }, m(dataSourceCreateButton));
+    return m("footer.bottombar", m(dataSourceCreateButton));
   }
 };
 

@@ -1,13 +1,9 @@
-import "./modal.css";
-import ShowModal from "../models/ShowModal";
-import CloseButton from "./CloseButton";
 import m from "mithril";
-
-const Occupancy = {
-  timestamp: 295820,
-  url: "https://ccdb-api:3333"
-};
-
+import "./modal.css";
+import CloseButton from "./CloseButton";
+import FetchButton from "./FetchButton";
+import Occupancy from "../models/Occupancy";
+import ShowModal from "../models/ShowModal";
 const ModalView = {
   view: () => {
     return m(
@@ -47,16 +43,18 @@ const ModalView = {
             }
           })
         ]),
-        m("button.fetch", "Fetch")
+        m(FetchButton)
       )
     );
   }
 };
 
-const Modal = {
-  view: () => {
-    return ShowModal.visible ? m(ModalView) : null;
-  }
-};
+function Modal() {
+  return {
+    view: () => {
+      return ShowModal.visible ? m(ModalView) : null;
+    }
+  };
+}
 
 export default Modal;
