@@ -1,5 +1,11 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+
 :root {
   --background-color: #303030;
   --text-color: #cdcdcd;
   --disabled-color: #585858;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
 }

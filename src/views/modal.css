@@ -11,13 +11,78 @@
 
 .modal main {
   position:absolute;
-  top: 15%;
+  top: 10px;
   left: 15%;
   width: 70%;
-  height: 70%;
+  padding: 0 10px;
   background: var(--background-color);
 }
 
 .modal p {
   color: white;
+}
+
+.modal header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+  border: none;
+
+  & label {
+    margin:1em 0;
+  }
+
+  & input {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--disabled-color);
+
+    &:focus {
+      border-bottom: 2px solid var(--text-color);
+      outline: none;
+    }
+
+    &:invalid {
+      color: red;
+
+      &:focus {
+        border-bottom: 2px dashed red;
+      }
+    }
+
+    &:valid:focus {
+      border-bottom: 2px solid green;
+    }
+
+    &::placeholder {
+      color:var(--disabled-color);
+    }
+  }
+
+}
+
+button.fetch {
+  display: flex;
+  width: auto;
+  margin: 2em auto;
+  font-size: 2em;
+  background: var(--text-color);
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in;
+
+  &:active,&:hover {
+    transform: scale(1.2);
+  }
 }

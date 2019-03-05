@@ -1,6 +1,16 @@
 @import "./common.css";
 
 .bottombar {
+  display: flex;
   min-height: 48px;
   background: var(--background-color);
+
+  & button {
+    margin: auto 0 auto 10px;
+    padding: 10px;
+    color: var(--text-color);
+    background: none;
+    border: 1px solid var(--text-color);
+    border-radius: 10px;
+  }
 }

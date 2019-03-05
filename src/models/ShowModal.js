@@ -1,5 +1,5 @@
 const ShowModal = {
-  visible: false
+  visible: true
 };
 
 export default ShowModal;
