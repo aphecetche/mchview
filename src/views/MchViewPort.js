@@ -1,4 +1,4 @@
-import "./mchviewport.css";
+import "./css/mchviewport.css";
 import m from "mithril";
 import drawOutline from "./draw.js";
 import ShowOutline from "../models/ShowOutline";

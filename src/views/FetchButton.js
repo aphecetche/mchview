@@ -13,7 +13,7 @@ const fetchOccupancy = (deid, timestamp, url) => {
       background: true
     })
     .then(function(ds) {
-      console.log(ds);
+      Occupancy.data = ds;
     });
 };
 

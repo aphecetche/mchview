@@ -1,5 +1,5 @@
 import m from "mithril";
-import "./closebutton.css";
+import "./css/closebutton.css";
 import ShowModal from "../models/ShowModal";
 
 const CloseButton = {

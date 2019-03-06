@@ -1,5 +1,6 @@
-import "./bottombar.css";
+import "./css/bottombar.css";
 import ShowModal from "../models/ShowModal";
+import DataSourceCard from "./DataSourceCard";
 import m from "mithril";
 
 const dataSourceCreateButton = {
@@ -18,7 +19,7 @@ const BottomBar = {
    * @return {vnode} the bottom bar UI
    * */
   view: function() {
-    return m("footer.bottombar", m(dataSourceCreateButton));
+    return m("footer.bottombar", m(dataSourceCreateButton), m(DataSourceCard));
   }
 };
 

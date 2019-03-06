@@ -1,5 +1,5 @@
 import m from "mithril";
-import "./modal.css";
+import "./css/modal.css";
 import CloseButton from "./CloseButton";
 import FetchButton from "./FetchButton";
 import Occupancy from "../models/Occupancy";
