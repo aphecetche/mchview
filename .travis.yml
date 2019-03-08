@@ -13,3 +13,14 @@ install:
 
 cache: npm
 
+after_script:
+  - docker images
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+
+deploy:
+  provider: script
+  script: docker push mrrtf/mchview
+  on:
+    branch: master
