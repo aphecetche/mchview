@@ -11,6 +11,9 @@ const changeValues = dualsampasJSON => {
 
 const dataValue = i => {
   let a = Occupancy.data["DualSampas"];
+  if (!a) {
+    return 0;
+  }
   let o = a[i];
   let mean = o["Mean"] / 0.01;
   return mean;

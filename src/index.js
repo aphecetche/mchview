@@ -3,6 +3,9 @@ import TopBar from "./views/TopBar";
 import MchViewPort from "./views/MchViewPort";
 import BottomBar from "./views/BottomBar";
 import Modal from "./views/Modal";
+import ShowModal from "./models/ShowModal";
+import RightSidePanel from "./views/RightSidePanel";
+import ShowRightSidePanel from "./models/ShowRightSidePanel";
 
 const Header = {
   view: () => {
@@ -16,9 +19,21 @@ const Footer = {
   }
 };
 
+const Main = {
+  view: () => {
+    if (ShowRightSidePanel.visible) {
+      return m("main", m(MchViewPort), m(RightSidePanel));
+    }
+    return m(MchViewPort);
+  }
+};
+
 const mchviewApp = {
   view: () => {
-    return m("mchview", m(Header), m(MchViewPort), m(Footer), m(Modal));
+    if (ShowModal.visible) {
+      return m("mchview", m(Header), m(Main), m(Footer), m(Modal));
+    }
+    return m("mchview", m(Header), m(Main), m(Footer));
   }
 };
 

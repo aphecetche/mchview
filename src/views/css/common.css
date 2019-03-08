@@ -6,6 +6,16 @@
   --disabled-color: #585858;
 }
 
+body {
+  margin:0;
+}
+
 html {
   font-family: 'Roboto', sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

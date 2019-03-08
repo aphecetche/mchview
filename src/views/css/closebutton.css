@@ -54,7 +54,7 @@ button.close {
     border-radius: 4px;
 
     &::before,&::after {
-      height: calc(var(--button-size)/2);
+      height: calc(var(--button-size) / 2);
       transform: rotate(0deg);
     }
   }
