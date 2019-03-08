@@ -1,9 +1,15 @@
 language: node_js
 
+services:
+  - docker
+
 node_js:
   - "node"
-  - "11.8"
 
 install:
-  - npm install && npm run build
+  - npm install 
+  - npm run build
+  - docker build -t mchview .
+
+cache: npm
 
