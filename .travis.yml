@@ -23,4 +23,6 @@ deploy:
   provider: script
   script: docker push mrrtf/mchview
   on:
-    branch: master
+    branch:
+      - travis
+      - master
