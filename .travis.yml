@@ -1,0 +1,25 @@
+language: node_js
+
+services:
+  - docker
+
+node_js:
+  - "node"
+
+install:
+  - npm install 
+  - npm run build
+  - docker build -t mrrtf/mchview .
+  - docker images
+
+cache: npm
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+
+deploy:
+  provider: script
+  script: docker push mrrtf/mchview
+  on:
+    branch:
+      - master
