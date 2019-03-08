@@ -10,11 +10,9 @@ install:
   - npm install 
   - npm run build
   - docker build -t mchview .
+  - docker images
 
 cache: npm
-
-after_script:
-  - docker images
 
 before_deploy:
   - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
@@ -25,4 +23,3 @@ deploy:
   on:
     branch:
       - travis
-      - master
