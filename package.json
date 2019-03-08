@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo no test specified",
     "start": "webpack-dev-server --config webpack.dev.js --watch --port 5678",
     "build": "webpack --config webpack.prod.js"
   },
