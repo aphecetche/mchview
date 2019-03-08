@@ -1,4 +1,4 @@
-import "./outlineselector.css";
+import "./css/outlineselector.css";
 import ShowOutline from "../models/ShowOutline.js";
 import m from "mithril";
 

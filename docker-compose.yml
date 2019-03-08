@@ -4,7 +4,7 @@ services:
   mchview:
     build: . 
     environment:
-      - MCH_MAPPING_API_PORT=${MCH_MAPPING_API_PORT}
+      - MCH_MAPPING_API_URL=${MCH_MAPPING_API_URL}
     ports:
       - "${MCHVIEW_PORT}:80"
 
@@ -15,28 +15,28 @@ services:
     ports:
       - ${MCH_MAPPING_API_PORT}:${MCH_MAPPING_API_PORT}
 
-  # ccdb-api:
-  #   build: 
-  #     context: ./ccdb-api
-  #   # volumes:
-  #   #   - /Users/laurent/alice/ccdb/local-repo:/ccdb/data
-  #   environment:
-  #     - TOMCAT_PORT=${CCDB_API_PORT}
-  #   ports:
-  #     - ${CCDB_API_PORT}:${CCDB_API_PORT}
-  #
-  # ccdb-json-api:
-  #   # build: ./ccdb-json-api
-  #   image: serve-ocdb:latest
-  #   entrypoint:
-  #     - /serve-ocdb
-  #   command:
-  #     - --ccdb
-  #     - http://ccdb-api:${CCDB_API_PORT}
-  #     - --port
-  #     - ${CCDB_JSON_API_PORT}
-  #   depends_on:
-  #     - ccdb-api
-  #   ports:
-  #     - ${CCDB_JSON_API_PORT}:${CCDB_JSON_API_PORT}
-  #
+  ccdb-api:
+    build: 
+      context: ./ccdb-api
+    volumes:
+      - /Users/laurent/alice/ccdb/local-repo:/ccdb/data
+    environment:
+      - TOMCAT_PORT=${CCDB_API_PORT}
+    ports:
+      - ${CCDB_API_PORT}:${CCDB_API_PORT}
+
+  ccdb-json-api:
+    # build: ./ccdb-json-api
+    image: serve-ocdb:latest
+    entrypoint:
+      - /serve-ocdb
+    command:
+      - --ccdb
+      - http://ccdb-api:${CCDB_API_PORT}
+      - --port
+      - ${CCDB_JSON_API_PORT}
+    depends_on:
+      - ccdb-api
+    ports:
+      - ${CCDB_JSON_API_PORT}:${CCDB_JSON_API_PORT}
+

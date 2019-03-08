@@ -1,6 +1,11 @@
 import m from "mithril";
 import TopBar from "./views/TopBar";
 import MchViewPort from "./views/MchViewPort";
+import BottomBar from "./views/BottomBar";
+import Modal from "./views/Modal";
+import ShowModal from "./models/ShowModal";
+import RightSidePanel from "./views/RightSidePanel";
+import ShowRightSidePanel from "./models/ShowRightSidePanel";
 
 const Header = {
   view: () => {
@@ -8,12 +13,28 @@ const Header = {
   }
 };
 
+const Footer = {
+  view: () => {
+    return m(BottomBar, "footer");
+  }
+};
+
+const Main = {
+  view: () => {
+    if (ShowRightSidePanel.visible) {
+      return m("main", m(MchViewPort), m(RightSidePanel));
+    }
+    return m(MchViewPort);
+  }
+};
+
 const mchviewApp = {
   view: () => {
-    return m("mchview", m(Header), m(MchViewPort));
+    if (ShowModal.visible) {
+      return m("mchview", m(Header), m(Main), m(Footer), m(Modal));
+    }
+    return m("mchview", m(Header), m(Main), m(Footer));
   }
 };
 
 m.mount(document.body, mchviewApp);
-
-console.log(`port is ${process.env.MCH_MAPPING_API_PORT}`);

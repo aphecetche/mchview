@@ -1,6 +1,6 @@
 module.exports = {
     "root": true,
-    "extends": ["eslint:recommended", "google", "prettier"],
+    "extends": ["prettier"],
     "env": {
         "es6": true,
         "node": true,
@@ -34,15 +34,6 @@ module.exports = {
             "args": "after-used",
             "ignoreRestSiblings": false,
             "argsIgnorePattern": "(next|model|^_)"
-        }],
-        "require-jsdoc": ["error", {
-            "require": {
-                "FunctionDeclaration": true,
-                "MethodDefinition": true,
-                "ClassDeclaration": true,
-                "ArrowFunctionExpression": true,
-                "FunctionExpression": true
-            }
         }],
         "prettier/prettier": "error"
     }

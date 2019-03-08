@@ -1,0 +1,63 @@
+@import "./common.css";
+
+:root {
+  --button-size: 48px;
+}
+
+.modal h1 {
+  color: var(--text-color);
+}
+
+button.close {
+  position: relative;
+  z-index:0;
+  box-sizing: border-box;
+  width: var(--button-size);
+  height: var(--button-size);
+  margin: 0;
+  overflow: hidden;
+  color: transparent;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &::before,&::after {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    display: block;
+    width: calc(1.42 * var(--button-size));
+    height: 1px;
+    background-color: var(--text-color);
+    transform-origin: center left;
+    transition: all 0.2s ease-in;
+    content: '';
+  }
+
+  &::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    bottom: 0;
+    transform: rotate(-45deg);
+  }
+
+  &:hover {
+    color: var(--background-color);
+    font-size: 0.5em;
+    text-align: center;
+    border-radius: 4px;
+
+    &::before,&::after {
+      height: calc(var(--button-size) / 2);
+      transform: rotate(0deg);
+    }
+  }
+
+}
+

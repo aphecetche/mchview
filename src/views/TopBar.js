@@ -1,4 +1,4 @@
-import "./topbar.css";
+import "./css/topbar.css";
 import m from "mithril";
 import OutlineSelector from "./OutlineSelector";
 import ElementSelector from "./ElementSelector";

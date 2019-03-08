@@ -1,14 +1,14 @@
 const ShowOutline = {
   chambers: false,
-  des: true,
-  dualSampas: false,
+  des: false,
+  dualSampas: true,
   pads: false,
 
   setAll: function() {
-    this.chambers = this.des=this.dualSampas=this.pads=true;
+    this.chambers = this.des = this.dualSampas = this.pads = true;
   },
   setNone: function() {
-    this.chambers = this.des=this.dualSampas=this.pads=false;
+    this.chambers = this.des = this.dualSampas = this.pads = false;
   },
   all: function() {
     return this.chambers && this.des && this.dualSampas && this.pads;

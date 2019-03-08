@@ -7,6 +7,7 @@ with all the relevant ports defined :
 CCDB_JSON_API_PORT=4343
 CCDB_API_PORT=6565
 MCH_MAPPING_API_PORT=3333
+MCH_MAPPING_API_URL=http://localhost:3333
 MCHVIEW_PORT=5678
 ```
 

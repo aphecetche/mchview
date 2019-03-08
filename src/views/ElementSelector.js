@@ -1,4 +1,4 @@
-import "./elementselector.css";
+import "./css/elementselector.css";
 import m from "mithril";
 import ShowElement from "../models/ShowElement.js";
 

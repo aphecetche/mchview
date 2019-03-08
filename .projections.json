@@ -1,0 +1,4 @@
+{
+"src/views/*.js": { "alternate": "src/views/css/{}.css" },
+"src/views/css/*.css": { "alternate": "src/views/{}.js" }
+}

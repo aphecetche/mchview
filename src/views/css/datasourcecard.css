@@ -1,0 +1,10 @@
+
+ul.datasourcecard {
+  display: inline-block;
+  color: var(--text-color);
+  list-style-type: none;
+
+  &li {
+    display: inline-block;
+  }
+}
