@@ -1,7 +1,7 @@
 import m from "mithril";
 
 const server = () => {
-  return process.env.MCH_MAPPING_API_URL;
+  return window.env.MCH_MAPPING_API;
 };
 
 const request = (deid, bending, what) => {

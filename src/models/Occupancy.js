@@ -1,6 +1,6 @@
 const Occupancy = {
   timestamp: 297624,
-  url: "http://localhost:4343",
+  url: window.env.CCDB_JSON_API,
   data: {}
 };
 

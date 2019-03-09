@@ -3,8 +3,6 @@ version: "3"
 services:
   mchview:
     build: . 
-    environment:
-      - MCH_MAPPING_API_URL=${MCH_MAPPING_API_URL}
     ports:
       - "${MCHVIEW_PORT}:80"
 
