@@ -9,4 +9,4 @@ EOF
 
 cat config.js
 
-nginx
+nginx -g "daemon off;"
