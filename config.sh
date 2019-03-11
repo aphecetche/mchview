@@ -1,12 +1,18 @@
 #!/bin/sh
 
-cat << EOF > config.js
+echo "In config.sh. Env="
+
+printenv
+
+dest=/usr/share/nginx/html/config.js
+
+cat << EOF > ${dest}
 window.env = {
   CCDB_JSON_API: "${CCDB_JSON_API:-http://localhost:4343}",
   MCH_MAPPING_API: "${MCH_MAPPING_API:-http://localhost:3333}"
 }
 EOF
 
-cat config.js
+cat ${dest}
 
 nginx -g "daemon off;"

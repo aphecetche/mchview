@@ -37,4 +37,5 @@ const mchviewApp = {
   }
 };
 
+console.log("mapping api at " + window.env.MCH_MAPPING_API);
 m.mount(document.body, mchviewApp);

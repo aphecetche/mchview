@@ -7,6 +7,7 @@ services:
     image: mrrtf/mchview
     environment:
       - MCHVIEW_PORT=${MCHVIEW_PORT}
+      - MCH_MAPPING_API=${MCH_MAPPING_API}
     ports:
       - "${MCHVIEW_PORT}:80"
 
