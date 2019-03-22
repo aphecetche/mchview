@@ -1,7 +1,7 @@
-import "./css/topbar.css";
+import "./topbar.css";
 import m from "mithril";
-import OutlineSelector from "./OutlineSelector";
-import ElementSelector from "./ElementSelector";
+import OutlineSelector from "../selectors/OutlineSelector";
+import ElementSelector from "../selectors/ElementSelector";
 const TopBar = {
   /** Default view
    * @return {vnode} the top bar UI

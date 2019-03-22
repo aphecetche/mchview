@@ -1,5 +1,5 @@
-import "./css/outlineselector.css";
-import ShowOutline from "../models/ShowOutline.js";
+import "./outlineselector.css";
+import ShowOutline from "../../models/ShowOutline.js";
 import m from "mithril";
 
 const OutlineSelector = {

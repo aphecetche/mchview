@@ -1,6 +1,6 @@
 import m from "mithril";
-import Occupancy from "../models/Occupancy";
-import "./css/datasourcecard.css";
+import Occupancy from "../../models/Occupancy";
+import "./datasourceselector.css";
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -12,7 +12,7 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-function DataSourceCard() {
+function DataSourceSelector() {
   return {
     view: () => {
       return m("ul.datasourcecard", [
@@ -23,4 +23,4 @@ function DataSourceCard() {
     }
   };
 }
-export default DataSourceCard;
+export default DataSourceSelector;

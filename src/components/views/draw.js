@@ -1,5 +1,5 @@
 import * as d3 from "d3";
-import Occupancy from "../models/Occupancy";
+import Occupancy from "../../models/Occupancy";
 
 const colorScheme = d3.scaleSequential(d3.interpolateYlGnBu);
 
@@ -36,7 +36,7 @@ const createSVG = (degeo, className) => {
   const w = 800;
 
   const svg = d3
-    .select(".mchviewport")
+    .select(".deview")
     .append("svg")
     .attr("width", w)
     .attr("height", 20 + aspectRatio * w)
@@ -89,7 +89,7 @@ const createSVGDualSampas = (dsDOM, style, dualsampasJSON) => {
 };
 
 const drawPads = seg => {
-  const viewport = d3.select(".mchviewport");
+  const viewport = d3.select(".deview");
   seg.dualSampas.map(function(d) {
     viewport.append("p").text(d.ID);
   });
@@ -101,12 +101,12 @@ const drawDualSampas = (strokeWidth, seg) => {
 };
 
 const drawDEs = seg => {
-  const viewport = d3.select(".mchviewport");
+  const viewport = d3.select(".deview");
   viewport.append("p").text(JSON.stringify(seg.degeo));
 };
 
 const drawOutline = (props, seg) => {
-  d3.selectAll(".mchviewport > *").remove();
+  d3.selectAll(".deview > *").remove();
   if (props.pads === true) {
     drawPads(seg);
   }

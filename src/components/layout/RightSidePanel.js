@@ -1,5 +1,5 @@
 import m from "mithril";
-import "./css/rightsidepanel.css";
+import "./rightsidepanel.css";
 
 function RightSidePanel() {
   let visible = false;
