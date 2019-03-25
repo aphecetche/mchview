@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 
+app {
+  display: flex;
+  flex-direction: column;
+}
+
 :root {
   --background-color: #303030;
   --text-color: #cdcdcd;

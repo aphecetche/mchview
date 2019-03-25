@@ -1,0 +1,43 @@
+{
+  "visibility": {
+    "rightPanel": false,
+    "modal": false
+  },
+  "outline": {
+    "pad": false,
+    "ds": true,
+    "de": false,
+    "chamber": false
+  },
+  "view": [
+    {
+      "de": 501,
+      "bending": false
+    }
+  ],
+  "data": {
+    "source": 1,
+    "content": [
+      {
+        "dsid": "102",
+        "value": 125
+      },
+      {
+        "dsid": "102",
+        "value": 125
+      }
+    ]
+  },
+  "datasources": [
+    {
+      "url": "localhost:4343",
+      "path": "MUON/OccupancyMap",
+      "run": 297624
+    },
+    {
+      "url": "localhost:4343",
+      "path": "MUON/OccupancyMap",
+      "run": 295820
+    }
+  ]
+}

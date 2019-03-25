@@ -1,4 +1,4 @@
-@import "./common.css";
+@import ../layout/app.css";
 
 .modal {
   position: absolute;

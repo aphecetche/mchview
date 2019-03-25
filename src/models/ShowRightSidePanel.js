@@ -1,5 +1,5 @@
 const ShowRightSidePanel = {
-  visible: true
+  visible: false
 };
 
 export default ShowRightSidePanel;

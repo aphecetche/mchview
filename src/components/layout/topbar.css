@@ -1,6 +1,10 @@
-@import "../../common.css";
+@import "../layout/app.css";
 
-header.topbar {
+topbar {
   display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: scroll;
   background: var(--background-color);
 }

@@ -1,9 +1,10 @@
 import m from "mithril";
 import TopBar from "./TopBar";
 import MainStage from "../layout/mainstage.js";
-import DEView from "../views/DEView";
 import BottomBar from "./BottomBar";
-// import Modal from "./views/Modal";
+import "./app.css";
+
+// immport Modal from "./views/Modal";
 // import ShowModal from "./models/ShowModal";
 //
 // const mchviewApp = {
@@ -18,19 +19,8 @@ import BottomBar from "./BottomBar";
 
 const App = () => {
   return {
-    oncreate: vnode => {
-      const main = vnode.dom.querySelector("mchviewport");
-      console.log(main);
-      m.route(main, "/de", {
-        "/de": {
-          view: () => {
-            return m(MainStage, m(DEView));
-          }
-        }
-      });
-    },
     view: () => {
-      return m("mchview", m(TopBar), m("mchviewport"), m(BottomBar));
+      return m("app", m(TopBar), m(MainStage), m(BottomBar));
     }
   };
 };

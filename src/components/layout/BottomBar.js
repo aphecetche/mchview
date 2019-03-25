@@ -9,11 +9,7 @@ const BottomBar = {
    * @return {vnode} the bottom bar UI
    * */
   view: function() {
-    return m(
-      "footer.bottombar",
-      m(DataSourceCreateButton),
-      m(DataSourceSelector)
-    );
+    return m("bottombar", m(DataSourceCreateButton), m(DataSourceSelector));
   }
 };
 

@@ -9,7 +9,12 @@ const DEView = () => {
   return {
     current: {},
     view: () => {
-      return m("div", { class: "deview" }, m("header"));
+      return m(
+        "deview",
+        m("header"),
+        m("main", { class: "deview" }),
+        m("footer")
+      );
     },
     oninit: function() {
       this.current.deid = ShowElement.deid;

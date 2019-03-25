@@ -23,7 +23,9 @@ module.exports = {
 
   plugins: [
     new CleanWebpackPlugin(["dist/*"]),
-    new HtmlWebpackPlugin({ title: "MchView 2.0 Proto",
-        template: "src/index.html" })
+    new HtmlWebpackPlugin({
+      title: "MchView 2.0 Proto",
+      template: "src/index.html"
+    })
   ]
 };

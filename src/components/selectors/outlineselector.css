@@ -1,6 +1,6 @@
-@import "../../common.css";
+@import "../layout/app.css";
 
-ul.outlineselector {
+outlineselector ul {
   display: flex;
   margin: 0;
   padding: 0;

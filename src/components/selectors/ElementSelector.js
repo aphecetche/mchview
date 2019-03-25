@@ -8,7 +8,7 @@ const deListPattern =
 const ElementSelector = {
   view: () => {
     return m(
-      "div.elementselector",
+      "elementselector",
       m("label", { for: "denumberselector" }, "DE"),
       m("input", {
         id: "denumberselector",

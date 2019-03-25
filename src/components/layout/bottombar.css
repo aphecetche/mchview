@@ -1,6 +1,6 @@
-@import "../../common.css";
+@import "../layout/app.css";
 
-.bottombar {
+bottombar {
   display: flex;
   min-height: 48px;
   background: var(--background-color);

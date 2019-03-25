@@ -1,14 +1,18 @@
-import m from "mithril";
+import "./mainstage.css";
+import MchViewPort from "./MchViewPort";
 import RightSidePanel from "./RightSidePanel";
 import ShowRightSidePanel from "../../models/ShowRightSidePanel";
+import m from "mithril";
 
-const MainStage = {
-  view: ({ children }) => {
-    if (ShowRightSidePanel.visible) {
-      return m("mainstage", children, m(RightSidePanel));
+const MainStage = () => {
+  return {
+    view: () => {
+      if (ShowRightSidePanel.visible) {
+        return m("mainstage", m(MchViewPort), m(RightSidePanel));
+      }
+      return m("mainstage", m(MchViewPort));
     }
-    return m("mainstage", children);
-  }
+  };
 };
 
 export default MainStage;

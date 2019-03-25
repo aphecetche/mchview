@@ -1,4 +1,21 @@
-.deview {
-  min-width: 640px;
-  min-height: 320px;
+deview {
+  display: flex;
+  flex-direction: column;
+  box-sizing: box-border;
+  width: 100%;
+  height: 100%;
+
+  & header {
+    display: flex;
+  }
+
+  & footer {
+    display: flex;
+  }
+
+  & main {
+    display: flex;
+    height: 100%;
+    padding: 5vmin;
+  }
 }

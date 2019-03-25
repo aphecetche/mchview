@@ -1,6 +1,13 @@
 import m from "mithril";
-
-const root = document.getElementById("app");
-
 import App from "./components/layout/App";
-m.render(root, m(App));
+import initialState from "./initialState.json";
+import { createStore } from "redux";
+import appReducer from "./store/reducers";
+
+const store = createStore(appReducer, initialState);
+
+window.store = store;
+
+console.log(initialState);
+
+m.mount(document.body, App);
