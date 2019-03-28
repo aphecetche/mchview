@@ -2,6 +2,8 @@ import React from "react";
 import "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { PartNames } from "../../constants";
+import * as actions from "../../store/actions";
 const OutlineSelectorButton = ({ label, value, onClick }) => {
   return (
     <li>
@@ -39,14 +41,31 @@ OutlineSelectorToggle.propTypes = {
   name: PropTypes.string.isRequired
 };
 
-const _OutlineSelector = ({ chamber, de, ds, pad }) => {
+const _OutlineSelector = ({ outline, toggleOutline }) => {
   return (
     <div className="outlineselector">
       <ul>
-        <OutlineSelectorButton key="chamber" label="chamber" value={chamber} />
-        <OutlineSelectorButton key="de" label="de" value={de} />
-        <OutlineSelectorButton key="ds" label="ds" value={ds} />
-        <OutlineSelectorButton key="pad" label="pad" value={pad} />
+        <OutlineSelectorButton
+          key={PartNames.Chamber}
+          label={PartNames.Chamber}
+          value={outline[PartNames.Chamber]}
+          onClick={() => toggleOutline(PartNames.Chamber)}
+        />
+        <OutlineSelectorButton
+          key={PartNames.DetectionElement}
+          label={PartNames.DetectionElement}
+          value={outline[PartNames.DetectionElement]}
+        />
+        <OutlineSelectorButton
+          key={PartNames.DualSampa}
+          label={PartNames.DualSampa}
+          value={outline[PartNames.DualSampa]}
+        />
+        <OutlineSelectorButton
+          key={PartNames.Pad}
+          label={PartNames.Pad}
+          value={outline[PartNames.Pad]}
+        />
       </ul>
       <div className="outlineselector-buttongroup">
         <OutlineSelectorToggle name="All" />
@@ -57,22 +76,24 @@ const _OutlineSelector = ({ chamber, de, ds, pad }) => {
 };
 
 _OutlineSelector.propTypes = {
-  chamber: PropTypes.bool.isRequired,
-  de: PropTypes.bool.isRequired,
-  ds: PropTypes.bool.isRequired,
-  pad: PropTypes.bool.isRequired
+  outline: PropTypes.shape({
+    [PartNames.Chamber]: PropTypes.bool.isRequired,
+    [PartNames.DetectionElement]: PropTypes.bool.isRequired,
+    [PartNames.DualSampa]: PropTypes.bool.isRequired,
+    [PartNames.Pad]: PropTypes.bool.isRequired
+  }),
+  toggleOutline: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    chamber: state.outline.chamber,
-    de: state.outline.de,
-    ds: state.outline.ds,
-    pad: state.outline.pad
+    outline: state.outline
   };
 };
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    toggleOutline: x => dispatch(actions.toggleOutline(x))
+  };
 };
 
 const OutlineSelector = connect(

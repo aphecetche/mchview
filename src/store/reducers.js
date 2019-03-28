@@ -14,15 +14,16 @@ export const modal = (state = false, action) => {
 };
 
 export const outline = (state = initialState.outline, action) => {
-  if (action.type === A.SHOW_OUTLINE) {
+  if (action.type === A.TOGGLE_OUTLINE) {
     if (
       action.payload.partName == PartNames.Chamber ||
       action.payload.partName == PartNames.DetectionElement ||
       action.payload.partName == PartNames.DualSampa ||
       action.payload.partName == PartNames.Pad
     ) {
-      state[action.payload.partName] = action.payload.value;
-      return state;
+      let ns = state;
+      ns[action.payload.partName] = !ns[action.payload.partName];
+      return ns;
     }
   }
   return state;

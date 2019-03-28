@@ -9,13 +9,12 @@ export const showRightPanel = () => ({
   payload: true
 });
 
-export const showOutline = (partName, value) => {
+export const toggleOutline = partName => {
   if (PartNames.hasOwnProperty(partName)) {
     return {
-      type: A.SHOW_OUTLINE,
+      type: A.TOGGLE_OUTLINE,
       payload: {
-        partName: partName,
-        value: value
+        partName: partName
       }
     };
   }

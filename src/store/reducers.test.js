@@ -9,7 +9,7 @@ describe("outline reducer", () => {
     expect(outline(undefined, {})).toEqual(initialState.outline);
   });
 
-  it("should handle SHOW_OUTLINE", () => {
+  it("should handle TOGGLE_OUTLINE", () => {
     const ini = {
       [PartNames.Chamber]: false,
       [PartNames.DetectionElement]: false,
@@ -18,8 +18,8 @@ describe("outline reducer", () => {
     };
     expect(
       outline(ini, {
-        type: A.SHOW_OUTLINE,
-        payload: { partName: PartNames.DetectionElement, value: true }
+        type: A.TOGGLE_OUTLINE,
+        payload: { partName: PartNames.DetectionElement }
       })
     ).toEqual({
       [PartNames.Chamber]: false,
