@@ -1,27 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "./outlineselector.css";
 import PropTypes from "prop-types";
 import ShowOutline from "../../models/ShowOutline";
 
-const OutlineSelectorButton = props => {
+const OutlineSelectorButton = ({ label }) => {
+  const [isOutlined, setIsOutlined] = useState(false);
   return (
     <li>
       <input
         type="checkbox"
-        id={props.for}
-        defaultChecked={props.value}
-        onClick={e => {
-          ShowOutline[e.target.id] = !ShowOutline[e.target.id];
+        id={label}
+        defaultChecked={isOutlined}
+        onClick={() => {
+          setIsOutlined(!isOutlined);
         }}
       />
-      <label htmlFor={props.for}>{props.for}</label>
+      <label htmlFor={label}>{label}</label>
     </li>
   );
 };
 
 OutlineSelectorButton.propTypes = {
-  for: PropTypes.string.isRequired,
-  value: PropTypes.bool.isRequired
+  label: PropTypes.string.isRequired
 };
 
 const individualButtons = () => {
@@ -29,7 +29,7 @@ const individualButtons = () => {
     if (typeof ShowOutline[x] === "function") {
       return;
     }
-    return <OutlineSelectorButton key={x} for={x} value={ShowOutline[x]} />;
+    return <OutlineSelectorButton key={x} label={x} />;
   });
 };
 
