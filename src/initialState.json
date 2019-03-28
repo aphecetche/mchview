@@ -7,7 +7,9 @@
     "pad": false,
     "ds": true,
     "de": false,
-    "chamber": false
+    "chamber": false,
+    "cluster": false,
+    "area": false
   },
   "view": [
     {

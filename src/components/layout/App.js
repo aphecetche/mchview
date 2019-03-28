@@ -1,7 +1,7 @@
 import React from "react";
 import TopBar from "./TopBar";
-import MainStage from "../layout/mainstage.js";
-import BottomBar from "./BottomBar";
+// import MainStage from "../layout/mainstage.js";
+// import BottomBar from "./BottomBar";
 import "./app.css";
 
 // immport Modal from "./views/Modal";

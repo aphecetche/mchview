@@ -1,7 +1,7 @@
 import A from "./actionTypes";
 import { combineReducers } from "redux";
 import initialState from "../initialState.json";
-import { PartNames } from "../constants";
+import { LayerCategories } from "../constants";
 
 export const rightPanel = (state = false, action) => {
   return action.type === A.CHANGE_RIGHT_PANEL_VISIBILITY
@@ -15,15 +15,10 @@ export const modal = (state = false, action) => {
 
 export const outline = (state = initialState.outline, action) => {
   if (action.type === A.TOGGLE_OUTLINE) {
-    if (
-      action.payload.partName == PartNames.Chamber ||
-      action.payload.partName == PartNames.DetectionElement ||
-      action.payload.partName == PartNames.DualSampa ||
-      action.payload.partName == PartNames.Pad
-    ) {
-      let ns = state;
-      ns[action.payload.partName] = !ns[action.payload.partName];
-      return ns;
+    if (LayerCategories.some(x => action.payload.partName === x.key)) {
+      return Object.assign({}, state, {
+        [action.payload.partName]: !state[action.payload.partName]
+      });
     }
   }
   return state;

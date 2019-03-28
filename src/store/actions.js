@@ -1,5 +1,5 @@
 import A from "./actionTypes";
-import { PartNames } from "../constants";
+import { LayerCategories } from "../constants";
 // see FSA (Flux Standard Action) at
 // https://github.com/redux-utilities/flux-standard-action
 // for advices on how to structure actions
@@ -10,7 +10,7 @@ export const showRightPanel = () => ({
 });
 
 export const toggleOutline = partName => {
-  if (PartNames.hasOwnProperty(partName)) {
+  if (LayerCategories.some(x => x.key === partName)) {
     return {
       type: A.TOGGLE_OUTLINE,
       payload: {
