@@ -1,6 +1,7 @@
 import A from "./actionTypes";
 import { combineReducers } from "redux";
 import initialState from "../initialState.json";
+import { PartNames } from "../constants";
 
 export const rightPanel = (state = false, action) => {
   return action.type === A.CHANGE_RIGHT_PANEL_VISIBILITY
@@ -12,8 +13,19 @@ export const modal = (state = false, action) => {
   return action.type === A.CHANGE_MODAL_VISIBILITY ? action.payload : state;
 };
 
-export const outline = (state = initialState, action) => {
-  return action.type === A.SHOW_OUTLINE ? action.payload : state;
+export const outline = (state = initialState.outline, action) => {
+  if (action.type === A.SHOW_OUTLINE) {
+    if (
+      action.payload.partName == PartNames.Chamber ||
+      action.payload.partName == PartNames.DetectionElement ||
+      action.payload.partName == PartNames.DualSampa ||
+      action.payload.partName == PartNames.Pad
+    ) {
+      state[action.payload.partName] = action.payload.value;
+      return state;
+    }
+  }
+  return state;
 };
 
 export default combineReducers({

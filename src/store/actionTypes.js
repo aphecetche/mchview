@@ -1,4 +1,4 @@
-const constants = {
+const ActionTypes = {
   CHANGE_RIGHT_PANEL_VISIBILITY: "CHANGE_RIGHT_PANEL_VISIBILITY",
   SHOW_OUTLINE: "SHOW_OUTLINE",
   VIEW_DE: "VIEW_DE",
@@ -6,7 +6,7 @@ const constants = {
   REMOVE_DATA_SOURCE: "REMOVE_DATA_SOURCE",
   CHANGE_DATA_SOURCE: "CHANGE_DATA_SOURCE"
 };
-export default constants;
+export default ActionTypes;
 
 // TODO
 // should there be CHANGE_DATA_SOURCE_CONTENT ?

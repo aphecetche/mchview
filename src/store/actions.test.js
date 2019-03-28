@@ -1,10 +1,9 @@
 import * as actions from "./actions.js";
 import A from "./actionTypes.js";
 import expect from "expect";
-
+import { PartNames } from "../constants";
 describe("actions", () => {
-  const elements = ["de", "pad", "chamber", "dualsampa"];
-  elements.map(x => {
+  Object.keys(PartNames).map(x => {
     const values = { show: true, hide: false };
     Object.keys(values).map(v => {
       it("should create an action to " + v + " outline of " + x, () => {
