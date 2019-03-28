@@ -1,6 +1,6 @@
 @import "../layout/app.css";
 
-topbar {
+.topbar {
   display: flex;
   flex-direction: row;
   box-sizing: border-box;

@@ -1,6 +1,6 @@
 module.exports = {
     "root": true,
-    "extends": ["prettier"],
+    "extends": ["eslint:recommended","prettier","plugin:react/recommended"],
     "env": {
         "es6": true,
         "node": true,
@@ -13,10 +13,12 @@ module.exports = {
     },
     "parserOptions": {
         "ecmaVersion": 8,
-        "sourceType": "module"
+        "sourceType": "module",
+        "jsx":true
     },
     "plugins": [
-        "prettier"
+        "prettier",
+        "react"
     ],
     "rules": {
         "max-len": ['error', {

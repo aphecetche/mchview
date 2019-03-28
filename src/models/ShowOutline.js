@@ -1,7 +1,7 @@
 const ShowOutline = {
   chambers: false,
   des: false,
-  dualSampas: true,
+  dualSampas: false,
   pads: false,
 
   setAll: function() {

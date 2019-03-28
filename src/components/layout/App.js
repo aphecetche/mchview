@@ -1,4 +1,4 @@
-import m from "mithril";
+import React from "react";
 import TopBar from "./TopBar";
 import MainStage from "../layout/mainstage.js";
 import BottomBar from "./BottomBar";
@@ -18,11 +18,13 @@ import "./app.css";
 //
 
 const App = () => {
-  return {
-    view: () => {
-      return m("app", m(TopBar), m(MainStage), m(BottomBar));
-    }
-  };
+  return (
+    <div>
+      <TopBar />
+      {/* <MainStage /> */}
+      {/* <BottomBar /> */}
+    </div>
+  );
 };
 
 export default App;
