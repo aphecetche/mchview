@@ -1,15 +1,16 @@
 import * as actions from "./actions.js";
 import A from "./actionTypes.js";
 import expect from "expect";
-import { PartNames } from "../constants";
+import { LayerCategories } from "../constants";
+
 describe("actions", () => {
-  Object.keys(PartNames).map(x => {
-    it("should create an action to toggle outline of " + x, () => {
-      const partName = x;
+  LayerCategories.map(x => {
+    it("should create an action to toggle outline of " + x.name, () => {
+      const partName = x.key;
       const expected = {
         type: A.TOGGLE_OUTLINE,
         payload: {
-          partName: partName
+          partName: x.key
         }
       };
       expect(actions.toggleOutline(partName)).toEqual(expected);
