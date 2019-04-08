@@ -52,5 +52,9 @@
       color: var(--disabled-color);
       border-color: var(--disabled-color);
     }
+
+    &:focus {
+      outline: 0;
+    }
   }
 }

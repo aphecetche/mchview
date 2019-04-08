@@ -21,3 +21,11 @@ export const toggleOutline = partName => {
   alert("incorrect partName", partName);
   return {};
 };
+
+export const showOutlineForAll = () => ({
+  type: A.SHOW_OUTLINE_FOR_ALL
+});
+
+export const showOutlineForNone = () => ({
+  type: A.SHOW_OUTLINE_FOR_NONE
+});

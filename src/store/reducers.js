@@ -26,6 +26,11 @@ export const outline = (state, action) => {
       });
     }
   }
+  if (action.type === A.SHOW_OUTLINE_FOR_ALL) {
+    var newState = {};
+    LayerCategories.map(x => (newState[x.key] = true));
+    return newState;
+  }
   return state;
 };
 
