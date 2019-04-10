@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -11,7 +11,8 @@ const OutlineSelectorButton = ({ label, value, onClick }) => {
       <input
         type="checkbox"
         id={label}
-        defaultChecked={value}
+        readOnly
+        checked={value}
         onClick={onClick}
       />
       <label htmlFor={label}>{label}</label>
@@ -22,7 +23,7 @@ const OutlineSelectorButton = ({ label, value, onClick }) => {
 OutlineSelectorButton.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.bool.isRequired,
-  onClick: PropTypes.func
+  onClick: PropTypes.func.isRequired
 };
 
 const OutlineSelectorToggle = props => {
@@ -35,23 +36,30 @@ const OutlineSelectorToggle = props => {
 
 OutlineSelectorToggle.propTypes = {
   name: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired
+  disabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
-const _OutlineSelector = ({ outline, toggleOutline, showOutlineForAll }) => {
-  const buttons = LayerCategories.map(x => {
-    return (
-      <OutlineSelectorButton
-        key={x.key}
-        label={x.name}
-        value={outline[x.key]}
-        onClick={() => toggleOutline(x.key)}
-      />
-    );
-  });
+const _OutlineSelector = ({
+  outline,
+  toggleOutline,
+  showOutlineForAll,
+  showOutlineForNone
+}) => {
+  const buttons = () =>
+    LayerCategories.map(x => {
+      return (
+        <OutlineSelectorButton
+          key={x.key}
+          label={x.name}
+          value={outline[x.key]}
+          onClick={() => toggleOutline(x.key)}
+        />
+      );
+    });
   return (
     <div className="outlineselector">
-      <ul>{buttons}</ul>
+      <ul>{buttons()}</ul>
       <div className="outlineselector-buttongroup">
         <OutlineSelectorToggle
           name="All"
@@ -61,6 +69,7 @@ const _OutlineSelector = ({ outline, toggleOutline, showOutlineForAll }) => {
         <OutlineSelectorToggle
           name="None"
           disabled={LayerCategories.every(x => outline[x.key] === false)}
+          onClick={() => showOutlineForNone()}
         />
       </div>
     </div>
@@ -69,7 +78,9 @@ const _OutlineSelector = ({ outline, toggleOutline, showOutlineForAll }) => {
 
 _OutlineSelector.propTypes = {
   outline: PropTypes.object.isRequired,
-  toggleOutline: PropTypes.func.isRequired
+  toggleOutline: PropTypes.func.isRequired,
+  showOutlineForNone: PropTypes.func.isRequired,
+  showOutlineForAll: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -80,7 +91,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     toggleOutline: x => dispatch(actions.toggleOutline(x)),
-    showOutlineForAll: () => dispatch(actions.showOutlineForAll())
+    showOutlineForAll: () => dispatch(actions.showOutlineForAll()),
+    showOutlineForNone: () => dispatch(actions.showOutlineForNone())
   };
 };
 

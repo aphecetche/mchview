@@ -15,7 +15,7 @@ export const modal = (state = false, action) => {
 export const outline = (state, action) => {
   if (state === undefined) {
     /// create default state
-    var ns = {};
+    let ns = {};
     LayerCategories.map(x => (ns[x.key] = x.key === "ds" ? true : false));
     return ns;
   }
@@ -27,14 +27,22 @@ export const outline = (state, action) => {
     }
   }
   if (action.type === A.SHOW_OUTLINE_FOR_ALL) {
-    var newState = {};
-    LayerCategories.map(x => (newState[x.key] = true));
-    return newState;
+    let ns = {};
+    LayerCategories.map(x => (ns[x.key] = true));
+    return ns;
+  }
+  if (action.type === A.SHOW_OUTLINE_FOR_NONE) {
+    let ns = {};
+    LayerCategories.map(x => (ns[x.key] = false));
+    return ns;
   }
   return state;
 };
 
 export default combineReducers({
   visibility: combineReducers({ rightPanel, modal }),
-  outline: outline
+  outline: outline,
+  view: (state = {}, action) => state,
+  data: (state = {}, action) => state,
+  datasources: (state = {}, action) => state
 });

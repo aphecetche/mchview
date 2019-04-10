@@ -22,12 +22,22 @@ describe("outline reducer", () => {
     ).toEqual(expected);
   });
 
-  it("should handle SHOW_OUTLINE_ALL", () => {
+  it("should handle SHOW_OUTLINE_FOR_ALL", () => {
     var expected = {};
     LayerCategories.map(x => (expected[x.key] = true));
     expect(
       outline(ini, {
-        type: A.SHOW_OUTLINE_ALL
+        type: A.SHOW_OUTLINE_FOR_ALL
+      })
+    ).toEqual(expected);
+  });
+
+  it("should handle SHOW_OUTLINE_FOR_NONE", () => {
+    var expected = {};
+    LayerCategories.map(x => (expected[x.key] = false));
+    expect(
+      outline(ini, {
+        type: A.SHOW_OUTLINE_FOR_NONE
       })
     ).toEqual(expected);
   });
