@@ -1,10 +1,11 @@
 import outlineReducer from "./ducks/outline.js";
+import viewReducer from "./ducks/view.js";
 import { combineReducers } from "redux";
 
 export default combineReducers({
   outline: outlineReducer,
+  view: viewReducer,
   visibility: (state = {}, action) => state,
-  view: (state = {}, action) => state,
   data: (state = {}, action) => state,
   datasources: (state = {}, action) => state
 });

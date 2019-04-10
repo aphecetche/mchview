@@ -11,12 +11,10 @@
     "cluster": false,
     "area": false
   },
-  "view": [
-    {
-      "de": 501,
-      "bending": false
-    }
-  ],
+  "view": {
+    "deid": 501,
+    "bending": false
+  },
   "data": {
     "source": 1,
     "content": [

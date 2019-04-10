@@ -1,7 +1,9 @@
 @import "../layout/app.css";
 
-elementselector {
+.elementselector {
   display: flex;
+  flex-direction: row;
+  align-items: center;
   margin: 0 0 0 10px;
 
   & input {
@@ -30,4 +32,8 @@ elementselector {
     margin: auto 0;
     color: var(--text-color);
   }
+}
+
+#deplaneselector {
+  display: none;
 }

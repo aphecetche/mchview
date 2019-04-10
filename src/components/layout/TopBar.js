@@ -1,13 +1,13 @@
 import "./topbar.css";
 import React from "react";
 import OutlineSelector from "../selectors/OutlineSelector";
-// import ElementSelector from "../selectors/ElementSelector";
+import ViewSelector from "../selectors/ViewSelector";
 
 const TopBar = () => {
   return (
     <div className="topbar">
       <OutlineSelector />
-      {/* <ElementSelector />  */}
+      <ViewSelector />
     </div>
   );
 };

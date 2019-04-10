@@ -50,10 +50,7 @@ export const initialState = {
 // reducer
 export default (state = initialState, action) => {
   if (state === undefined) {
-    /// create default state
-    let ns = {};
-    LayerCategories.map(x => (ns[x.key] = x.key === "ds" ? true : false));
-    return ns;
+    return initialState;
   }
   if (action.type === types.TOGGLE) {
     if (LayerCategories.some(x => action.payload.partName === x.key)) {
