@@ -1,9 +1,21 @@
-import { outline } from "./reducers.js";
+import outline, { actions, types, LayerCategories } from "./outline.js";
 import expect from "expect";
-import A from "./actionTypes.js";
 import initialState from "../initialState.json";
-import { LayerCategories } from "../constants";
 
+describe("actions", () => {
+  LayerCategories.map(x => {
+    it("should create an action to toggle outline of " + x.name, () => {
+      const partName = x.key;
+      const expected = {
+        type: types.TOGGLE,
+        payload: {
+          partName: x.key
+        }
+      };
+      expect(actions.toggleOutline(partName)).toEqual(expected);
+    });
+  });
+});
 describe("outline reducer", () => {
   const ini = outline(undefined, {});
 
@@ -16,7 +28,7 @@ describe("outline reducer", () => {
     expected["de"] = true;
     expect(
       outline(ini, {
-        type: A.TOGGLE_OUTLINE,
+        type: types.TOGGLE,
         payload: { partName: "de" }
       })
     ).toEqual(expected);
@@ -27,7 +39,7 @@ describe("outline reducer", () => {
     LayerCategories.map(x => (expected[x.key] = true));
     expect(
       outline(ini, {
-        type: A.SHOW_OUTLINE_FOR_ALL
+        type: types.ALL
       })
     ).toEqual(expected);
   });
@@ -37,7 +49,7 @@ describe("outline reducer", () => {
     LayerCategories.map(x => (expected[x.key] = false));
     expect(
       outline(ini, {
-        type: A.SHOW_OUTLINE_FOR_NONE
+        type: types.NONE
       })
     ).toEqual(expected);
   });
