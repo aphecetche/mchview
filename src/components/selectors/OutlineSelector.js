@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { LayerCategories } from "../../constants";
-import * as actions from "../../store/actions";
+import {
+  actions,
+  LayerCategories,
+  getAllSelected,
+  getNoneSelected
+} from "../../ducks/outline.js";
 
 const OutlineSelectorButton = ({ label, value, onClick }) => {
   return (
@@ -63,12 +67,12 @@ const _OutlineSelector = ({
       <div className="outlineselector-buttongroup">
         <OutlineSelectorToggle
           name="All"
-          disabled={LayerCategories.every(x => outline[x.key] === true)}
+          disabled={getAllSelected(outline)}
           onClick={() => showOutlineForAll()}
         />
         <OutlineSelectorToggle
           name="None"
-          disabled={LayerCategories.every(x => outline[x.key] === false)}
+          disabled={getNoneSelected(outline)}
           onClick={() => showOutlineForNone()}
         />
       </div>

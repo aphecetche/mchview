@@ -7,8 +7,7 @@
     "test": "jest",
     "test:watch": "npm test -- --watch",
     "start": "webpack-dev-server --config webpack.dev.js --watch --port 5678",
-    "build": "webpack --config webpack.prod.js",
-    "play": "webpack --config webpack.dev.js"
+    "build": "webpack --config webpack.prod.js"
   },
   "keywords": [],
   "author": "",
@@ -49,7 +48,6 @@
   },
   "dependencies": {
     "d3": "^5.9.0",
-    "mithril": "^1.1.6",
     "react-redux": "^7.0.0-beta.0",
     "redux": "^4.0.1"
   }
