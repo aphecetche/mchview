@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import DEView from "../views/DEView";
 import AllView from "../views/AllView";
+import "./mchviewport.css";
 
 const NotFound = () => <h1>404... Boooh</h1>;
 const MchViewPort = () => {

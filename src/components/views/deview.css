@@ -1,7 +1,8 @@
-deview {
+.deview {
   display: flex;
   flex-direction: column;
-  box-sizing: box-border;
+
+  /* box-sizing: border-box; */
   width: 100%;
   height: 100%;
 
@@ -15,7 +16,10 @@ deview {
 
   & main {
     display: flex;
+    width: 100%;
     height: 100%;
-    padding: 5vmin;
+
+    /* padding: 1vmin; */
   }
+
 }
