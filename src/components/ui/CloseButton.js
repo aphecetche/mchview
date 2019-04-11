@@ -1,19 +1,28 @@
-import m from "mithril";
-import "./css/closebutton.css";
-import ShowModal from "../models/ShowModal";
+import "./closebutton.css";
+import React from "react";
+import { connect } from "react-redux";
+import { actions } from "../../ducks/visibility";
+import PropTypes from "prop-types";
 
-const CloseButton = {
-  view: () => {
-    return m(
-      "button.close",
-      {
-        onclick: () => {
-          ShowModal.visible = false;
-        }
-      },
-      "Cancel"
-    );
-  }
+const CloseButton = ({ hideModal }) => {
+  return (
+    <button className="close" onClick={() => hideModal()}>
+      Cancel
+    </button>
+  );
 };
 
-export default CloseButton;
+CloseButton.propTypes = {
+  hideModal: PropTypes.func.isRequired
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    hideModal: () => dispatch(actions.hideModal())
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(CloseButton);

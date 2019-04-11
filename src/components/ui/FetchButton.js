@@ -1,54 +1,36 @@
-import m from "mithril";
-import Occupancy from "../models/Occupancy";
-import ShowModal from "../models/ShowModal";
-import ShowElement from "../models/ShowElement";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-const fetchOccupancy = (deid, timestamp, url) => {
-  const qurl = url + "/occupancymap?deid=" + deid + "&run=" + timestamp;
-  console.log("qurl=" + qurl);
-  return m
-    .request({
-      method: "GET",
-      url: qurl,
-      background: true
-    })
-    .then(function(ds) {
-      Occupancy.data = ds;
-    });
+const FetchButton = ({ fetcher, finalizer }) => {
+  let [isLoading, setIsLoading] = useState(false);
+  let [isError, setIsError] = useState(false);
+
+  return (
+    <button
+      className={"fetch" + (isLoading ? " loading" : "")}
+      onClick={() => {
+        setIsLoading(true);
+        return fetcher().then(
+          () => {
+            setIsLoading(false);
+            finalizer();
+          },
+          () => {
+            console.log("problem");
+            setIsError(true);
+            setIsLoading(false);
+          }
+        );
+      }}
+    >
+      {isLoading ? "Loading" : isError ? "Error" : "Fetch"}
+    </button>
+  );
 };
 
-function FetchButton() {
-  let isLoading = false;
-  let isError = false;
-  return {
-    view: () => {
-      return m("button.fetch", {
-        innerHTML: isLoading ? "Loading" : isError ? "Error" : "Fetch",
-        class: isLoading ? "loading" : "",
-        onclick: () => {
-          isLoading = true;
-          return fetchOccupancy(
-            ShowElement.deid,
-            Occupancy.timestamp,
-            Occupancy.url
-          ).then(
-            () => {
-              isLoading = false;
-              ShowModal.visible = false;
-              m.redraw();
-              console.log("here");
-            },
-            () => {
-              console.log("problem");
-              isLoading = false;
-              isError = true;
-              m.redraw();
-            }
-          );
-        }
-      });
-    }
-  };
-}
+FetchButton.propTypes = {
+  fetcher: PropTypes.func.isRequired,
+  finalizer: PropTypes.func.isRequired
+};
 
 export default FetchButton;

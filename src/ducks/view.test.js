@@ -24,7 +24,7 @@ describe("view reducer", () => {
 });
 
 describe("view selector", () => {
-  const ini = { view: { deid: 501, bending: false } };
+  const ini = { deid: 501, bending: false };
   it("deid should be 501", () => {
     expect(selectors.deid(ini)).toEqual(501);
   });

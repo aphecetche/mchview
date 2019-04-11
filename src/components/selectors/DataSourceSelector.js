@@ -1,6 +1,23 @@
-import m from "mithril";
-import Occupancy from "../../models/Occupancy";
+import React from "react";
 import "./datasourceselector.css";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
+let DataSourceSelector = ({ url, timestamp, data }) => {
+  return (
+    <ul className="datasourcecard">
+      <li>{url}</li>
+      <li>{timestamp}</li>
+      <li>{isEmpty(data) ? "NODATA" : "SOMEDATA"}</li>
+    </ul>
+  );
+};
+
+DataSourceSelector.propTypes = {
+  url: PropTypes.string.isRequired,
+  timestamp: PropTypes.number.isRequired,
+  data: PropTypes.object
+};
 
 function isEmpty(obj) {
   for (var prop in obj) {
@@ -12,15 +29,17 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-function DataSourceSelector() {
-  return {
-    view: () => {
-      return m("ul.datasourcecard", [
-        m("li", Occupancy.url),
-        m("li", Occupancy.timestamp),
-        m("li", isEmpty(Occupancy.data) ? "NODATA" : "SOME DATA")
-      ]);
-    }
-  };
-}
+const mapStateToProps = state => ({
+  url: "https://wonderful.com",
+  timestamp: 42,
+  data: {}
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+DataSourceSelector = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DataSourceSelector);
+
 export default DataSourceSelector;

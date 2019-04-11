@@ -36,6 +36,6 @@ export const actions = {
 
 // selectors
 export const selectors = {
-  deid: state => state.view.deid,
-  bending: state => state.view.bending
+  deid: state => state.deid,
+  bending: state => state.bending
 };

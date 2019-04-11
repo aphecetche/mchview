@@ -1,30 +1,40 @@
 import React from "react";
 import TopBar from "./TopBar";
 import MainStage from "./MainStage";
-// import BottomBar from "./BottomBar";
+import BottomBar from "./BottomBar";
 import "./app.css";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { selectors } from "../../reducers";
+import Modal from "./Modal";
+import CCDBSelector from "../selectors/CCDBSelector";
 
-// immport Modal from "./views/Modal";
-// import ShowModal from "./models/ShowModal";
-//
-// const mchviewApp = {
-//   view: () => {
-//     if (ShowModal.visible) {
-//       return m("mchview", m(Header), m(Main), m(Footer), m(Modal));
-//     }
-//     return m("mchview", m(Header), m(Main), m(Footer));
-//   }
-// };
-//
-
-const App = () => {
+const App = ({ modal }) => {
   return (
     <div className="app">
       <TopBar />
       <MainStage view="de" />
-      {/* <BottomBar /> */}
+      <BottomBar />
+      {modal ? (
+        <Modal>
+          <CCDBSelector title="Fetch Occupancy Map" />
+        </Modal>
+      ) : null}
     </div>
   );
 };
 
-export default App;
+App.propTypes = {
+  modal: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  modal: selectors.isModalVisible(state)
+});
+
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

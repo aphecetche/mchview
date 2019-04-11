@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { selectors as viewSelectors } from "../../ducks/view";
+import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
 import SVGView from "./SVGView";
 import DualSampaView from "./DualSampaView";
@@ -64,8 +64,8 @@ DEView.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  deid: viewSelectors.deid(state),
-  bending: viewSelectors.bending(state),
+  deid: selectors.deid(state),
+  bending: selectors.bending(state),
   outline: state.outline
 });
 
@@ -75,19 +75,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(DEView);
-
-// const DEView = () => {
-//   return {
-//     current: {},
-//     view: () => {
-//       return m(
-//         "deview",
-//         m("header"),
-//         m("main", { class: "deview" }),
-//         m("footer")
-//       );
-//     },
-//     oncreate: () => {
-//       Segmentation.loadData(ShowElement.deid, ShowElement.bending);
-//       drawOutline({ ds: true }, Segmentation);
-//     },
