@@ -1,6 +1,6 @@
 import React from "react";
 import TopBar from "./TopBar";
-// import MainStage from "../layout/mainstage.js";
+import MainStage from "./MainStage";
 // import BottomBar from "./BottomBar";
 import "./app.css";
 
@@ -21,7 +21,7 @@ const App = () => {
   return (
     <div className="app">
       <TopBar />
-      {/* <MainStage /> */}
+      <MainStage view="de" />
       {/* <BottomBar /> */}
     </div>
   );

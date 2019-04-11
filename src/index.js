@@ -1,19 +1,8 @@
-import ReactDOM from "react-dom";
 import React from "react";
-import App from "./components/layout/App";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
-import reducer from "./reducers";
+import { render } from "react-dom";
+import configureStore from "./configureStore";
+import Root from "./components/layout/Root";
 
-const store = createStore(
-  reducer,
-  {},
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const store = configureStore();
 
-ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.querySelector("mchviewapp")
-);
+render(<Root store={store} />, document.querySelector("mchviewapp"));
