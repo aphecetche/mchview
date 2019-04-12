@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
@@ -16,7 +17,17 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader", "postcss-loader"]
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {}
+          },
+          {
+            loader: "css-loader",
+            options: { modules: true }
+          },
+          "postcss-loader"
+        ]
       },
       {
         test: /\.(js|jsx)$/,
@@ -33,6 +44,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "MchView 2.0 Proto",
       template: "src/index.html"
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css"
     })
   ]
 };

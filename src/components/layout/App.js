@@ -2,7 +2,7 @@ import React from "react";
 import TopBar from "./TopBar";
 import MainStage from "./MainStage";
 import BottomBar from "./BottomBar";
-import "./app.css";
+import styles from "./app.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { selectors } from "../../reducers";
@@ -11,7 +11,7 @@ import CCDBSelector from "../selectors/CCDBSelector";
 
 const App = ({ modal }) => {
   return (
-    <div className="app">
+    <div className={styles.app}>
       <TopBar />
       <MainStage view="de" />
       <BottomBar />

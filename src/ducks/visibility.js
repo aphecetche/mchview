@@ -1,12 +1,15 @@
 // action types
 export const types = {
   SHOW_MODAL: "VISIBILITY/SHOW_MODAL",
-  HIDE_MODAL: "VISIBILITY/HIDE_MODAL"
+  HIDE_MODAL: "VISIBILITY/HIDE_MODAL",
+  SHOW_RIGHTPANEL: "VISIBILITY/SHOW_RIGHTPANEL",
+  HIDE_RIGHTPANEL: "VISIBILITY/HIDE_RIGHTPANEL",
+  TOGGLE_RIGHTPANEL: "VISIBILITY/TOGGLE_RIGHTPANEL"
 };
 
 // initial state
 export const initialState = {
-  rightPanel: false,
+  rightPanel: true,
   modal: false
 };
 
@@ -21,16 +24,29 @@ export default (state = initialState, action) => {
   if (action.type === types.HIDE_MODAL) {
     return Object.assign({}, state, { modal: false });
   }
+  if (action.type === types.SHOW_RIGHTPANEL) {
+    return Object.assign({}, state, { rightPanel: true });
+  }
+  if (action.type === types.HIDE_RIGHTPANEL) {
+    return Object.assign({}, state, { rightPanel: false });
+  }
+  if (action.type === types.TOGGLE_RIGHTPANEL) {
+    return Object.assign({}, state, { rightPanel: !state.rightPanel });
+  }
   return state;
 };
 
 // action creators
 export const actions = {
   showModal: () => ({ type: types.SHOW_MODAL }),
-  hideModal: () => ({ type: types.HIDE_MODAL })
+  hideModal: () => ({ type: types.HIDE_MODAL }),
+  showRightPanel: () => ({ type: types.SHOW_RIGHTPANEL }),
+  hideRightPanel: () => ({ type: types.HIDE_RIGHTPANEL }),
+  toggleRightPanel: () => ({ type: types.TOGGLE_RIGHTPANEL })
 };
 
 // selectors
 export const selectors = {
-  isModalVisible: state => state.modal === true
+  isModalVisible: state => state.modal === true,
+  isRightPanelVisible: state => state.rightPanel === true
 };

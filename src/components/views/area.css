@@ -1,0 +1,21 @@
+.area {
+  stroke-dasharray: 1,0.4;
+  stroke-width: 0.3;
+
+  & .left {
+    stroke: blue;
+  }
+
+  & .right {
+    stroke: red;
+  }
+
+  & .top {
+    stroke: green;
+  }
+
+  & .bottom {
+    stroke: pink;
+
+  }
+}

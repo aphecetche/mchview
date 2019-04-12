@@ -1,11 +1,11 @@
 import React from "react";
-import "./datasourceselector.css";
+import styles from "./datasourceselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 let DataSourceSelector = ({ url, timestamp, data }) => {
   return (
-    <ul className="datasourcecard">
+    <ul className={styles.datasourcecard}>
       <li>{url}</li>
       <li>{timestamp}</li>
       <li>{isEmpty(data) ? "NODATA" : "SOMEDATA"}</li>

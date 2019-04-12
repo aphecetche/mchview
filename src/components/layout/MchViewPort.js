@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 import DEView from "../views/DEView";
 import AllView from "../views/AllView";
-import "./mchviewport.css";
+import styles from "./mchviewport.css";
 
 const NotFound = () => <h1>404... Boooh</h1>;
 const MchViewPort = () => {
   return (
-    <div className="mchviewport">
+    <div className={styles.mchviewport}>
       <Router>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/de" />} />

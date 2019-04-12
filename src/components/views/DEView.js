@@ -4,7 +4,8 @@ import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
 import SVGView from "./SVGView";
 import DualSampaView from "./DualSampaView";
-import "./deview.css";
+import styles from "./deview.css";
+import AreaView from "./AreaView";
 
 const server = () => {
   return window.env.MCH_MAPPING_API;
@@ -16,7 +17,7 @@ const request = (deid, bending, what) => {
   return fetch(url).then(response => response.json());
 };
 
-const DEView = ({ deid, bending, outline }) => {
+const DEView = ({ deid, bending, outline, area }) => {
   let [ds, setds] = useState([]);
   let [geo, setgeo] = useState({});
 
@@ -44,13 +45,15 @@ const DEView = ({ deid, bending, outline }) => {
   if (!geo.hasOwnProperty("X")) {
     return "";
   }
+
   return (
-    <div className={"deview DE" + deid + (bending ? "B" : "NB")}>
+    <div className={styles.deview}>
       <main>
-        <SVGView geo={geo} classname="dualsampa">
+        <SVGView geo={geo} classname={styles.dualsampa}>
           {ds.map(x => (
             <DualSampaView key={x.ID} ds={x} fill={true} outline={outline.ds} />
           ))}
+          <AreaView clip={geo} area={area} />
         </SVGView>
       </main>
     </div>
@@ -60,18 +63,20 @@ const DEView = ({ deid, bending, outline }) => {
 DEView.propTypes = {
   deid: PropTypes.number.isRequired,
   bending: PropTypes.bool.isRequired,
-  outline: PropTypes.object.isRequired
+  outline: PropTypes.object.isRequired,
+  area: PropTypes.shape({
+    xmin: PropTypes.number.isRequired,
+    ymin: PropTypes.number.isRequired,
+    xmax: PropTypes.number.isRequired,
+    ymax: PropTypes.number.isRequired
+  })
 };
 
 const mapStateToProps = state => ({
   deid: selectors.deid(state),
   bending: selectors.bending(state),
-  outline: state.outline
+  outline: state.outline,
+  area: state.area
 });
 
-const mapDispatchToProps = dispatch => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DEView);
+export default connect(mapStateToProps)(DEView);

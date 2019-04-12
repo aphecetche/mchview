@@ -1,13 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./dualsampaview.css";
-
+import styles from "./dualsampaview.css";
+import classNames from "classnames";
 const DualSampaView = ({ ds, outline = true, fill = true }) => {
-  let classname =
-    "dualsampa" + (outline ? " outline" : "") + (fill ? " fill" : "");
+  let polygonClass = classNames({
+    [styles.dualsampa]: true,
+    [styles.outline]: outline,
+    [styles.fill]: fill
+  });
   return (
     <polygon
-      className={classname}
+      className={polygonClass}
       id={"DS" + ds.ID}
       points={ds.Vertices.map(v => [v.X, v.Y].join(","))}
       onMouseOver={e => e.target.classList.add("highlight")}

@@ -1,0 +1,12 @@
+.rightpanel {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panelcontent {
+  height: 100%;
+  background: var(--background-color);
+  transition: all 0.2s ease-in
+}

@@ -1,4 +1,4 @@
-import "./datasourcecreatebutton.css";
+import styles from "./datasourcecreatebutton.css";
 import React from "react";
 import { actions } from "../../ducks/visibility.js";
 import { connect } from "react-redux";
@@ -6,7 +6,10 @@ import PropTypes from "prop-types";
 
 const DataSourceCreateButton = ({ showModal }) => {
   return (
-    <button className="dataSourceCreateButton" onClick={() => showModal()}>
+    <button
+      className={styles.dataSourceCreateButton}
+      onClick={() => showModal()}
+    >
       New Data Source
     </button>
   );

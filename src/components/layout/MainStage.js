@@ -1,24 +1,17 @@
 import React from "react";
-import "./mainstage.css";
+import styles from "./mainstage.css";
 import MchViewPort from "./MchViewPort";
-// import RightSidePanel from "./RightSidePanel";
-// import ShowRightSidePanel from "../../models/ShowRightSidePanel";
+import RightPanel from "./RightPanel";
 
 const MainStage = () => {
   return (
-    <div className="mainstage">
+    <div className={styles.mainstage}>
       <MchViewPort />
+      <RightPanel>
+        <p>Selection of xmin and co would go there</p>
+      </RightPanel>
     </div>
   );
 };
-//   return {
-//     view: () => {
-//       if (ShowRightSidePanel.visible) {
-//         return m("mainstage", m(MchViewPort), m(RightSidePanel));
-//       }
-//       return m("mainstage", m(MchViewPort));
-//     }
-//   };
-// };
 
 export default MainStage;

@@ -1,5 +1,5 @@
 import React from "react";
-import "./outlineselector.css";
+import styles from "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {
@@ -62,9 +62,9 @@ const _OutlineSelector = ({
       );
     });
   return (
-    <div className="outlineselector">
+    <div className={styles.outlineselector}>
       <ul>{buttons()}</ul>
-      <div className="outlineselector-buttongroup">
+      <div className={styles["outlineselector-buttongroup"]}>
         <OutlineSelectorToggle
           name="All"
           disabled={getAllSelected(outline)}

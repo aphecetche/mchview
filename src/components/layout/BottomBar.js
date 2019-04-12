@@ -1,10 +1,10 @@
 import React from "react";
-import "./bottombar.css";
+import styles from "./bottombar.css";
 import DataSourceCreateButton from "../ui/DataSourceCreateButton";
 import DataSourceSelector from "../selectors/DataSourceSelector";
 const BottomBar = () => {
   return (
-    <div className="bottombar">
+    <div className={styles.bottombar}>
       <DataSourceCreateButton />
       <DataSourceSelector />
     </div>
