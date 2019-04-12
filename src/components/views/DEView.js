@@ -53,7 +53,7 @@ const DEView = ({ deid, bending, outline, area }) => {
           {ds.map(x => (
             <DualSampaView key={x.ID} ds={x} fill={true} outline={outline.ds} />
           ))}
-          <AreaView clip={geo} area={area} />
+          {outline.area ? <AreaView clip={geo} area={area} /> : null}
         </SVGView>
       </main>
     </div>
