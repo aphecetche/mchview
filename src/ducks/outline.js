@@ -44,7 +44,7 @@ export const initialState = {
   de: false,
   chamber: false,
   cluster: false,
-  area: false
+  area: true
 };
 
 // reducer

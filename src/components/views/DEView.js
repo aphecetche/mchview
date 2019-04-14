@@ -65,10 +65,10 @@ DEView.propTypes = {
   bending: PropTypes.bool.isRequired,
   outline: PropTypes.object.isRequired,
   area: PropTypes.shape({
-    xmin: PropTypes.number.isRequired,
-    ymin: PropTypes.number.isRequired,
-    xmax: PropTypes.number.isRequired,
-    ymax: PropTypes.number.isRequired
+    xmin: PropTypes.string.isRequired,
+    ymin: PropTypes.string.isRequired,
+    xmax: PropTypes.string.isRequired,
+    ymax: PropTypes.string.isRequired
   })
 };
 

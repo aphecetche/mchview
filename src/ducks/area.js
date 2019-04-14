@@ -8,10 +8,10 @@ export const types = {
 
 // initial state
 export const initialState = {
-  xmin: 10,
-  ymin: 10,
-  xmax: 12,
-  ymax: 15
+  xmin: "10",
+  ymin: "10",
+  xmax: "12",
+  ymax: "15"
 };
 
 // reducer

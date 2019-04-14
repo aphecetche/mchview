@@ -1,6 +1,10 @@
-import outline, { actions, types, LayerCategories } from "./outline.js";
+import outline, {
+  actions,
+  types,
+  LayerCategories,
+  initialState
+} from "./outline.js";
 import expect from "expect";
-import initialState from "../initialState.json";
 
 describe("actions", () => {
   LayerCategories.map(x => {
@@ -20,7 +24,7 @@ describe("outline reducer", () => {
   const ini = outline(undefined, {});
 
   it("should return the initial state", () => {
-    expect(ini).toEqual(initialState.outline);
+    expect(ini).toEqual(initialState);
   });
 
   it("should handle TOGGLE_OUTLINE", () => {
