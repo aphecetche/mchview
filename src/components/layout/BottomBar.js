@@ -3,9 +3,16 @@ import styles from "./bottombar.css";
 import DataSourceCreateButton from "../ui/DataSourceCreateButton";
 import DataSourceListButton from "../ui/DataSourceListButton";
 import DataSourceSelector from "../selectors/DataSourceSelector";
+import { TObject2JsonClient } from "@aliceo2/qc";
 
 const listDataSources = () => {
-  alert("titi");
+  const config = { hostname: "localhost", port: 6464 };
+
+  const client = new TObject2JsonClient("ccdb", config);
+
+  client.retrieve("<task_path>").then(result => {
+    console.log(result);
+  });
 };
 
 const BottomBar = () => {

@@ -16,6 +16,10 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.node$/,
+        use: "node-loader"
+      },
+      {
         test: /\.css$/,
         use: [
           {
@@ -33,7 +37,18 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
+          loader: "babel-loader",
+          options: {
+            plugins: [
+              [
+                "module-resolver",
+                {
+                  root:
+                    "/Users/laurent/alice/qc/sw/osx_x86-64/qcg/v1.5.1-1/node_modules"
+                }
+              ]
+            ]
+          }
         }
       }
     ]
