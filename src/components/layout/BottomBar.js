@@ -4,7 +4,7 @@ import DataSourceCreateButton from "../ui/DataSourceCreateButton";
 import DataSourceListButton from "../ui/DataSourceListButton";
 import DataSourceSelector from "../selectors/DataSourceSelector";
 import { TObject2JsonClient } from "@aliceo2/qc";
-
+// const { TObject2JsonClient } = require("@aliceo2/qc");
 const listDataSources = () => {
   const config = { hostname: "localhost", port: 6464 };
 

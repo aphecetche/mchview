@@ -13,6 +13,15 @@ module.exports = {
     filename: "[name].js"
   },
 
+  externals: {
+    "@aliceo2/qc": {
+      commonjs: "@aliceo2/qc",
+      commonjs2: "@aliceo2/qc",
+      amd: "qc",
+      root: "qc"
+    }
+  },
+
   module: {
     rules: [
       {
@@ -37,18 +46,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
-          options: {
-            plugins: [
-              [
-                "module-resolver",
-                {
-                  root:
-                    "/Users/laurent/alice/qc/sw/osx_x86-64/qcg/v1.5.1-1/node_modules"
-                }
-              ]
-            ]
-          }
+          loader: "babel-loader"
         }
       }
     ]
