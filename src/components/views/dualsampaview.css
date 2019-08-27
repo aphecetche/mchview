@@ -1,15 +1,11 @@
 @import "../layout/app.css";
 
 polygon.dualsampa.outline {
-  fill: none;
   stroke: var(--background-color);
   stroke-width: 0.2;
 }
 
-polygon.dualsampa.fill {
-  fill: lightyellow;
-}
-
 polygon.dualsampa.highlight {
-  fill: yellow;
+  stroke: yellow;
+  stroke-width: 0.4;
 }

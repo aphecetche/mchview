@@ -26,6 +26,10 @@ const DEView = ({ deid, bending, outline, area }) => {
     const georequest = request(deid, bending, "degeo");
     Promise.all([dsrequest, georequest])
       .then(result => {
+        result[0].DualSampas.map(x => {
+          x.Value = x.ID;
+          console.log(x.Value, x.ID);
+        });
         setds(result[0].DualSampas);
         setgeo(result[1]);
         console.log(

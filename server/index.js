@@ -26,16 +26,13 @@ app.listen(config.http.port, function() {
   console.log("Example app listening on port 3000!");
 });
 
-/**
- *  * List all objects without data
- *   * @param {Request} req
- *    * @param {Response} res
- *     */
 const toto = (req, res) => {
   client
     .retrieve("QcTaskMCH/QcMuonChambers_Pedestals_DS39/1564581527418")
+    // .retrieve("QcTaskMCH/QcMuonChambers_Noise_00/1566827328236")
     .then(data => {
-      res.json({ DsId: data.fLineColor });
+      //res.json({ DsId: data.fLineColor });
+      res.json(data);
     })
     .catch(err => errorHandler(err, res));
 };
