@@ -7,8 +7,10 @@ import DualSampaView from "./DualSampaView";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
 import envelops from "../../services/envelops.js";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-const DEView = ({ deid, bending, outline, area, data }) => {
+const DEView = ({ deid, bending, outline, area, data, isFetching }) => {
   let [ds, setds] = useState([]);
   let [geo, setgeo] = useState({});
 
@@ -29,15 +31,28 @@ const DEView = ({ deid, bending, outline, area, data }) => {
     return "";
   }
 
+  console.log(
+    "deid=" + deid + " bending=" + bending + " isFetching=" + isFetching
+  );
   return (
     <div className={styles.deview}>
       <main>
-        <SVGView geo={geo} classname={styles.dualsampa}>
-          {ds.map(x => (
-            <DualSampaView key={x.ID} ds={x} fill={true} outline={outline.ds} />
-          ))}
-          {outline.area ? <AreaView clip={geo} area={area} /> : null}
-        </SVGView>
+        <h2>{isFetching}</h2>
+        {isFetching ? (
+          <Loader type="Watch" color="red" />
+        ) : (
+          <SVGView geo={geo} classname={styles.dualsampa}>
+            {ds.map(x => (
+              <DualSampaView
+                key={x.ID}
+                ds={x}
+                fill={true}
+                outline={outline.ds}
+              />
+            ))}
+            {outline.area ? <AreaView clip={geo} area={area} /> : null}
+          </SVGView>
+        )}
       </main>
     </div>
   );
@@ -53,7 +68,8 @@ DEView.propTypes = {
     xmax: PropTypes.string.isRequired,
     ymax: PropTypes.string.isRequired
   }),
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
+  isFetching: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -61,7 +77,12 @@ const mapStateToProps = state => ({
   bending: selectors.bending(state),
   outline: state.outline,
   area: state.area,
-  data: state.data
+  data: state.data,
+  isFetching: selectors.isFetching(
+    state,
+    selectors.deid(state),
+    selectors.bending(state)
+  )
 });
 
 export default connect(mapStateToProps)(DEView);

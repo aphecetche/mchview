@@ -1,7 +1,9 @@
+import { combineReducers } from "redux";
 import outlineReducer from "./ducks/outline";
 import viewReducer, { selectors as viewSelectors } from "./ducks/view";
 import dataReducer, { selectors as dataSelectors } from "./ducks/data";
-import { combineReducers } from "redux";
+import envelopReducer, { selectors as envelopSelectors } from "./ducks/envelop";
+
 import visibilityReducer, {
   selectors as visibilitySelectors
 } from "./ducks/visibility";
@@ -13,6 +15,7 @@ export default combineReducers({
   visibility: visibilityReducer,
   area: areaReducer,
   data: dataReducer,
+  envelop: envelopReducer,
   datasources: (state = {}, action) => state
 });
 
@@ -27,5 +30,11 @@ export const selectors = {
   deid: state => viewSelectors.deid(state.view),
   bending: state => viewSelectors.bending(state.view),
   area: state => state.area,
-  dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid)
+  dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
+  isFetching: state =>
+    envelopSelectors.isFetching(
+      state.envelop,
+      selectors.deid(state),
+      selectors.bending(state)
+    )
 };

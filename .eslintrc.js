@@ -12,7 +12,7 @@ module.exports = {
         "Promise": true
     },
     "parserOptions": {
-        "ecmaVersion": 8,
+        "ecmaVersion": 9,
         "sourceType": "module",
         "jsx":true
     },

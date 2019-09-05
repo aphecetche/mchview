@@ -6,19 +6,22 @@ import axios from "axios";
 import { normalize, schema } from "normalizr";
 
 const fetchData = (deid, bending, setdata) => {
-  const dualsampa = new schema.Entity("dualsampas");
+  const dualsampa = new schema.Entity("dualsampas", undefined, {
+    // convert local id to some global id using the deid
+    idAttribute: value => deid + "-" + value.id,
+    // append the deid to the dualsampa object
+    processStrategy: entity => Object.assign({}, { ...entity, deid: deid })
+  });
 
   let url =
     "http://localhost:8080/v2/dualsampas?deid=" + deid + "&bending=" + bending;
   axios.get(url).then(response => {
     const normalizedData = normalize(response.data, [dualsampa]);
     setdata(normalizedData);
-    // setdata(response.data);
-    console.log(normalizedData);
   });
 };
 
-const DebugView = ({ deid, bending }) => {
+const DebugView = ({ deid, bending, toto }) => {
   let [data, setdata] = useState({});
 
   useEffect(() => {
@@ -28,6 +31,7 @@ const DebugView = ({ deid, bending }) => {
   return (
     <div className="allview">
       <p>DebugView would be here </p>
+      {toto ? <h1>FETCHING</h1> : ""}
       <h2>DE={deid}</h2>
       <h2>Bending={bending}</h2>
       <pre>{JSON.stringify(data, {}, 2)}</pre>
@@ -49,7 +53,8 @@ DebugView.propTypes = {
 const mapStateToProps = state => {
   return {
     deid: selectors.deid(state),
-    bending: selectors.bending(state)
+    bending: selectors.bending(state),
+    toto: selectors.isFetching(state)
   };
 };
 
