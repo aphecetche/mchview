@@ -1,11 +1,11 @@
 // action types
 export const types = {
-  SET_DETECTION_ELEMENT: "VIEWSELECTOR/SET_DETECTION_ELEMENT"
+  SET_DETECTION_ELEMENT: "VIEW/SET_DETECTION_ELEMENT"
 };
 
 // initial state
 export const initialState = {
-  deid: 501,
+  deid: 819,
   bending: false
 };
 
@@ -25,13 +25,20 @@ export default (state = initialState, action) => {
 
 // action creators
 export const actions = {
-  setDetectionElement: (deid, bending) => ({
-    type: types.SET_DETECTION_ELEMENT,
-    payload: {
-      deid: deid,
-      bending: bending
-    }
-  })
+  setDetectionElement: (deid, bending) => {
+    return dispatch => {
+      // TODO: check here if we already have :
+      // - the envelops for DualSampas for (deid,bending)
+      // - the data for (deid,bending) if data is not null
+      dispatch({
+        type: types.SET_DETECTION_ELEMENT,
+        payload: {
+          deid: deid,
+          bending: bending
+        }
+      });
+    };
+  }
 };
 
 // selectors

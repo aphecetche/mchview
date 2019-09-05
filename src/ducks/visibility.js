@@ -9,7 +9,7 @@ export const types = {
 
 // initial state
 export const initialState = {
-  rightPanel: true,
+  rightPanel: false,
   modal: false
 };
 

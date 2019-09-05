@@ -2,18 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./dualsampaview.css";
 import classNames from "classnames";
-const DualSampaView = ({
-  ds,
-  outline = true,
-  fill = false,
-  fillcolor = "black"
-}) => {
+import { scaleSequential } from "d3-scale";
+import { interpolateViridis } from "d3-scale-chromatic";
+
+const DualSampaView = ({ ds, outline = true, fill = false }) => {
   let polygonClass = classNames({
     [styles.dualsampa]: true,
     [styles.outline]: outline
   });
+  const colorFunction = scaleSequential()
+    .domain([0, 500])
+    .interpolator(interpolateViridis);
   const st = {
-    fill: fill ? fillcolor : "none"
+    fill: fill ? colorFunction(ds.Value) : "none"
   };
   return (
     <polygon

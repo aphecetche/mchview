@@ -1,5 +1,6 @@
 import outlineReducer from "./ducks/outline";
 import viewReducer, { selectors as viewSelectors } from "./ducks/view";
+import dataReducer, { selectors as dataSelectors } from "./ducks/data";
 import { combineReducers } from "redux";
 import visibilityReducer, {
   selectors as visibilitySelectors
@@ -11,7 +12,7 @@ export default combineReducers({
   view: viewReducer,
   visibility: visibilityReducer,
   area: areaReducer,
-  data: (state = {}, action) => state,
+  data: dataReducer,
   datasources: (state = {}, action) => state
 });
 
@@ -25,5 +26,6 @@ export const selectors = {
     visibilitySelectors.isRightPanelVisible(state.visibility),
   deid: state => viewSelectors.deid(state.view),
   bending: state => viewSelectors.bending(state.view),
-  area: state => state.area
+  area: state => state.area,
+  dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid)
 };

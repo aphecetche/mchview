@@ -1,14 +1,16 @@
 import styles from "./datasourcecreatebutton.css";
 import React from "react";
-import { actions } from "../../ducks/visibility.js";
+// import { actions } from "../../ducks/visibility.js";
+import { actions as dataActions } from "../../ducks/data.js";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { selectors } from "../../reducers.js";
 
-const DataSourceCreateButton = ({ showModal }) => {
+const DataSourceCreateButton = ({ onClick, deid, bending }) => {
   return (
     <button
       className={styles.dataSourceCreateButton}
-      onClick={() => showModal()}
+      onClick={() => onClick(deid, bending)}
     >
       New Data Source
     </button>
@@ -16,16 +18,26 @@ const DataSourceCreateButton = ({ showModal }) => {
 };
 
 DataSourceCreateButton.propTypes = {
-  showModal: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  deid: PropTypes.number.isRequired,
+  bending: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    showModal: () => dispatch(actions.showModal())
+    // onClick: () => dispatch(actions.showModal())
+    onClick: (deid, bending) => dispatch(dataActions.randomData(deid, bending))
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    deid: selectors.deid(state),
+    bending: selectors.bending(state)
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(DataSourceCreateButton);

@@ -6,45 +6,24 @@ import SVGView from "./SVGView";
 import DualSampaView from "./DualSampaView";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
+import envelops from "../../services/envelops.js";
 
-const server = () => {
-  return window.env.MCH_MAPPING_API;
-};
-
-const request = (deid, bending, what) => {
-  const url =
-    server() + "/" + what + "?deid=" + deid + "&" + "bending=" + bending;
-  return fetch(url).then(response => response.json());
-};
-
-const DEView = ({ deid, bending, outline, area }) => {
+const DEView = ({ deid, bending, outline, area, data }) => {
   let [ds, setds] = useState([]);
   let [geo, setgeo] = useState({});
 
   useEffect(() => {
-    const dsrequest = request(deid, bending, "dualsampas");
-    const georequest = request(deid, bending, "degeo");
+    const dsrequest = envelops.request(deid, bending, "dualsampas");
+    const georequest = envelops.request(deid, bending, "degeo");
     Promise.all([dsrequest, georequest])
       .then(result => {
-        result[0].DualSampas.map(x => {
-          x.Value = x.ID;
-          console.log(x.Value, x.ID);
-        });
         setds(result[0].DualSampas);
         setgeo(result[1]);
-        console.log(
-          "mapping data successfully loaded from " +
-            server() +
-            " for DE " +
-            deid +
-            " " +
-            (bending ? "B" : "NB")
-        );
       })
       .catch(reason => {
         console.log(reason);
       });
-  }, [deid, bending]);
+  }, [deid, bending, data]);
 
   if (!geo.hasOwnProperty("X")) {
     return "";
@@ -73,14 +52,16 @@ DEView.propTypes = {
     ymin: PropTypes.string.isRequired,
     xmax: PropTypes.string.isRequired,
     ymax: PropTypes.string.isRequired
-  })
+  }),
+  data: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   deid: selectors.deid(state),
   bending: selectors.bending(state),
   outline: state.outline,
-  area: state.area
+  area: state.area,
+  data: state.data
 });
 
 export default connect(mapStateToProps)(DEView);
