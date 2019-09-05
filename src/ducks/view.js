@@ -5,7 +5,7 @@ export const types = {
 
 // initial state
 export const initialState = {
-  deid: 819,
+  deid: 501,
   bending: false
 };
 
