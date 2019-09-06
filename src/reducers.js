@@ -36,5 +36,11 @@ export const selectors = {
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
+    ),
+  degeo: state =>
+    envelopSelectors.degeo(
+      state.envelop,
+      selectors.deid(state),
+      selectors.bending(state)
     )
 };

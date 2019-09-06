@@ -4,13 +4,14 @@ import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
 import SVGView from "./SVGView";
 import DualSampaView from "./DualSampaView";
+import PolygonView from "./PolygonView";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
 import envelops from "../../services/envelops.js";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-const DEView = ({ deid, bending, outline, area, data, isFetching }) => {
+const DEView = ({ deid, bending, outline, area, data, isFetching, de }) => {
   let [ds, setds] = useState([]);
   let [geo, setgeo] = useState({});
 
@@ -31,26 +32,27 @@ const DEView = ({ deid, bending, outline, area, data, isFetching }) => {
     return "";
   }
 
-  console.log(
-    "deid=" + deid + " bending=" + bending + " isFetching=" + isFetching
-  );
   return (
     <div className={styles.deview}>
       <main>
-        <h2>{isFetching}</h2>
         {isFetching ? (
           <Loader type="Watch" color="red" />
         ) : (
           <SVGView geo={geo} classname={styles.dualsampa}>
-            {ds.map(x => (
-              <DualSampaView
-                key={x.ID}
-                ds={x}
-                fill={true}
-                outline={outline.ds}
-              />
-            ))}
+            {outline.ds
+              ? ds.map(x => (
+                  <DualSampaView
+                    key={x.ID}
+                    ds={x}
+                  fill={true}
+                    outline={outline.ds}
+                  />
+                ))
+              : null}
             {outline.area ? <AreaView clip={geo} area={area} /> : null}
+            {outline.de ? (
+              <PolygonView poly={de} outline={true} fill={true} prefix="zob" />
+            ) : null}
           </SVGView>
         )}
       </main>
@@ -82,7 +84,8 @@ const mapStateToProps = state => ({
     state,
     selectors.deid(state),
     selectors.bending(state)
-  )
+  ),
+  de: selectors.degeo(state)
 });
 
 export default connect(mapStateToProps)(DEView);

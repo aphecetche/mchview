@@ -2,6 +2,7 @@ import styles from "./datasourcecreatebutton.css";
 import React from "react";
 // import { actions } from "../../ducks/visibility.js";
 import { actions as dataActions } from "../../ducks/data.js";
+import { actions as envelopActions } from "../../ducks/envelop";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { selectors } from "../../reducers.js";
@@ -26,7 +27,9 @@ DataSourceCreateButton.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     // onClick: () => dispatch(actions.showModal())
-    onClick: (deid, bending) => dispatch(dataActions.randomData(deid, bending))
+    // onClick: (deid, bending) => dispatch(dataActions.randomData(deid, bending))
+    onClick: (deid, bending) =>
+      dispatch(envelopActions.fetchDualSampas(deid, bending))
   };
 };
 
