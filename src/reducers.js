@@ -48,5 +48,7 @@ export const selectors = {
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
-    )
+    ),
+  plane: (state, deid, bending) =>
+    envelopSelectors.plane(state.envelop, deid, bending)
 };

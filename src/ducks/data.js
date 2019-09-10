@@ -1,5 +1,4 @@
-import envelops from "../services/envelops.js";
-import axios from "axios";
+import { selectors as globalSelectors } from "../reducers";
 
 // action types
 export const types = {
@@ -32,46 +31,25 @@ export const actions = {
   setData: (source, content) => ({
     type: types.SET,
     payload: {
-      source: source,
-      content: content
+      source,
+      content
     }
   }),
   setDsValue: (dsid, value) => ({
     type: types.SET_DS_VALUE,
     payload: {
-      dsid: dsid,
-      value: value
+      dsid,
+      value
     }
   }),
-  randomData: (deid, bending) => {
-    return dispatch => {
-      axios
-        .get(
-          "http://mchmapping.aphecetche.me:3333/dualsampas?deid=819&bending=false"
-        )
-        .then(response => {
-          console.log(response.data);
-          const data = response.data.DualSampas.map(x => {
-            return { dsid: x.ID, value: Math.random() * 500.0 };
-          });
-          dispatch(actions.setData(-1, data));
-        });
-    };
-    // TODO: handle the fetching of dual sampa list
-    // return dispatch => {
-    //     if listofdualsampas not uptodate for deid, bending
-    //     fetchDualSampaList(deid,bending)
-    //     if fetch successfull then dispatch({
-    //       type: types.RANDOM_DATA,
-    //       payload: {
-    //         deid: deid,
-    //         bending: bending
-    //       })
-    //     else dispatch(error)
-    //     }
-    //
-    // };
-  }
+  randomData: (deid, bending, dsids) => ({
+    type: types.RANDOM_DATA,
+    payload: {
+      deid,
+      bending,
+      dsids
+    }
+  })
 };
 
 // reducer
@@ -80,25 +58,8 @@ export default (state = initialState, action) => {
     return initialState;
   }
   if (action.type === types.RANDOM_DATA) {
-    const dsrequest = envelops.request(
-      action.payload.deid,
-      action.payload.bending,
-      "dualsampas"
-    );
-    let n = 0;
-    dsrequest.then(result => {
-      n = result.DualSampas.length;
-      // result.DualSampas.map(x => {
-      //   dispatch(setDsValue(x.ID, Math.random(500)));
-      // });
-      return {
-        source: -1,
-        content: {
-          dsid: 42,
-          value: n
-        }
-      };
-    });
+    console.log(action.payload.dsids);
+    return state;
   }
   if (action.type === types.SET) {
     return Object.assign({}, state, {

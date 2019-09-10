@@ -12,38 +12,62 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { scaleSequential } from "d3-scale";
 import { interpolateViridis } from "d3-scale-chromatic";
 
-const color = scaleSequential()
+const colorDE = scaleSequential()
   .domain([100, 1025])
   .interpolator(interpolateViridis);
 
+const colorDS = scaleSequential()
+  .domain([0, 1500])
+  .interpolator(interpolateViridis);
+
 const DEView = ({ outline, area, data, isFetching, de, ds }) => {
+  if (isFetching) {
+    return <Loader key="loader" type="Watch" color="blue" />;
+  }
+
+  let comp = [];
+
+  if (outline.ds) {
+    Object.keys(ds).forEach(key => {
+      let single = ds[key];
+      comp.push(
+        <PolygonView
+          key={"DS" + single.id}
+          poly={single}
+          styles={{
+            strokeWidth: () => {
+              return 0.2;
+            },
+            stroke: () => "black",
+            fill: () => (single.value ? colorDS(single.value) : "none")
+          }}
+          prefix="DS"
+        />
+      );
+    });
+  }
+
+  if (outline.de) {
+    comp.push(
+      <PolygonView
+        key={"DS" + de.id}
+        prefix="DE"
+        poly={de}
+        styles={{ stroke: () => colorDE(de.id) }}
+      />
+    );
+  }
+
+  if (outline.area) {
+    comp.push(<AreaView key={"AREA"} clip={de} area={area} />);
+  }
+
   return (
     <div className={styles.deview}>
       <main>
-        {isFetching ? (
-          <Loader type="Watch" color="blue" />
-        ) : (
-          <SVGView geo={de} classname={styles.dualsampa}>
-            {ds.map(x =>
-              outline.ds ? (
-                <DualSampaView
-                  key={x.ID}
-                  ds={x}
-                  fill={true}
-                  outline={outline.ds}
-                />
-              ) : null
-            )}
-            {outline.area ? <AreaView clip={de} area={area} /> : null}
-            {outline.de ? (
-              <PolygonView
-                poly={de}
-                styles={{ stroke: () => color(de.id) }}
-                prefix="zob"
-              />
-            ) : null}
-          </SVGView>
-        )}
+        <SVGView geo={de} classname={styles.dualsampa}>
+          {comp}
+        </SVGView>
       </main>
     </div>
   );
@@ -81,7 +105,7 @@ const mapStateToProps = state => ({
       selectors.bending(state)
     ),
   de: selectors.degeo(state),
-  ds: []
+  ds: selectors.degeo(state).dualsampas
 });
 
 export default connect(mapStateToProps)(DEView);

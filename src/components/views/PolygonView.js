@@ -17,7 +17,7 @@ const PolygonView = ({
   return (
     <polygon
       className={classname}
-      id={prefix + poly.id}
+      id={(prefix ? prefix : "") + poly.id}
       data-value={poly.value}
       points={poly.vertices.map(v => [v.x, v.y].join(","))}
       onMouseOver={onmouseover}

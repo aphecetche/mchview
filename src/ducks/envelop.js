@@ -17,59 +17,7 @@ export const types = {
 const bendingPlaneName = bending => (bending ? "bending" : "non-bending");
 
 // initial state
-export const initialState = {
-  des: {
-    706: {
-      id: 706,
-      bending: {
-        isFetchingDualSampas: true,
-        x: 0,
-        y: 0,
-        sx: 80,
-        sy: 40,
-        vertices: [
-          { x: -40, y: 20 },
-          { x: -40, y: -20 },
-          { x: 40, y: -20 },
-          { x: 40, y: 20 },
-          { x: -40, y: 20 }
-        ]
-      }
-    },
-    819: {
-      id: 819,
-      "non-bending": {
-        isFetchingDualSampas: false,
-        x: -4.000000330961484e-9,
-        y: 0,
-        sx: 79.999999992,
-        sy: 40,
-        vertices: [
-          {
-            x: -40,
-            y: 20
-          },
-          {
-            x: -40,
-            y: -20
-          },
-          {
-            x: 39.999999992,
-            y: -20
-          },
-          {
-            x: 39.999999992,
-            y: 20
-          },
-          {
-            x: -40,
-            y: 20
-          }
-        ]
-      }
-    }
-  }
-};
+export const initialState = {};
 
 export const assertDE = (state, deid, bending) => {
   let newState = cloneDeep(state);
@@ -274,6 +222,9 @@ export const actions = {
 // selectors
 export const selectors = {
   plane: (state, deid, bending) => {
+    if (state.des === undefined) {
+      return undefined;
+    }
     if (state.des && state.des[deid]) {
       return state.des[deid][bendingPlaneName(bending)];
     }

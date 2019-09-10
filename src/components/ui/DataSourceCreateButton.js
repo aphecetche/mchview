@@ -7,11 +7,11 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { selectors } from "../../reducers.js";
 
-const DataSourceCreateButton = ({ onClick, deid, bending }) => {
+const DataSourceCreateButton = ({ onClick, deid, bending, dsids }) => {
   return (
     <button
       className={styles.dataSourceCreateButton}
-      onClick={() => onClick(deid, bending)}
+      onClick={() => onClick(deid, bending, dsids)}
     >
       New Data Source
     </button>
@@ -27,16 +27,20 @@ DataSourceCreateButton.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     // onClick: () => dispatch(actions.showModal())
-    // onClick: (deid, bending) => dispatch(dataActions.randomData(deid, bending))
-    onClick: (deid, bending) =>
-      dispatch(envelopActions.fetchDualSampas(deid, bending))
+    onClick: (deid, bending, dsids) =>
+      dispatch(dataActions.randomData(deid, bending, dsids))
   };
 };
 
 const mapStateToProps = state => {
   return {
     deid: selectors.deid(state),
-    bending: selectors.bending(state)
+    bending: selectors.bending(state),
+    dsids: selectors.plane(
+      state,
+      selectors.deid(state),
+      selectors.bending(state)
+    ).dsids
   };
 };
 
