@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
@@ -7,51 +7,40 @@ import DualSampaView from "./DualSampaView";
 import PolygonView from "./PolygonView";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
-import envelops from "../../services/envelops.js";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { scaleSequential } from "d3-scale";
+import { interpolateViridis } from "d3-scale-chromatic";
 
-const DEView = ({ deid, bending, outline, area, data, isFetching, de }) => {
-  let [ds, setds] = useState([]);
-  let [geo, setgeo] = useState({});
+const color = scaleSequential()
+  .domain([100, 1025])
+  .interpolator(interpolateViridis);
 
-  useEffect(() => {
-    const dsrequest = envelops.request(deid, bending, "dualsampas");
-    const georequest = envelops.request(deid, bending, "degeo");
-    Promise.all([dsrequest, georequest])
-      .then(result => {
-        setds(result[0].DualSampas);
-        setgeo(result[1]);
-      })
-      .catch(reason => {
-        console.log(reason);
-      });
-  }, [deid, bending, data]);
-
-  if (!geo.hasOwnProperty("X")) {
-    return "";
-  }
-
+const DEView = ({ outline, area, data, isFetching, de, ds }) => {
   return (
     <div className={styles.deview}>
       <main>
         {isFetching ? (
-          <Loader type="Watch" color="red" />
+          <Loader type="Watch" color="blue" />
         ) : (
-          <SVGView geo={geo} classname={styles.dualsampa}>
-            {outline.ds
-              ? ds.map(x => (
-                  <DualSampaView
-                    key={x.ID}
-                    ds={x}
+          <SVGView geo={de} classname={styles.dualsampa}>
+            {ds.map(x =>
+              outline.ds ? (
+                <DualSampaView
+                  key={x.ID}
+                  ds={x}
                   fill={true}
-                    outline={outline.ds}
-                  />
-                ))
-              : null}
-            {outline.area ? <AreaView clip={geo} area={area} /> : null}
+                  outline={outline.ds}
+                />
+              ) : null
+            )}
+            {outline.area ? <AreaView clip={de} area={area} /> : null}
             {outline.de ? (
-              <PolygonView poly={de} outline={true} fill={true} prefix="zob" />
+              <PolygonView
+                poly={de}
+                styles={{ stroke: () => color(de.id) }}
+                prefix="zob"
+              />
             ) : null}
           </SVGView>
         )}
@@ -80,12 +69,19 @@ const mapStateToProps = state => ({
   outline: state.outline,
   area: state.area,
   data: state.data,
-  isFetching: selectors.isFetching(
-    state,
-    selectors.deid(state),
-    selectors.bending(state)
-  ),
-  de: selectors.degeo(state)
+  isFetching:
+    selectors.isFetchingDualSampas(
+      state,
+      selectors.deid(state),
+      selectors.bending(state)
+    ) ||
+    selectors.isFetchingDE(
+      state,
+      selectors.deid(state),
+      selectors.bending(state)
+    ),
+  de: selectors.degeo(state),
+  ds: []
 });
 
 export default connect(mapStateToProps)(DEView);

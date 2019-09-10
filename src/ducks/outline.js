@@ -40,7 +40,7 @@ export const types = {
 // initial state
 export const initialState = {
   pad: false,
-  ds: true,
+  ds: false,
   de: false,
   chamber: false,
   cluster: false,

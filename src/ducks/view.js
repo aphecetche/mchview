@@ -1,3 +1,5 @@
+import { actions as envelopActions } from "./envelop";
+
 // action types
 export const types = {
   SET_DETECTION_ELEMENT: "VIEW/SET_DETECTION_ELEMENT"
@@ -27,15 +29,16 @@ export default (state = initialState, action) => {
 export const actions = {
   setDetectionElement: (deid, bending) => {
     return dispatch => {
-      // TODO: check here if we already have :
-      // - the envelops for DualSampas for (deid,bending)
-      // - the data for (deid,bending) if data is not null
-      dispatch({
-        type: types.SET_DETECTION_ELEMENT,
-        payload: {
-          deid: deid,
-          bending: bending
-        }
+      let p1 = dispatch(envelopActions.fetchDualSampas(deid, bending));
+      let p2 = dispatch(envelopActions.fetchDE(deid, bending));
+      Promise.all([p1, p2]).then(() => {
+        dispatch({
+          type: types.SET_DETECTION_ELEMENT,
+          payload: {
+            deid: deid,
+            bending: bending
+          }
+        });
       });
     };
   }

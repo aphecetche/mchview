@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setDEID(deid, bending) {
+  setDEID: (deid, bending) => {
     dispatch(actions.setDetectionElement(deid, bending));
   }
 });

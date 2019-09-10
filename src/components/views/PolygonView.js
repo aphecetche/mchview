@@ -1,23 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { scaleSequential } from "d3-scale";
-import { interpolateViridis } from "d3-scale-chromatic";
 
 const PolygonView = ({
   poly,
-  outline,
-  fill,
+  styles,
   classname,
   prefix,
   onmouseover,
   onmouseout
 }) => {
-  const colorFunction = scaleSequential()
-    .domain([0, 500])
-    .interpolator(interpolateViridis);
   const st = {
-    stroke: "blue",
-    fill: fill && poly.value ? colorFunction(poly.value) : "none"
+    stroke: styles.stroke ? styles.stroke() : "red",
+    strokeWidth: styles.strokeWidth ? styles.strokeWidth() : 0.35,
+    fill: styles.fill ? styles.fill() : "none"
   };
   return (
     <polygon
@@ -43,8 +38,10 @@ PolygonView.propTypes = {
     ),
     value: PropTypes.number
   }),
-  outline: PropTypes.bool,
-  fill: PropTypes.bool,
+  styles: PropTypes.shape({
+    stroke: PropTypes.func,
+    fill: PropTypes.func
+  }),
   prefix: PropTypes.string,
   classname: PropTypes.string,
   onmouseover: PropTypes.func,

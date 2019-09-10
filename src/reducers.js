@@ -31,14 +31,20 @@ export const selectors = {
   bending: state => viewSelectors.bending(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
-  isFetching: state =>
-    envelopSelectors.isFetching(
+  isFetchingDualSampas: state =>
+    envelopSelectors.isFetchingDualSampas(
+      state.envelop,
+      selectors.deid(state),
+      selectors.bending(state)
+    ),
+  isFetchingDE: state =>
+    envelopSelectors.isFetchingDE(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
     ),
   degeo: state =>
-    envelopSelectors.degeo(
+    envelopSelectors.plane(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)

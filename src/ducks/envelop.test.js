@@ -1,11 +1,5 @@
 import reducer, { selectors, actions, initialState, assertDE } from "./envelop";
 import expect from "expect";
-import configureMockStore from "redux-mock-store";
-import thunk from "redux-thunk";
-import moxios from "moxios";
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe("ctor", () => {
   const ini = reducer(undefined, {});
@@ -14,16 +8,16 @@ describe("ctor", () => {
   });
 });
 
-describe("isFetching selector ", () => {
+describe("isFetchingDualSampas selector ", () => {
   const ini = reducer(undefined, {});
   it("should return false for 819 bending", () => {
-    expect(selectors.isFetching(ini, 819, true)).toEqual(false);
+    expect(selectors.isFetchingDualSampas(ini, 819, true)).toEqual(false);
   });
   it("should return true for 706 bending", () => {
-    expect(selectors.isFetching(ini, 706, true)).toEqual(true);
+    expect(selectors.isFetchingDualSampas(ini, 706, true)).toEqual(true);
   });
   it("should return true for 706 non-bending", () => {
-    expect(selectors.isFetching(ini, 706, false)).toEqual(false);
+    expect(selectors.isFetchingDualSampas(ini, 706, false)).toEqual(false);
   });
 });
 
@@ -40,30 +34,40 @@ describe("has selector ", () => {
   });
 });
 
-describe("dispatch fetch dualsampa action", () => {
-  beforeEach(() => {
-    moxios.install();
+describe("envelop reducer", () => {
+  const expected1 = {
+    des: {
+      300: {
+        id: 300,
+        bending: {
+          isFetchingDualSampas: true
+        }
+      }
+    }
+  };
+  const expected2 = {
+    des: {
+      100: {
+        id: 100,
+        "non-bending": {
+          isFetchingDualSampas: true
+        }
+      },
+      300: {
+        id: 300,
+        bending: {
+          isFetchingDualSampas: true
+        }
+      }
+    }
+  };
+  let state1 = reducer({}, actions.requestDualSampas(300, true));
+  it("should add DE 300,bending to empty state", () => {
+    expect(state1).toEqual(expected1);
   });
-  afterEach(() => {
-    moxios.uninstall();
-  });
-  it("creates FETCH_DUALSAMPAS_REQUEST when fetching dualsampas", () => {
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request.respondWith({
-        status: 200,
-        response: {}
-      });
-    });
-    const expectedActions = [
-      actions.requestDualSampas(819, false),
-      actions.receiveDualSampas(819, false, {})
-    ];
-    const store = mockStore({});
-    return store.dispatch(actions.fetchDualSampas(819, false)).then(() => {
-      const actions = store.getActions();
-      expect(actions).toEqual(expectedActions);
-    });
+  let state2 = reducer(state1, actions.requestDualSampas(100, false));
+  it("should add DE 100,non-bending to previous state", () => {
+    expect(state2).toEqual(expected2);
   });
 });
 
@@ -73,7 +77,7 @@ describe("assert DE", () => {
       100: {
         id: 100,
         bending: {
-          isFetching: false
+          isFetchingDualSampas: false
         }
       }
     }
