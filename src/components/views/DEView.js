@@ -12,6 +12,14 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { scaleSequential } from "d3-scale";
 import { interpolateViridis } from "d3-scale-chromatic";
 
+const makeGroup = (groupname, style, children) => {
+  return (
+    <g className={groupname} key={groupname} style={style}>
+      {children}
+    </g>
+  );
+};
+
 const colorDE = scaleSequential()
   .domain([100, 1025])
   .interpolator(interpolateViridis);
@@ -20,52 +28,69 @@ const colorDS = scaleSequential()
   .domain([0, 1500])
   .interpolator(interpolateViridis);
 
-const DEView = ({ outline, area, data, isFetching, de, ds }) => {
+const DEView = ({
+  isVisible,
+  outlineStyle,
+  area,
+  data,
+  isFetching,
+  de,
+  ds
+}) => {
   if (isFetching) {
     return <Loader key="loader" type="Watch" color="blue" />;
   }
 
   let comp = [];
 
-  if (outline.ds) {
+  if (isVisible("de")) {
+    comp.push(
+      makeGroup(
+        "de",
+        outlineStyle("de"),
+        <PolygonView
+          classname="de"
+          key={"DE" + de.id}
+          prefix="DE"
+          poly={de}
+          fillColor={colorDS(420)}
+        />
+      )
+    );
+  }
+
+  if (isVisible("ds")) {
+    // const events = {
+    //   onClick: e => console.log("CLICK DualSamp" + e.target.id),
+    //   onMouseEnter: e => {
+    //     console.log("Enter DualSampa" + e.target.id);
+    //     console.log(e.target);
+    //   }
+    // };
+    const dspoly = [];
     Object.keys(ds).forEach(key => {
       let single = ds[key];
-      comp.push(
+      dspoly.push(
         <PolygonView
+          classname="ds"
           key={"DS" + single.id}
           poly={single}
-          styles={{
-            strokeWidth: () => {
-              return 0.2;
-            },
-            stroke: () => "black",
-            fill: () => (single.value ? colorDS(single.value) : "none")
-          }}
+          fillColor={colorDS(single.value)}
           prefix="DS"
         />
       );
     });
+    comp.push(makeGroup("ds", outlineStyle("ds"), dspoly));
   }
 
-  if (outline.de) {
-    comp.push(
-      <PolygonView
-        key={"DS" + de.id}
-        prefix="DE"
-        poly={de}
-        styles={{ stroke: () => colorDE(de.id) }}
-      />
-    );
-  }
-
-  if (outline.area) {
+  if (isVisible("area")) {
     comp.push(<AreaView key={"AREA"} clip={de} area={area} />);
   }
 
   return (
     <div className={styles.deview}>
       <main>
-        <SVGView geo={de} classname={styles.dualsampa}>
+        <SVGView geo={de} classname={styles.deview}>
           {comp}
         </SVGView>
       </main>
@@ -76,7 +101,8 @@ const DEView = ({ outline, area, data, isFetching, de, ds }) => {
 DEView.propTypes = {
   deid: PropTypes.number.isRequired,
   bending: PropTypes.bool.isRequired,
-  outline: PropTypes.object.isRequired,
+  isVisible: PropTypes.func.isRequired,
+  outlineStyle: PropTypes.func.isRequired,
   area: PropTypes.shape({
     xmin: PropTypes.string.isRequired,
     ymin: PropTypes.string.isRequired,
@@ -90,7 +116,8 @@ DEView.propTypes = {
 const mapStateToProps = state => ({
   deid: selectors.deid(state),
   bending: selectors.bending(state),
-  outline: state.outline,
+  isVisible: selectors.isVisible(state),
+  outlineStyle: selectors.outlineStyle(state),
   area: state.area,
   data: state.data,
   isFetching:

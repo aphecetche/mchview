@@ -1,30 +1,24 @@
+import { cloneDeep } from "lodash";
+
 // constants
-const LayerCategories = [
-  {
-    key: "chamber",
-    name: "Chamber"
-  },
-  {
-    key: "de",
+const LayerCategories = {
+  chamber: { name: "Chamber" },
+  de: {
     name: "Detection Element"
   },
-  {
-    key: "ds",
+  ds: {
     name: "Dual Sampa"
   },
-  {
-    key: "pad",
+  pad: {
     name: "Pad"
   },
-  {
-    key: "cluster",
+  cluster: {
     name: "Cluster"
   },
-  {
-    key: "area",
+  area: {
     name: "Area"
   }
-];
+};
 
 Object.freeze(LayerCategories);
 
@@ -39,12 +33,12 @@ export const types = {
 
 // initial state
 export const initialState = {
-  pad: false,
-  ds: false,
-  de: false,
-  chamber: false,
-  cluster: false,
-  area: false
+  de: { show: false, stroke: "#333333", strokeWidth: 0.7 },
+  chamber: { show: false, stroke: "black", strokeWidth: 0.5 },
+  ds: { show: false, stroke: "black", strokeWidth: 0.3 },
+  pad: { show: false, stroke: "black", strokeWidth: 0.1 },
+  cluster: { show: false, stroke: "black", strokeWidth: 0.1 },
+  area: { show: false, stroke: "black", strokeWidth: 0.1 }
 };
 
 // reducer
@@ -53,20 +47,26 @@ export default (state = initialState, action) => {
     return initialState;
   }
   if (action.type === types.TOGGLE) {
-    if (LayerCategories.some(x => action.payload.partName === x.key)) {
-      return Object.assign({}, state, {
-        [action.payload.partName]: !state[action.payload.partName]
-      });
+    const partName = action.payload.partName;
+    if (partName in LayerCategories) {
+      let ns = cloneDeep(state);
+      ns[partName].show = !ns[partName].show;
+      return ns;
     }
+    return state;
   }
   if (action.type === types.ALL) {
-    let ns = {};
-    LayerCategories.map(x => (ns[x.key] = true));
+    let ns = cloneDeep(state);
+    Object.keys(LayerCategories).map(x => {
+      ns[x].show = true;
+    });
     return ns;
   }
   if (action.type === types.NONE) {
-    let ns = {};
-    LayerCategories.map(x => (ns[x.key] = false));
+    let ns = cloneDeep(state);
+    Object.keys(LayerCategories).map(x => {
+      ns[x].show = false;
+    });
     return ns;
   }
   return state;
@@ -75,7 +75,7 @@ export default (state = initialState, action) => {
 // action creators
 export const actions = {
   toggleOutline: partName => {
-    if (LayerCategories.some(x => x.key === partName)) {
+    if (partName in LayerCategories) {
       return {
         type: types.TOGGLE,
         payload: {
@@ -97,8 +97,21 @@ export const actions = {
 };
 
 // selectors
-export const getAllSelected = state =>
-  LayerCategories.every(x => state[x.key] === true);
-
-export const getNoneSelected = state =>
-  LayerCategories.every(x => state[x.key] === false);
+export const selectors = {
+  isVisible: (state, partName) => {
+    if (partName in LayerCategories) {
+      return state[partName].show;
+    }
+    return false;
+  },
+  style: (state, partName) => {
+    if (partName in LayerCategories) {
+      return state[partName];
+    }
+    return {};
+  },
+  getAllSelected: state =>
+    Object.keys(LayerCategories).every(x => state[x].show === true),
+  getNoneSelected: state =>
+    Object.keys(LayerCategories).every(x => state[x].show === false)
+};

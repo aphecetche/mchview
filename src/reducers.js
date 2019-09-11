@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import outlineReducer from "./ducks/outline";
+import outlineReducer, { selectors as outlineSelectors } from "./ducks/outline";
 import viewReducer, { selectors as viewSelectors } from "./ducks/view";
 import dataReducer, { selectors as dataSelectors } from "./ducks/data";
 import envelopReducer, { selectors as envelopSelectors } from "./ducks/envelop";
@@ -31,6 +31,10 @@ export const selectors = {
   bending: state => viewSelectors.bending(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
+  isVisible: state => partName =>
+    outlineSelectors.isVisible(state.outline, partName),
+  outlineStyle: state => partName =>
+    outlineSelectors.style(state.outline, partName),
   isFetchingDualSampas: state =>
     envelopSelectors.isFetchingDualSampas(
       state.envelop,

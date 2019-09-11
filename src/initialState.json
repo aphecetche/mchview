@@ -4,12 +4,36 @@
     "modal": false
   },
   "outline": {
-    "pad": false,
-    "ds": true,
-    "de": false,
-    "chamber": false,
-    "cluster": false,
-    "area": false
+    "de": {
+      "show": false,
+      "stroke": "red",
+      "strokeWidth": 0.7
+    },
+    "chamber": {
+      "show": false,
+      "stroke": "black",
+      "strokeWidth": 0.5
+    },
+    "ds": {
+      "show": false,
+      "stroke": "black",
+      "strokeWidth": 0.3
+    },
+    "pad": {
+      "show": false,
+      "stroke": "black",
+      "strokeWidth": 0.1
+    },
+    "cluster": {
+      "show": false,
+      "stroke": "black",
+      "strokeWidth": 0.1
+    },
+    "area": {
+      "show": false,
+      "stroke": "black",
+      "strokeWidth": 0.1
+    }
   },
   "view": {
     "deid": 501,
@@ -51,7 +75,6 @@
     "ymax": "15"
   },
   "envelop": {
-          "entities" : {
-          }
+    "entities": {}
   }
 }

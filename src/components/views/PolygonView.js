@@ -1,18 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const PolygonView = ({
-  poly,
-  styles,
-  classname,
-  prefix,
-  onmouseover,
-  onmouseout
-}) => {
+const PolygonView = ({ poly, fillColor, classname, prefix, events }) => {
   const st = {
-    stroke: styles.stroke ? styles.stroke() : "red",
-    strokeWidth: styles.strokeWidth ? styles.strokeWidth() : 0.35,
-    fill: styles.fill ? styles.fill() : "none"
+    fill: fillColor ? fillColor : "red",
+    fillOpacity: fillColor ? 1 : 0
   };
   return (
     <polygon
@@ -20,8 +12,13 @@ const PolygonView = ({
       id={(prefix ? prefix : "") + poly.id}
       data-value={poly.value}
       points={poly.vertices.map(v => [v.x, v.y].join(","))}
-      onMouseOver={onmouseover}
-      onMouseOut={onmouseout}
+      onMouseEnter={
+        events && events.onMouseEnter ? e => events.onMouseEnter(e) : null
+      }
+      onMouseOut={
+        events && events.onMouseOut ? e => events.onMouseOut(e) : null
+      }
+      onClick={events && events.onClick ? e => events.onClick(e) : null}
       style={st}
     />
   );
