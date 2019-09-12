@@ -1,15 +1,17 @@
 import { actions as envelopActions } from "./envelop";
+import { cloneDeep } from "lodash";
 
 // action types
 export const types = {
-  SET_DETECTION_ELEMENT: "VIEW/SET_DETECTION_ELEMENT"
+  SET_DETECTION_ELEMENT: "VIEW/SET_DETECTION_ELEMENT",
+  SET_CURRENT_ELEMENT: "VIEW/SET_CURRENT_ELEMENT"
 };
 
 // initial state
 export const initialState = {
   deid: 501,
   bending: false,
-  currentElement: "42"
+  currentElement: null
 };
 
 // reducer
@@ -22,6 +24,11 @@ export default (state = initialState, action) => {
       deid: parseInt(action.payload.deid, 10),
       bending: action.payload.bending
     });
+  }
+  if (action.type === types.SET_CURRENT_ELEMENT) {
+    let ns = cloneDeep(state);
+    ns["currentElement"] = action.payload;
+    return ns;
   }
   return state;
 };
@@ -41,6 +48,16 @@ export const actions = {
           }
         });
       });
+    };
+  },
+  setCurrentElement: (type, id, value) => {
+    return {
+      type: types.SET_CURRENT_ELEMENT,
+      payload: {
+        type,
+        id,
+        value
+      }
     };
   }
 };

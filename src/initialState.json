@@ -38,7 +38,7 @@
   "view": {
     "deid": 501,
     "bending": false,
-    "currentElement": "42"
+    "currentElement": null
   },
   "data": {
     "source": 1,

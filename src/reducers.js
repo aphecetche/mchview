@@ -29,6 +29,7 @@ export const selectors = {
     visibilitySelectors.isRightPanelVisible(state.visibility),
   deid: state => viewSelectors.deid(state.view),
   bending: state => viewSelectors.bending(state.view),
+  currentElement: state => viewSelectors.currentElement(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
   isVisible: state => partName =>

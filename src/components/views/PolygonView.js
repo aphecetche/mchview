@@ -1,7 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { actions as viewActions } from "../../ducks/view";
+import { connect } from "react-redux";
 
-const PolygonView = ({ poly, fillColor, classname, prefix }) => {
+const PolygonView = ({
+  poly,
+  fillColor,
+  classname,
+  prefix,
+  setCurrentElement
+}) => {
   const st = {
     fill: fillColor ? fillColor : "red",
     fillOpacity: fillColor ? 1 : 0
@@ -13,6 +21,12 @@ const PolygonView = ({ poly, fillColor, classname, prefix }) => {
       data-value={poly.value}
       points={poly.vertices.map(v => [v.x, v.y].join(","))}
       style={st}
+      onMouseEnter={() => {
+        setCurrentElement(prefix, poly.id, poly.value);
+      }}
+      onMouseOut={() => {
+        setCurrentElement(undefined, undefined);
+      }}
     />
   );
 };
@@ -31,8 +45,15 @@ PolygonView.propTypes = {
   fillColor: PropTypes.string,
   prefix: PropTypes.string,
   classname: PropTypes.string,
-  onmouseover: PropTypes.func,
-  onmouseout: PropTypes.func
+  setCurrentElement: PropTypes.func
 };
 
-export default PolygonView;
+export default connect(
+  state => state,
+  dispatch => {
+    return {
+      setCurrentElement: (a, b, c) =>
+        dispatch(viewActions.setCurrentElement(a, b, c))
+    };
+  }
+)(PolygonView);

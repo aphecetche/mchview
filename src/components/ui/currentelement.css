@@ -2,17 +2,24 @@
 
 .currentelement {
   padding: 5px;
-  background: var(--background-color);
-
-}
-
-.currentelement ul{
-  display: flex;
   color: var(--text-color);
+  background: var(--background-color);
+  
+  & p {
+    padding-left: 1rem;
+  }
 
-  & li {
-    margin-right: 15px;
-    color: var(--text-color);
-    list-style: none;
+  & ul{
+    display: flex;
+
+    & li {
+      margin-right: 15px;
+      color: var(--text-color);
+      list-style: none;
+
+      & span {
+        margin-right: 10px;
+      }
+    }
   }
 }
