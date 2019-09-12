@@ -1,0 +1,18 @@
+@import "../../components/layout/app.css";
+
+.currentelement {
+  padding: 5px;
+  background: var(--background-color);
+
+}
+
+.currentelement ul{
+  display: flex;
+  color: var(--text-color);
+
+  & li {
+    margin-right: 15px;
+    color: var(--text-color);
+    list-style: none;
+  }
+}

@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "./area.css";
 import VerticalLine from "../ui/VerticalLine";
 import HorizontalLine from "../ui/HorizontalLine";
 
@@ -18,26 +17,11 @@ const AreaView = ({ clip, area }) => {
   const ymin = clip.y - clip.sy / 2.0;
   const ymax = clip.y + clip.sy / 2.0;
   return (
-    <g className={styles.area}>
-      <VerticalLine x={axmin} ymin={ymin} ymax={ymax} classname={styles.left} />
-      <VerticalLine
-        x={axmax}
-        ymin={ymin}
-        ymax={ymax}
-        classname={styles.right}
-      />
-      <HorizontalLine
-        y={aymax}
-        xmin={xmin}
-        xmax={xmax}
-        classname={styles.top}
-      />
-      <HorizontalLine
-        y={aymin}
-        xmin={xmin}
-        xmax={xmax}
-        classname={styles.bottom}
-      />
+    <g>
+      <VerticalLine x={axmin} ymin={ymin} ymax={ymax} />
+      <VerticalLine x={axmax} ymin={ymin} ymax={ymax} />
+      <HorizontalLine y={aymax} xmin={xmin} xmax={xmax} />
+      <HorizontalLine y={aymin} xmin={xmin} xmax={xmax} />
     </g>
   );
 };

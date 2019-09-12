@@ -16,7 +16,7 @@ HorizontalLine.propTypes = {
   y: PropTypes.number.isRequired,
   xmin: PropTypes.number.isRequired,
   xmax: PropTypes.number.isRequired,
-  classname: PropTypes.string.isRequired
+  classname: PropTypes.string
 };
 
 export default HorizontalLine;

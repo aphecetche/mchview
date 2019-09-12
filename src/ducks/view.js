@@ -8,7 +8,8 @@ export const types = {
 // initial state
 export const initialState = {
   deid: 501,
-  bending: false
+  bending: false,
+  currentElement: "42"
 };
 
 // reducer
@@ -47,5 +48,6 @@ export const actions = {
 // selectors
 export const selectors = {
   deid: state => state.deid,
-  bending: state => state.bending
+  bending: state => state.bending,
+  currentElement: state => state.currentElement
 };

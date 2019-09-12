@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
 import SVGView from "./SVGView";
-import DualSampaView from "./DualSampaView";
 import PolygonView from "./PolygonView";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
@@ -20,9 +19,49 @@ const makeGroup = (groupname, style, children) => {
   );
 };
 
-const colorDE = scaleSequential()
-  .domain([100, 1025])
-  .interpolator(interpolateViridis);
+const addDELayer = (de, outlineStyle) => {
+  const colorDE = scaleSequential()
+    .domain([100, 1025])
+    .interpolator(interpolateViridis);
+
+  return makeGroup(
+    "de",
+    outlineStyle("de"),
+    <PolygonView
+      classname="de"
+      key={"DE" + de.id}
+      prefix="DE"
+      poly={de}
+      fillColor={colorDE(420)}
+    />
+  );
+};
+
+const addDSLayer = (ds, outlineStyle) => {
+  const dspoly = [];
+  Object.keys(ds).forEach(key => {
+    let single = ds[key];
+    dspoly.push(
+      <PolygonView
+        classname="ds"
+        key={"DS" + single.id}
+        poly={single}
+        fillColor={colorDS(single.value)}
+        prefix="DS"
+      />
+    );
+  });
+
+  return makeGroup("ds", outlineStyle("ds"), dspoly);
+};
+
+const addAreaLayer = (area, de, outlineStyle) => {
+  return makeGroup(
+    "area",
+    outlineStyle("area"),
+    <AreaView key={"AREA"} clip={de} area={area} />
+  );
+};
 
 const colorDS = scaleSequential()
   .domain([0, 1500])
@@ -43,48 +82,19 @@ const DEView = ({
 
   let comp = [];
 
+  //TODO: extract this to a separate component ?
   if (isVisible("de")) {
-    comp.push(
-      makeGroup(
-        "de",
-        outlineStyle("de"),
-        <PolygonView
-          classname="de"
-          key={"DE" + de.id}
-          prefix="DE"
-          poly={de}
-          fillColor={colorDS(420)}
-        />
-      )
-    );
+    comp.push(addDELayer(de, outlineStyle));
   }
 
+  //TODO: extract this to a separate component ?
   if (isVisible("ds")) {
-    // const events = {
-    //   onClick: e => console.log("CLICK DualSamp" + e.target.id),
-    //   onMouseEnter: e => {
-    //     console.log("Enter DualSampa" + e.target.id);
-    //     console.log(e.target);
-    //   }
-    // };
-    const dspoly = [];
-    Object.keys(ds).forEach(key => {
-      let single = ds[key];
-      dspoly.push(
-        <PolygonView
-          classname="ds"
-          key={"DS" + single.id}
-          poly={single}
-          fillColor={colorDS(single.value)}
-          prefix="DS"
-        />
-      );
-    });
-    comp.push(makeGroup("ds", outlineStyle("ds"), dspoly));
+    comp.push(addDSLayer(ds, outlineStyle));
   }
 
+  //TODO: extract this to a separate component ?
   if (isVisible("area")) {
-    comp.push(<AreaView key={"AREA"} clip={de} area={area} />);
+    comp.push(addAreaLayer(area, de, outlineStyle));
   }
 
   return (

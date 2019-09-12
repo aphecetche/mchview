@@ -38,7 +38,7 @@ export const initialState = {
   ds: { show: false, stroke: "black", strokeWidth: 0.3 },
   pad: { show: false, stroke: "black", strokeWidth: 0.1 },
   cluster: { show: false, stroke: "black", strokeWidth: 0.1 },
-  area: { show: false, stroke: "black", strokeWidth: 0.1 }
+  area: { show: false, stroke: "blue", strokeWidth: 0.1 }
 };
 
 // reducer

@@ -1,6 +1,26 @@
 {
-"src/views/*.js": { "alternate": "src/views/css/{}.css" },
-"src/views/css/*.css": { "alternate": "src/views/{}.js" },
-"*.test.js": { "alternate": "{}.js" },
-"*.js": { "alternate": "{}.test.js" }
+  "src/views/*.js": {
+    "alternate": "src/views/css/{}.css"
+  },
+  "src/views/css/*.css": {
+    "alternate": "src/views/{}.js"
+  },
+  "*.stories.js": {
+    "alternate": [
+      "{}.js",
+      "{}.test.js"
+    ]
+  },
+  "*.test.js": {
+    "alternate": [
+      "{}.stories.js",
+      "{}.js"
+    ]
+  },
+  "*.js": {
+    "alternate": [
+      "{}.test.js",
+      "{}.stories.js"
+    ]
+  }
 }

@@ -16,7 +16,7 @@ VerticalLine.propTypes = {
   x: PropTypes.number.isRequired,
   ymin: PropTypes.number.isRequired,
   ymax: PropTypes.number.isRequired,
-  classname: PropTypes.string.isRequired
+  classname: PropTypes.string
 };
 
 export default VerticalLine;
