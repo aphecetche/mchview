@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { actions, LayerCategories, selectors } from "../../ducks/outline.js";
+import { actions, Categories, selectors } from "../../ducks/outline.js";
 
 const OutlineSelectorButton = ({ label, value, onClick }) => {
   return (
@@ -46,16 +46,20 @@ const _OutlineSelector = ({
   showOutlineForNone
 }) => {
   const buttons = () =>
-    Object.keys(LayerCategories).map(x => {
-      return (
-        <OutlineSelectorButton
-          key={x}
-          label={LayerCategories[x].name}
-          value={outline[x].show}
-          onClick={() => toggleOutline(x)}
-        />
-      );
-    });
+    Object.keys(Categories)
+      .filter(x => {
+        return !outline[x].disabled;
+      })
+      .map(x => {
+        return (
+          <OutlineSelectorButton
+            key={x}
+            label={Categories[x].name}
+            value={outline[x].show}
+            onClick={() => toggleOutline(x)}
+          />
+        );
+      });
   return (
     <div className={styles.outlineselector}>
       <ul>{buttons()}</ul>

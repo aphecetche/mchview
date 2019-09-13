@@ -50,11 +50,10 @@ export const actions = {
       });
     };
   },
-  setCurrentElement: (type, id, value) => {
+  setCurrentElement: (id, value) => {
     return {
       type: types.SET_CURRENT_ELEMENT,
       payload: {
-        type,
         id,
         value
       }

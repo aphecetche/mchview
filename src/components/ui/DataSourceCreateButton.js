@@ -36,7 +36,7 @@ const mapStateToProps = state => {
   return {
     deid: selectors.deid(state),
     bending: selectors.bending(state),
-    dsids: selectors.plane(
+    dsids: selectors.deplane(
       state,
       selectors.deid(state),
       selectors.bending(state)

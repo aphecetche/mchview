@@ -12,7 +12,7 @@ describe("envelop reducer", () => {
   const expected1 = {
     des: {
       300: {
-        id: 300,
+        id: { deid: 300 },
         bending: {
           isFetchingDualSampas: true
         }
@@ -22,13 +22,13 @@ describe("envelop reducer", () => {
   const expected2 = {
     des: {
       100: {
-        id: 100,
+        id: { deid: 100 },
         "non-bending": {
           isFetchingDualSampas: true
         }
       },
       300: {
-        id: 300,
+        id: { deid: 300 },
         bending: {
           isFetchingDualSampas: true
         }
@@ -49,7 +49,7 @@ describe("assert DE", () => {
   const expected = {
     des: {
       100: {
-        id: 100,
+        id: { deid: 100 },
         bending: {
           isFetchingDualSampas: false
         }

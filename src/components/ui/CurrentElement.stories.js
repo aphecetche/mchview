@@ -7,9 +7,15 @@ import { PureCurrentElement } from "./CurrentElement";
 
 storiesOf("CurrentElement", module)
   .addDecorator(story => <div style={{ padding: "10px" }}>{story()}</div>)
-  .add("ds", () => <PureCurrentElement type="Dual Sampa" id={42} />)
-  .add("de", () => <PureCurrentElement type="DE" id={501} />)
+  .add("de (invalid)", () => <PureCurrentElement id={{ deid: null }} />)
+  .add("de", () => <PureCurrentElement id={{ deid: 501 }} />)
   .add("de (with data)", () => (
-    <PureCurrentElement type="DE" id={501} value={1234.42} />
+    <PureCurrentElement id={{ deid: 501 }} value={1234.42} />
+  ))
+  .add("deplane", () => (
+    <PureCurrentElement id={{ deid: 501, bending: true }} />
+  ))
+  .add("ds", () => (
+    <PureCurrentElement id={{ deid: null, bending: null, dsid: null }} />
   ))
   .add("nothing", () => <PureCurrentElement />);

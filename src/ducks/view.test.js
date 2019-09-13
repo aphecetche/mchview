@@ -2,7 +2,7 @@ import viewReducer, { actions, selectors } from "./view.js";
 import expect from "expect";
 import initialState from "../initialState.json";
 
-const ce = { type: "a", id: "b", value: "c" };
+const ce = { id: { a: 1, b: 2 }, value: "c" };
 
 describe("view reducer", () => {
   const ini = viewReducer(undefined, {});
@@ -12,7 +12,7 @@ describe("view reducer", () => {
   });
 
   it("should return a state with modified currentElement", () => {
-    const s = viewReducer(ini, actions.setCurrentElement("a", "b", "c"));
+    const s = viewReducer(ini, actions.setCurrentElement({ a: 1, b: 2 }, "c"));
     expect(s.currentElement).toEqual(ce);
   });
 });
@@ -25,8 +25,8 @@ describe("view selector", () => {
   it("bending should be false", () => {
     expect(selectors.bending(ini)).toEqual(false);
   });
-  it("currentElement should be {a,b,c}", () => {
-    const s = viewReducer(ini, actions.setCurrentElement("a", "b", "c"));
+  it("currentElement should be {id:{a:1,b:2},c}", () => {
+    const s = viewReducer(ini, actions.setCurrentElement({ a: 1, b: 2 }, "c"));
     expect(selectors.currentElement(s)).toEqual(ce);
   });
 });

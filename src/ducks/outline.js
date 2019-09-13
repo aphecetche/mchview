@@ -1,28 +1,5 @@
 import { cloneDeep } from "lodash";
-
-// constants
-const LayerCategories = {
-  chamber: { name: "Chamber" },
-  de: {
-    name: "Detection Element"
-  },
-  ds: {
-    name: "Dual Sampa"
-  },
-  pad: {
-    name: "Pad"
-  },
-  cluster: {
-    name: "Cluster"
-  },
-  area: {
-    name: "Area"
-  }
-};
-
-Object.freeze(LayerCategories);
-
-export { LayerCategories };
+import { Categories } from "../categories";
 
 // action types
 export const types = {
@@ -33,8 +10,9 @@ export const types = {
 
 // initial state
 export const initialState = {
-  de: { show: false, stroke: "#333333", strokeWidth: 0.7 },
-  chamber: { show: false, stroke: "black", strokeWidth: 0.5 },
+  de: { show: false, stroke: "#333333", strokeWidth: 0.7, disabled: true },
+  deplane: { show: true, stroke: "#333333", strokeWidth: 0.7 },
+  chamber: { show: false, stroke: "black", strokeWidth: 0.5, disabled: true },
   ds: { show: false, stroke: "black", strokeWidth: 0.3 },
   pad: { show: false, stroke: "black", strokeWidth: 0.1 },
   cluster: { show: false, stroke: "black", strokeWidth: 0.1 },
@@ -48,7 +26,7 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.TOGGLE) {
     const partName = action.payload.partName;
-    if (partName in LayerCategories) {
+    if (partName in Categories) {
       let ns = cloneDeep(state);
       ns[partName].show = !ns[partName].show;
       return ns;
@@ -57,14 +35,14 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.ALL) {
     let ns = cloneDeep(state);
-    Object.keys(LayerCategories).map(x => {
+    Object.keys(Categories).map(x => {
       ns[x].show = true;
     });
     return ns;
   }
   if (action.type === types.NONE) {
     let ns = cloneDeep(state);
-    Object.keys(LayerCategories).map(x => {
+    Object.keys(Categories).map(x => {
       ns[x].show = false;
     });
     return ns;
@@ -75,7 +53,7 @@ export default (state = initialState, action) => {
 // action creators
 export const actions = {
   toggleOutline: partName => {
-    if (partName in LayerCategories) {
+    if (partName in Categories) {
       return {
         type: types.TOGGLE,
         payload: {
@@ -99,19 +77,21 @@ export const actions = {
 // selectors
 export const selectors = {
   isVisible: (state, partName) => {
-    if (partName in LayerCategories) {
+    if (partName in Categories) {
       return state[partName].show;
     }
     return false;
   },
   style: (state, partName) => {
-    if (partName in LayerCategories) {
+    if (partName in Categories) {
       return state[partName];
     }
     return {};
   },
   getAllSelected: state =>
-    Object.keys(LayerCategories).every(x => state[x].show === true),
+    Object.keys(Categories).every(x => state[x].show === true),
   getNoneSelected: state =>
-    Object.keys(LayerCategories).every(x => state[x].show === false)
+    Object.keys(Categories).every(x => state[x].show === false)
 };
+
+export { Categories };

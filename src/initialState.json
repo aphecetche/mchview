@@ -4,6 +4,11 @@
     "modal": false
   },
   "outline": {
+    "deplane": {
+      "show": false,
+      "stroke": "red",
+      "strokeWidth": 0.7
+    },
     "de": {
       "show": false,
       "stroke": "red",

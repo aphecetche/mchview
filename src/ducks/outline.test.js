@@ -1,7 +1,7 @@
 import outline, {
   actions,
   types,
-  LayerCategories,
+  Categories,
   initialState,
   selectors
 } from "./outline.js";
@@ -9,7 +9,7 @@ import expect from "expect";
 import { cloneDeep } from "lodash";
 
 describe("actions", () => {
-  Object.keys(LayerCategories).map(x => {
+  Object.keys(Categories).map(x => {
     it("should create an action to toggle outline of " + x.name, () => {
       const partName = x;
       const expected = {

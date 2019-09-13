@@ -10,6 +10,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { scaleSequential } from "d3-scale";
 import { interpolateViridis } from "d3-scale-chromatic";
+import { encode } from "../../categories";
 
 const makeGroup = (groupname, style, children) => {
   return (
@@ -19,19 +20,19 @@ const makeGroup = (groupname, style, children) => {
   );
 };
 
-const addDELayer = (de, outlineStyle) => {
+const addDELayer = (deplane, outlineStyle) => {
   const colorDE = scaleSequential()
     .domain([100, 1025])
     .interpolator(interpolateViridis);
 
   return makeGroup(
-    "de",
-    outlineStyle("de"),
+    "deplane",
+    outlineStyle("deplane"),
     <PolygonView
-      classname="de"
-      key={"DE" + de.id}
+      classname="deplane"
+      key={encode(deplane.id)}
       prefix="DE"
-      poly={de}
+      poly={deplane}
       fillColor={colorDE(420)}
     />
   );
@@ -44,10 +45,9 @@ const addDSLayer = (ds, outlineStyle) => {
     dspoly.push(
       <PolygonView
         classname="ds"
-        key={"DS" + single.id}
+        key={encode(single.id)}
         poly={single}
         fillColor={colorDS(single.value)}
-        prefix="DS"
       />
     );
   });
@@ -73,7 +73,7 @@ const DEView = ({
   area,
   data,
   isFetching,
-  de,
+  deplane,
   ds
 }) => {
   if (isFetching) {
@@ -83,8 +83,8 @@ const DEView = ({
   let comp = [];
 
   //TODO: extract this to a separate component ?
-  if (isVisible("de")) {
-    comp.push(addDELayer(de, outlineStyle));
+  if (isVisible("deplane")) {
+    comp.push(addDELayer(deplane, outlineStyle));
   }
 
   //TODO: extract this to a separate component ?
@@ -94,13 +94,13 @@ const DEView = ({
 
   //TODO: extract this to a separate component ?
   if (isVisible("area")) {
-    comp.push(addAreaLayer(area, de, outlineStyle));
+    comp.push(addAreaLayer(area, deplane, outlineStyle));
   }
 
   return (
     <div className={styles.deview}>
       <main>
-        <SVGView geo={de} classname={styles.deview}>
+        <SVGView geo={deplane} classname={styles.deview}>
           {comp}
         </SVGView>
       </main>
@@ -141,7 +141,7 @@ const mapStateToProps = state => ({
       selectors.deid(state),
       selectors.bending(state)
     ),
-  de: selectors.degeo(state),
+  deplane: selectors.degeo(state),
   ds: selectors.degeo(state).dualsampas
 });
 

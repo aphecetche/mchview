@@ -49,11 +49,11 @@ export const selectors = {
       selectors.bending(state)
     ),
   degeo: state =>
-    envelopSelectors.plane(
+    envelopSelectors.deplane(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
     ),
-  plane: (state, deid, bending) =>
-    envelopSelectors.plane(state.envelop, deid, bending)
+  deplane: (state, deid, bending) =>
+    envelopSelectors.deplane(state.envelop, deid, bending)
 };

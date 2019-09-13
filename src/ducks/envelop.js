@@ -25,7 +25,7 @@ export const assertDE = (state, deid, bending) => {
     let de = {
       des: {
         [deid]: {
-          id: deid,
+          id: { deid: deid },
           [bendingPlaneName(bending)]: {
             isFetchingDualSampas: false
           }
@@ -44,7 +44,7 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.FETCH_DUALSAMPAS_REQUEST) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.FETCH_DUALSAMPAS_FAILURE) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -63,10 +63,10 @@ export default (state = initialState, action) => {
   if (action.type === types.FETCH_DUALSAMPAS_SUCCESS) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
     merge(
-      selectors.plane(s, action.payload.deid, action.payload.bending),
+      selectors.deplane(s, action.payload.deid, action.payload.bending),
       action.payload.json
     );
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -75,7 +75,7 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.FETCH_DE_REQUEST) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -84,7 +84,7 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.FETCH_DE_FAILURE) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -94,10 +94,10 @@ export default (state = initialState, action) => {
   if (action.type === types.FETCH_DE_SUCCESS) {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
     merge(
-      selectors.plane(s, action.payload.deid, action.payload.bending),
+      selectors.deplane(s, action.payload.deid, action.payload.bending),
       action.payload.json
     );
-    selectors.plane(
+    selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
@@ -120,7 +120,12 @@ const axiosDE = (dispatch, deid, bending) => {
           actions.failedToFetchDE("got empty de data for deid" + deid)
         );
       }
-      return dispatch(actions.receiveDE(deid, bending, response.data));
+      return dispatch(
+        actions.receiveDE(deid, bending, {
+          ...response.data,
+          id: { deid: response.data.id, bending }
+        })
+      );
     })
     .catch(error => {
       return dispatch(actions.failedToFetchDE(error));
@@ -138,7 +143,8 @@ export const actions = {
   fetchDualSampas: (deid, bending) => {
     const dualsampa = new schema.Entity("dualsampas", undefined, {
       // append the deid to the dualsampa object
-      processStrategy: entity => Object.assign({}, { ...entity, deid: deid })
+      processStrategy: entity =>
+        Object.assign({}, { ...entity, id: { deid, bending, dsid: entity.id } })
     });
     let url =
       mappingServer() + "/v2/dualsampas?deid=" + deid + "&bending=" + bending;
@@ -221,7 +227,7 @@ export const actions = {
 
 // selectors
 export const selectors = {
-  plane: (state, deid, bending) => {
+  deplane: (state, deid, bending) => {
     if (state.des === undefined) {
       return undefined;
     }
@@ -232,14 +238,14 @@ export const selectors = {
   },
   isFetchingDualSampas: (state, deid, bending) => {
     return selectors.has(state, deid, bending)
-      ? selectors.plane(state, deid, bending).isFetchingDualSampas
+      ? selectors.deplane(state, deid, bending).isFetchingDualSampas
       : false;
   },
   isFetchingDE: (state, deid, bending) => {
     return selectors.has(state, deid, bending)
-      ? selectors.plane(state, deid, bending).isFetchingDE
+      ? selectors.deplane(state, deid, bending).isFetchingDE
       : false;
   },
   has: (state, deid, bending) =>
-    selectors.plane(state, deid, bending) !== undefined ? true : false
+    selectors.deplane(state, deid, bending) !== undefined ? true : false
 };
