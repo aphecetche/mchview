@@ -27,8 +27,20 @@ DataSourceCreateButton.propTypes = {
 const mapDispatchToProps = dispatch => {
   return {
     // onClick: () => dispatch(actions.showModal())
-    onClick: (deid, bending, dsids) =>
-      dispatch(dataActions.randomData(deid, bending, dsids))
+    // onClick: (deid, bending, dsids) =>
+    //   dispatch(dataActions.randomData(deid, bending, dsids))
+    onClick: () =>
+      dispatch({
+        type: "TOTO",
+        payload: {
+          request: {
+            url: "degeo?deid=819&bending=false",
+            transformResponse: data => {
+              console.log("data=", data);
+            }
+          }
+        }
+      })
   };
 };
 
@@ -36,11 +48,17 @@ const mapStateToProps = state => {
   return {
     deid: selectors.deid(state),
     bending: selectors.bending(state),
-    dsids: selectors.deplane(
-      state,
-      selectors.deid(state),
-      selectors.bending(state)
-    ).dsids
+    dsids: () => {
+      let deplane = selectors.deplane(
+        state,
+        selectors.deid(state),
+        selectors.bending(state)
+      );
+      if (deplane) {
+        return deplane.dsids;
+      }
+      return null;
+    }
   };
 };
 

@@ -11,7 +11,7 @@ export const types = {
 // initial state
 export const initialState = {
   de: { show: false, stroke: "#333333", strokeWidth: 0.7, disabled: true },
-  deplane: { show: true, stroke: "#333333", strokeWidth: 0.7 },
+  deplane: { show: false, stroke: "#333333", strokeWidth: 0.7 },
   chamber: { show: false, stroke: "black", strokeWidth: 0.5, disabled: true },
   ds: { show: false, stroke: "black", strokeWidth: 0.3 },
   pad: { show: false, stroke: "black", strokeWidth: 0.1 },

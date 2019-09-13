@@ -136,13 +136,13 @@ const mapStateToProps = state => ({
       selectors.deid(state),
       selectors.bending(state)
     ) ||
-    selectors.isFetchingDE(
+    selectors.isFetchingDe(
       state,
       selectors.deid(state),
       selectors.bending(state)
     ),
-  deplane: selectors.degeo(state),
-  ds: selectors.degeo(state).dualsampas
+  deplane: selectors.degeo(state) ? selectors.degeo(state) : null,
+  ds: selectors.degeo(state) ? selectors.degeo(state).dualsampas : null
 });
 
 export default connect(mapStateToProps)(DEView);

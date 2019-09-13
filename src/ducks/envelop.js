@@ -1,6 +1,7 @@
 import axios from "axios";
 import { normalize, schema } from "normalizr";
 import { merge, cloneDeep } from "lodash";
+import { isValidDeId } from "../categories";
 
 const mappingServer = () => "http://localhost:8080";
 
@@ -27,7 +28,8 @@ export const assertDE = (state, deid, bending) => {
         [deid]: {
           id: { deid: deid },
           [bendingPlaneName(bending)]: {
-            isFetchingDualSampas: false
+            isFetchingDualSampas: false,
+            isFetchingDe: false
           }
         }
       }
@@ -37,192 +39,132 @@ export const assertDE = (state, deid, bending) => {
   return newState;
 };
 
+const fetch = (state, { deid, bending }, what) => {
+  let s = assertDE(state, deid, bending);
+  selectors.deplane(s, deid, bending)["isFetching" + what] = true;
+  return state;
+};
+
+const receive = (state, { deid, bending }, what, data) => {
+  let s = assertDE(state, deid, bending);
+  merge(selectors.deplane(s, deid, bending), data);
+  selectors.deplane(s, deid, bending)["isFetching" + what] = false;
+  return s;
+};
+
 // reducer
 export default (state = initialState, action) => {
   if (state === undefined) {
     return initialState;
   }
   if (action.type === types.FETCH_DUALSAMPAS_REQUEST) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).isFetchingDualSampas = true;
-    return s;
+    return fetch(state, action.payload.request.params, "DualSampas");
   }
   if (action.type === types.FETCH_DUALSAMPAS_FAILURE) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).fetchingDualSampasFailed = action.payload.error;
+    console.error("FETCH_DUALSAMPAS_FAILURE: ", action.error);
     return state;
   }
   if (action.type === types.FETCH_DUALSAMPAS_SUCCESS) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    merge(
-      selectors.deplane(s, action.payload.deid, action.payload.bending),
-      action.payload.json
+    return receive(
+      state,
+      action.payload.data.id,
+      "DualSampas",
+      action.payload.data
     );
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).isFetchingDualSampas = false;
-    return s;
   }
   if (action.type === types.FETCH_DE_REQUEST) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).isFetchingDE = true;
-    return s;
+    return fetch(state, action.payload.request.params, "De");
   }
   if (action.type === types.FETCH_DE_FAILURE) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).fetchingDEFailed = action.payload.error;
+    console.error("FETCH_DE_FAILURE: ", action.error);
     return state;
   }
   if (action.type === types.FETCH_DE_SUCCESS) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    merge(
-      selectors.deplane(s, action.payload.deid, action.payload.bending),
-      action.payload.json
-    );
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).isFetchingDE = false;
-    return s;
+    return receive(state, action.payload.data.id, "De", action.payload.data);
   }
   return state;
 };
 
-const axiosDE = (dispatch, deid, bending) => {
-  let url = mappingServer() + "/v2/degeo?deid=" + deid + "&bending=" + bending;
-  return axios
-    .get(url)
-    .then(response => {
-      if (
-        Object.entries(response.data).length === 0 &&
-        response.data.construtor === Object
-      ) {
-        return dispatch(
-          actions.failedToFetchDE("got empty de data for deid" + deid)
-        );
-      }
-      return dispatch(
-        actions.receiveDE(deid, bending, {
-          ...response.data,
-          id: { deid: response.data.id, bending }
-        })
-      );
-    })
-    .catch(error => {
-      return dispatch(actions.failedToFetchDE(error));
-    });
-};
-
 // action creators
+
 export const actions = {
   fetchDE: (deid, bending) => {
-    return dispatch => {
-      dispatch(actions.requestDE(deid, bending));
-      return axiosDE(dispatch, deid, bending);
+    if (!isValidDeId(deid)) {
+      return {
+        type: types.FETCH_DE_FAILURE,
+        error: {
+          message: "deid " + deid + " is not a valid detection element id"
+        }
+      };
+    }
+    return {
+      types: [
+        types.FETCH_DE_REQUEST,
+        types.FETCH_DE_SUCCESS,
+        types.FETCH_DE_FAILURE
+      ],
+      payload: {
+        request: {
+          url: "/degeo",
+          params: {
+            deid,
+            bending
+          },
+          transformResponse: data => {
+            return {
+              ...data,
+              id: { deid: data.id, bending }
+            };
+          }
+        }
+      }
     };
   },
   fetchDualSampas: (deid, bending) => {
-    const dualsampa = new schema.Entity("dualsampas", undefined, {
-      // append the deid to the dualsampa object
-      processStrategy: entity =>
-        Object.assign({}, { ...entity, id: { deid, bending, dsid: entity.id } })
-    });
-    let url =
-      mappingServer() + "/v2/dualsampas?deid=" + deid + "&bending=" + bending;
-    return dispatch => {
-      dispatch(actions.requestDualSampas(deid, bending));
-      return axios
-        .get(url)
-        .then(response => {
-          let normalizedData = {};
-          if (
-            !(
-              Object.entries(response.data).length === 0 &&
-              response.data.construtor === Object
-            )
-          ) {
-            // ensure we are not normalizing and empty data
-            normalizedData = normalize(response.data, [dualsampa]);
-          } else {
-            return dispatch(
-              actions.failedToFetchDualSampas(
-                "got empty dualsampa data for deid" + deid
-              )
-            );
-          }
-          return dispatch(
-            actions.receiveDualSampas(deid, bending, {
+    if (!isValidDeId(deid)) {
+      return {
+        type: types.FETCH_DE_FAILURE,
+        error: {
+          message: "deid " + deid + " is not a valid detection element id"
+        }
+      };
+    }
+    return {
+      types: [
+        types.FETCH_DUALSAMPAS_REQUEST,
+        types.FETCH_DUALSAMPAS_SUCCESS,
+        types.FETCH_DUALSAMPAS_FAILURE
+      ],
+      payload: {
+        request: {
+          url: "/dualsampas",
+          params: {
+            deid,
+            bending
+          },
+          transformResponse: data => {
+            const dualsampa = new schema.Entity("dualsampas", undefined, {
+              // append the deid to the dualsampa object
+              processStrategy: entity =>
+                Object.assign(
+                  {},
+                  { ...entity, id: { deid, bending, dsid: entity.id } }
+                )
+            });
+            const normalizedData = normalize(data, [dualsampa]);
+            return {
               dualsampas: normalizedData.entities.dualsampas,
-              dsids: normalizedData.result
-            })
-          );
-        })
-        .catch(error => {
-          return dispatch(actions.failedToFetchDualSampas(error));
-        });
+              dsids: normalizedData.result,
+              id: {
+                deid,
+                bending
+              }
+            };
+          }
+        }
+      }
     };
-  },
-  requestDE: (deid, bending) => ({
-    type: types.FETCH_DE_REQUEST,
-    payload: {
-      deid: deid,
-      bending: bending
-    }
-  }),
-  requestDualSampas: (deid, bending) => ({
-    type: types.FETCH_DUALSAMPAS_REQUEST,
-    payload: {
-      deid: deid,
-      bending: bending
-    }
-  }),
-  receiveDE: (deid, bending, json) => ({
-    type: types.FETCH_DE_SUCCESS,
-    payload: {
-      deid: deid,
-      bending: bending,
-      json: json
-    }
-  }),
-  receiveDualSampas: (deid, bending, json) => ({
-    type: types.FETCH_DUALSAMPAS_SUCCESS,
-    payload: {
-      deid: deid,
-      bending: bending,
-      json: json
-    }
-  }),
-  failedToFetchDE: error => ({
-    type: types.FETCH_DE_FAILURE,
-    payload: {
-      error: error
-    }
-  }),
-  failedToFetchDualSampas: error => ({
-    type: types.FETCH_DUALSAMPAS_FAILURE,
-    payload: {
-      error: error
-    }
-  })
+  }
 };
 
 // selectors
@@ -241,9 +183,9 @@ export const selectors = {
       ? selectors.deplane(state, deid, bending).isFetchingDualSampas
       : false;
   },
-  isFetchingDE: (state, deid, bending) => {
+  isFetchingDe: (state, deid, bending) => {
     return selectors.has(state, deid, bending)
-      ? selectors.deplane(state, deid, bending).isFetchingDE
+      ? selectors.deplane(state, deid, bending).isFetchingDe
       : false;
   },
   has: (state, deid, bending) =>

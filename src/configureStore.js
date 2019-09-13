@@ -3,8 +3,15 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import reducer from "./reducers";
 import reduxThunk from "redux-thunk";
 import startup from "./startup";
+import axiosMiddleWare from "redux-axios-middleware";
+import axios from "axios";
 
-const middleware = [reduxThunk];
+const mappingAPI = axios.create({
+  baseURL: "http://localhost:8080/v2",
+  responseType: "json"
+});
+
+const middleware = [reduxThunk, axiosMiddleWare(mappingAPI)];
 
 const configureStore = () => {
   const store = createStore(

@@ -42,8 +42,8 @@ export const selectors = {
       selectors.deid(state),
       selectors.bending(state)
     ),
-  isFetchingDE: state =>
-    envelopSelectors.isFetchingDE(
+  isFetchingDe: state =>
+    envelopSelectors.isFetchingDe(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
