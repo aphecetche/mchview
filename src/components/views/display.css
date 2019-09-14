@@ -1,0 +1,39 @@
+.display {
+  width: 500px;
+  height:500px;
+  background: lightyellow;
+  border: 2px solid yellow;
+  stroke-width: 0.1rem;
+
+  /* pointer-events: none */
+}
+
+.lime {
+  fill: limegreen;
+  stroke: lime;
+}
+
+.salmon {
+  fill: lightsalmon;
+  stroke: salmon
+}
+
+.green {
+  fill: lightgreen;
+  stroke: green;
+
+}
+
+.blue {
+  fill: lightblue;
+  stroke: blue
+}
+
+.gray {
+  fill: lightgray;
+  stroke: gray
+}
+
+.toto {
+  stroke: red;
+}

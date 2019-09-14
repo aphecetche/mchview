@@ -42,12 +42,15 @@ export const selectors = {
       selectors.deid(state),
       selectors.bending(state)
     ),
-  isFetchingDE: state =>
+  isFetchingDEPlane: state =>
     envelopSelectors.isFetchingDE(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
     ),
+  isFetchingDE: state =>
+    envelopSelectors.isFetchingDE(state.envelop, selectors.deid(state), true) ||
+    envelopSelectors.isFetchingDE(state.envelop, selectors.deid(state), false),
   degeo: state =>
     envelopSelectors.deplane(
       state.envelop,

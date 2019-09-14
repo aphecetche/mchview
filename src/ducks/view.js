@@ -1,5 +1,6 @@
 import { actions as envelopActions } from "./envelop";
 import { cloneDeep } from "lodash";
+import { isValidDeId } from "../categories";
 
 // action types
 export const types = {
@@ -37,10 +38,18 @@ export default (state = initialState, action) => {
 export const actions = {
   setDetectionElement: (deid, bending) => {
     return dispatch => {
+      if (!isValidDeId(deid)) {
+        return dispatch({
+          type: "ERROR",
+          payload: {
+            message: "invalid deid " + deid
+          }
+        });
+      }
       let p1 = dispatch(envelopActions.fetchDualSampas(deid, bending));
       let p2 = dispatch(envelopActions.fetchDE(deid, bending));
       Promise.all([p1, p2]).then(() => {
-        dispatch({
+        return dispatch({
           type: types.SET_DETECTION_ELEMENT,
           payload: {
             deid: deid,

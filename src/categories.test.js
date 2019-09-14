@@ -29,6 +29,12 @@ describe("isvalid", () => {
   it("deid:501 should be valid", () => {
     expect(categories.isvalid({ deid: 501 })).toBe(true);
   });
+  it("deid:100 should be valid", () => {
+    expect(categories.isvalid({ deid: 100 })).toBe(true);
+  });
+  it("deid:104 should be invalid", () => {
+    expect(categories.isvalid({ deid: 104 })).toBe(false);
+  });
   it("deid:null,bending:null,dsid:null should be invalid", () => {
     expect(categories.isvalid({ deid: null, bending: null, dsid: null })).toBe(
       false

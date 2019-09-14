@@ -23,5 +23,17 @@
     /* padding: 1vmin; */
   }
 
+  stroke: pink
 }
 
+.loader {
+  margin: 1rem auto;
+
+  & line {
+    stroke: var(--text-color);
+  }
+
+  & circle {
+    stroke: var(--background-color)
+  }
+}

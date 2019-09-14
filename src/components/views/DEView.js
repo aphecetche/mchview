@@ -136,7 +136,7 @@ const mapStateToProps = state => ({
       selectors.deid(state),
       selectors.bending(state)
     ) ||
-    selectors.isFetchingDE(
+    selectors.isFetchingDEPlane(
       state,
       selectors.deid(state),
       selectors.bending(state)

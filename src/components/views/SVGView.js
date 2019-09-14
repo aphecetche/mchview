@@ -13,13 +13,15 @@ const SVGView = ({ geo, classname, children }) => {
   const w = "100%";
   const h = aspectRatio * 100 + "%";
   if (isFinite(h)) {
-    return "";
+    return null;
   }
-  const vx = geo.sx + 10;
-  const vy = geo.sy + 10;
+  // const vx = geo.sx + 10;
+  // const vy = geo.sy + 10;
+  const vx = geo.sx;
+  const vy = geo.sy;
 
   return (
-    <svg width={w} height={h} viewBox={"-5 -5 " + vx + " " + vy}>
+    <svg width={w} height={h} viewBox={"0 0 " + vx + " " + vy}>
       <g
         className={classname}
         transform={"translate(" + xleft + "," + ybottom + ")"}
@@ -38,7 +40,7 @@ SVGView.propTypes = {
     sy: PropTypes.number
   }),
   classname: PropTypes.string.isRequired,
-  children: PropTypes.array
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 export default SVGView;
