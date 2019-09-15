@@ -1,6 +1,6 @@
 import { actions as envelopActions } from "./envelop";
 import { cloneDeep } from "lodash";
-import { isValidDeId } from "../categories";
+import * as categories from "../categories";
 
 // action types
 export const types = {
@@ -38,11 +38,15 @@ export default (state = initialState, action) => {
 export const actions = {
   setDetectionElement: (deid, bending) => {
     return dispatch => {
-      if (!isValidDeId(deid)) {
+      if (!categories.isValidDeId(deid)) {
         return dispatch({
           type: "ERROR",
           payload: {
-            message: "invalid deid " + deid
+            message:
+              "invalid deid " +
+              deid +
+              ". Valid ones are : " +
+              categories.listOfValidDeIds.join(",")
           }
         });
       }

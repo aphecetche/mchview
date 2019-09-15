@@ -224,7 +224,10 @@ export const listOfValidDeIds = [
 ];
 
 export const isValidDeId = deid => {
-  return !isNaN(deid) && listOfValidDeIds.includes(deid);
+  if (isNaN(deid)) {
+    return false;
+  }
+  return listOfValidDeIds.includes(parseInt(deid, 10));
 };
 
 export const isvalid = id => {
