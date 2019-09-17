@@ -1,30 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SVGView = ({ geo, classname, children }) => {
+const SVGView = ({ geo, classname, children, offset }) => {
   if (!geo) {
     return null;
   }
-  const xleft = -(geo.x - geo.sx / 2.0);
-  const ybottom = -(geo.y - geo.sy / 2.0);
+  let xleft = -(geo.x - geo.sx / 2.0);
+  let ytop = -(geo.y - geo.sy / 2.0);
 
   const aspectRatio = (1.0 * geo.sy) / geo.sx;
 
-  const w = "100%";
-  const h = aspectRatio * 100 + "%";
+  let w = "100%";
+  let h = aspectRatio * 100 + "%";
   if (isFinite(h)) {
     return null;
   }
-  // const vx = geo.sx + 10;
-  // const vy = geo.sy + 10;
-  const vx = geo.sx;
-  const vy = geo.sy;
+  let vx = geo.sx;
+  let vy = geo.sy;
 
+  let left = 0;
+  let top = 0;
+  if (offset) {
+    left = -offset.left;
+    top = -offset.top;
+    vx += offset.left + offset.right;
+    vy += offset.top + offset.bottom;
+  }
   return (
-    <svg width={w} height={h} viewBox={"0 0 " + vx + " " + vy}>
+    <svg width={w} height={h} viewBox={left + " " + top + " " + vx + " " + vy}>
       <g
         className={classname}
-        transform={"translate(" + xleft + "," + ybottom + ")"}
+        transform={"translate(" + xleft + "," + ytop + ")"}
       >
         {children}
       </g>
@@ -40,7 +46,13 @@ SVGView.propTypes = {
     sy: PropTypes.number
   }),
   classname: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  offset: PropTypes.shape({
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number,
+    bottom: PropTypes.number
+  })
 };
 
 export default SVGView;

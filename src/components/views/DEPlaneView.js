@@ -100,7 +100,11 @@ const DEPlaneView = ({
   return (
     <div className={styles.deview}>
       <main>
-        <SVGView geo={deplane} classname={styles.deview}>
+        <SVGView
+          geo={deplane}
+          classname={styles.deview}
+          offset={{ left: 5, right: 5, top: 5, bottom: 5 }}
+        >
           {comp}
         </SVGView>
       </main>
