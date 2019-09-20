@@ -1,5 +1,4 @@
 import React from "react";
-import TopBar from "./TopBar";
 import MainStage from "./MainStage";
 import BottomBar from "./BottomBar";
 import styles from "./app.css";
@@ -12,8 +11,7 @@ import CCDBSelector from "../selectors/CCDBSelector";
 const App = ({ modal }) => {
   return (
     <div className={styles.app}>
-      <TopBar />
-      <MainStage view="de" />
+      <MainStage />
       <BottomBar />
       {modal ? (
         <Modal>

@@ -1,31 +1,42 @@
-import { isEmpty } from "lodash";
-
+import { isEmpty, isEqual } from "lodash";
 // constants
-const Categories = {
-  chamber: { name: "Chamber" },
-  de: {
-    name: "Detection Element"
-  },
-  deplane: {
-    name: "Detection Element Plane"
-  },
-  ds: {
-    name: "Dual Sampa"
-  },
-  pad: {
-    name: "Pad"
-  },
-  cluster: {
-    name: "Cluster"
-  },
-  area: {
-    name: "Area"
-  }
+const chamber = { name: "Chamber", key: "chamber" };
+
+const de = {
+  name: "Detection Element",
+  key: "de"
+};
+const deplane = {
+  name: "Detection Element Plane",
+  key: "deplane"
+};
+const ds = {
+  name: "Dual Sampa",
+  key: "ds"
+};
+const pad = {
+  name: "Pad",
+  key: "pad"
+};
+const cluster = {
+  name: "Cluster",
+  key: "cluster"
+};
+const area = {
+  name: "Area",
+  key: "area"
 };
 
-Object.freeze(Categories);
-
-export { Categories };
+export const isValidCategory = c => {
+  return (
+    isEqual(c, de) ||
+    isEqual(c, ds) ||
+    isEqual(c, deplane) ||
+    isEqual(c, chamber) ||
+    isEqual(c, cluster) ||
+    isEqual(c, area)
+  );
+};
 
 export const whatis = id => {
   if (id === undefined) {
@@ -35,7 +46,7 @@ export const whatis = id => {
     return undefined;
   }
   if (id.hasOwnProperty("clusterid") && id.hasOwnProperty("deid")) {
-    return Categories.cluster;
+    return cluster;
   }
   if (
     id.hasOwnProperty("deid") &&
@@ -43,23 +54,23 @@ export const whatis = id => {
     id.hasOwnProperty("dsid") &&
     id.hasOwnProperty("padid")
   ) {
-    return Categories.pad;
+    return pad;
   }
   if (
     id.hasOwnProperty("deid") &&
     id.hasOwnProperty("bending") &&
     id.hasOwnProperty("dsid")
   ) {
-    return Categories.ds;
+    return ds;
   }
   if (id.hasOwnProperty("bending") && id.hasOwnProperty("deid")) {
-    return Categories.deplane;
+    return deplane;
   }
   if (id.hasOwnProperty("deid")) {
-    return Categories.de;
+    return de;
   }
   if (id.hasOwnProperty("chid")) {
-    return Categories.chamber;
+    return chamber;
   }
   return undefined;
 };
@@ -233,13 +244,13 @@ export const isValidDeId = deid => {
 export const isvalid = id => {
   //TODO: get the real values from the mapping API at startup instead
   const w = whatis(id);
-  if (w === Categories.de) {
+  if (w === de) {
     return isValidDeId(id.deid);
   }
-  if (w === Categories.deplane) {
+  if (w === deplane) {
     return isValidDeId(id.deid) && id.bending !== null;
   }
-  if (w === Categories.ds) {
+  if (w === ds) {
     return !(isNaN(id.dsid) || id.dsid === null);
   }
   return false;
@@ -254,13 +265,13 @@ export const describe = id => {
   if (!isvalid(id)) {
     return rv;
   }
-  if (w === Categories.de) {
+  if (w === de) {
     rv += " " + id.deid;
   }
-  if (w === Categories.deplane) {
+  if (w === deplane) {
     rv += " " + id.deid + " (" + (id.bending ? "Bending" : "Non-Bending") + ")";
   }
-  if (w === Categories.ds) {
+  if (w === ds) {
     rv =
       describe({ deid: id.deid, bending: id.bending }) +
       " " +
@@ -276,4 +287,4 @@ export const encode = id =>
     .toLowerCase()
     .replace(/ /g, "-");
 
-export default Categories;
+export { de, deplane, chamber, area, cluster, ds, pad };

@@ -1,17 +1,16 @@
 import axios from "axios";
 import { normalize, schema } from "normalizr";
-import { merge, cloneDeep } from "lodash";
+import { merge, cloneDeep, isEqual } from "lodash";
 
 const mappingServer = () => "http://localhost:8080";
+
+const mappingAPI = "http://localhost:8080/v2";
 
 // action types
 export const types = {
   FETCH_DUALSAMPAS_REQUEST: "ENVELOPS/FETCH_DUALSAMPAS_REQUEST",
   FETCH_DUALSAMPAS_FAILURE: "ENVELOPS/FETCH_DUALSAMPAS_FAILURE",
-  FETCH_DUALSAMPAS_SUCCESS: "ENVELOPS/FETCH_DUALSAMPAS_SUCCESS",
-  FETCH_DE_REQUEST: "ENVELOPS/FETCH_DE_REQUEST",
-  FETCH_DE_FAILURE: "ENVELOPS/FETCH_DE_FAILURE",
-  FETCH_DE_SUCCESS: "ENVELOPS/FETCH_DE_SUCCESS"
+  FETCH_DUALSAMPAS_SUCCESS: "ENVELOPS/FETCH_DUALSAMPAS_SUCCESS"
 };
 
 const bendingPlaneName = bending => (bending ? "bending" : "non-bending");
@@ -73,71 +72,48 @@ export default (state = initialState, action) => {
     ).isFetchingDualSampas = false;
     return s;
   }
-  if (action.type === types.FETCH_DE_REQUEST) {
+  if (action.type == "FETCH_DEPLANE") {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
     selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
-    ).isFetchingDE = true;
+    ).isFetchingDePlane = true;
     return s;
   }
-  if (action.type === types.FETCH_DE_FAILURE) {
+  if (action.type == "ERROR_DEPLANE") {
     let s = assertDE(state, action.payload.deid, action.payload.bending);
     selectors.deplane(
       s,
       action.payload.deid,
       action.payload.bending
-    ).fetchingDEFailed = action.payload.error;
+    ).isFetchingDePlane = false;
     return state;
   }
-  if (action.type === types.FETCH_DE_SUCCESS) {
-    let s = assertDE(state, action.payload.deid, action.payload.bending);
-    merge(
-      selectors.deplane(s, action.payload.deid, action.payload.bending),
-      action.payload.json
-    );
-    selectors.deplane(
-      s,
-      action.payload.deid,
-      action.payload.bending
-    ).isFetchingDE = false;
+  if (action.type == "RECEIVE_DEPLANE") {
+    const id = action.payload.response.id;
+    const { deid, bending } = id;
+    console.log(id, deid, bending);
+    let s = assertDE(state, deid, bending);
+    merge(selectors.deplane(s, deid, bending), action.payload.response);
+    selectors.deplane(s, deid, bending).isFetchingDePlane = false;
     return s;
   }
   return state;
 };
 
-const axiosDE = (dispatch, deid, bending) => {
-  let url = mappingServer() + "/v2/degeo?deid=" + deid + "&bending=" + bending;
-  return axios
-    .get(url)
-    .then(response => {
-      if (
-        Object.entries(response.data).length === 0 &&
-        response.data.construtor === Object
-      ) {
-        return dispatch(
-          actions.failedToFetchDE("got empty de data for deid" + deid)
-        );
-      }
-      return dispatch(
-        actions.receiveDE(deid, bending, {
-          ...response.data,
-          id: { deid: response.data.id, bending }
-        })
-      );
-    })
-    .catch(error => {
-      return dispatch(actions.failedToFetchDE(error));
-    });
-};
-
 // action creators
 export const actions = {
-  fetchDE: (deid, bending) => {
-    return dispatch => {
-      dispatch(actions.requestDE(deid, bending));
-      return axiosDE(dispatch, deid, bending);
+  fetchDePlane: (deid, bending) => {
+    return {
+      type: "DEPLANE",
+      payload: {
+        request: {
+          url: mappingAPI + "/degeo?deid=" + deid + "&bending=" + bending,
+          deid,
+          bending
+        }
+      }
     };
   },
   fetchDualSampas: (deid, bending) => {
@@ -181,26 +157,11 @@ export const actions = {
         });
     };
   },
-  requestDE: (deid, bending) => ({
-    type: types.FETCH_DE_REQUEST,
-    payload: {
-      deid: deid,
-      bending: bending
-    }
-  }),
   requestDualSampas: (deid, bending) => ({
     type: types.FETCH_DUALSAMPAS_REQUEST,
     payload: {
       deid: deid,
       bending: bending
-    }
-  }),
-  receiveDE: (deid, bending, json) => ({
-    type: types.FETCH_DE_SUCCESS,
-    payload: {
-      deid: deid,
-      bending: bending,
-      json: json
     }
   }),
   receiveDualSampas: (deid, bending, json) => ({
@@ -209,12 +170,6 @@ export const actions = {
       deid: deid,
       bending: bending,
       json: json
-    }
-  }),
-  failedToFetchDE: error => ({
-    type: types.FETCH_DE_FAILURE,
-    payload: {
-      error: error
     }
   }),
   failedToFetchDualSampas: error => ({
@@ -237,15 +192,27 @@ export const selectors = {
     return undefined;
   },
   isFetchingDualSampas: (state, deid, bending) => {
-    return selectors.has(state, deid, bending)
+    return selectors.hasDePlane(state, deid, bending)
       ? selectors.deplane(state, deid, bending).isFetchingDualSampas
       : false;
   },
-  isFetchingDE: (state, deid, bending) => {
-    return selectors.has(state, deid, bending)
-      ? selectors.deplane(state, deid, bending).isFetchingDE
+  isFetchingDePlane: (state, deid, bending) => {
+    return selectors.hasDePlane(state, deid, bending)
+      ? selectors.deplane(state, deid, bending).isFetchingDePlane
       : false;
   },
-  has: (state, deid, bending) =>
-    selectors.deplane(state, deid, bending) !== undefined ? true : false
+  hasDePlane: (state, deid, bending) => {
+    const dp = selectors.deplane(state, deid, bending);
+    if (dp !== undefined) {
+      return true;
+      // return dp.vertices !== undefined;
+    }
+    return false;
+  },
+  hasDe: (state, deid) => {
+    return (
+      selectors.hasDePlane(state, deid, true) &&
+      selectors.hasDePlane(state, deid, false)
+    );
+  }
 };

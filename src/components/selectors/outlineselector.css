@@ -3,6 +3,7 @@
 .outlineselector {
   display: flex;
   flex-direction: row;
+  background: var(--background-color);
 }
 
 .outlineselector ul {
@@ -15,24 +16,6 @@
     margin: 10px 0;
     padding: 0 0 0 10px;
 
-    & input[type="checkbox"] {
-      display: none;
-
-      & ~ label {
-        display: flex;
-        margin: auto 0;
-        padding: 10px;
-        color: var(--disabled-color);
-        border: 1px solid var(--disabled-color);
-        border-radius: 10px;
-        user-select: none;
-      }
-
-      &:checked ~ label {
-        color: var(--text-color);
-        border: 1px solid var(--text-color);
-      }
-    }
   }
 }
 

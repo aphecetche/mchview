@@ -1,23 +1,34 @@
 import expect from "expect";
 import * as categories from "./categories";
 
-describe("categories.whatis", () => {
+describe("isValidCategory", () => {
+  it("{de,Detection Element} should be a valid category", () => {
+    expect(
+      categories.isValidCategory({
+        key: categories.de.key,
+        name: categories.de.name
+      })
+    ).toBe(true);
+  });
+});
+
+describe("whatis", () => {
   it("deid should be de", () => {
-    expect(categories.whatis({ deid: null })).toBe(categories.Categories.de);
+    expect(categories.whatis({ deid: null })).toBe(categories.de);
   });
   it("deid,bending should be detection element plane", () => {
     expect(categories.whatis({ deid: null, bending: null })).toBe(
-      categories.Categories.deplane
+      categories.deplane
     );
   });
   it("deid,bending,dsid should be dual sampa", () => {
     expect(categories.whatis({ deid: null, bending: null, dsid: null })).toBe(
-      categories.Categories.ds
+      categories.ds
     );
   });
   it("deid:null,bending:null,dsid:null should be dual sampa", () => {
     expect(categories.whatis({ deid: null, bending: null, dsid: null })).toBe(
-      categories.Categories.ds
+      categories.ds
     );
   });
 });

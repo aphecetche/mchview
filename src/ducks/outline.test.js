@@ -1,24 +1,19 @@
-import outline, {
-  actions,
-  types,
-  Categories,
-  initialState,
-  selectors
-} from "./outline.js";
+import outline, { actions, types, initialState, selectors } from "./outline.js";
 import expect from "expect";
 import { cloneDeep } from "lodash";
+import * as categories from "../categories";
 
 describe("actions", () => {
-  Object.keys(Categories).map(x => {
-    it("should create an action to toggle outline of " + x.name, () => {
-      const partName = x;
+  Object.keys(categories).map(x => {
+    const c = categories[x];
+    it("should create an action to toggle outline of " + c.name, () => {
       const expected = {
         type: types.TOGGLE,
         payload: {
-          partName: x
+          category: c
         }
       };
-      expect(actions.toggleOutline(partName)).toEqual(expected);
+      expect(actions.toggleOutline(c)).toEqual(expected);
     });
   });
 });
@@ -32,7 +27,7 @@ describe("outline reducer", () => {
   it("should handle TOGGLE_OUTLINE", () => {
     const expected = cloneDeep(ini);
     expected["de"].show = true;
-    const r = outline(ini, actions.toggleOutline("de"));
+    const r = outline(ini, actions.toggleOutline(categories.de));
     expect(r).toEqual(expected);
   });
 

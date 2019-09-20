@@ -3,8 +3,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import reducer from "./reducers";
 import reduxThunk from "redux-thunk";
 import startup from "./startup";
+import fetchMiddleware from "./services/fetchMiddleware";
 
-const middleware = [reduxThunk];
+const middleware = [reduxThunk, fetchMiddleware];
 
 const configureStore = () => {
   const store = createStore(

@@ -2,28 +2,9 @@ import React from "react";
 import styles from "./outlineselector.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { actions, Categories, selectors } from "../../ducks/outline.js";
-
-const OutlineSelectorButton = ({ label, value, onClick }) => {
-  return (
-    <li>
-      <input
-        type="checkbox"
-        id={label}
-        readOnly
-        checked={value}
-        onClick={onClick}
-      />
-      <label htmlFor={label}>{label}</label>
-    </li>
-  );
-};
-
-OutlineSelectorButton.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired
-};
+import { actions } from "../../ducks/outline.js";
+import { selectors } from "../../reducers";
+import OutlineSelectorButton from "./OutlineSelectorButton";
 
 const OutlineSelectorToggle = props => {
   return (
@@ -39,69 +20,45 @@ OutlineSelectorToggle.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
-const _OutlineSelector = ({
-  outline,
-  toggleOutline,
-  showOutlineForAll,
-  showOutlineForNone
-}) => {
-  const buttons = () =>
-    Object.keys(Categories)
-      .filter(x => {
-        return !outline[x].disabled;
-      })
-      .map(x => {
+const OutlineSelector = ({ elements, isVisible, isAvailable, toggle }) => (
+  <div className={styles.outlineselector}>
+    <ul>
+      {elements.map(x => {
         return (
-          <OutlineSelectorButton
-            key={x}
-            label={Categories[x].name}
-            value={outline[x].show}
-            onClick={() => toggleOutline(x)}
-          />
+          <li key={x.name}>
+            <OutlineSelectorButton
+              label={x.name}
+              value={isVisible(x)}
+              onClick={() => (toggle ? toggle(x) : null)}
+              avail={isAvailable(x)}
+            />
+          </li>
         );
-      });
-  return (
-    <div className={styles.outlineselector}>
-      <ul>{buttons()}</ul>
-      <div className={styles["outlineselector-buttongroup"]}>
-        <OutlineSelectorToggle
-          name="All"
-          disabled={selectors.getAllSelected(outline)}
-          onClick={() => showOutlineForAll()}
-        />
-        <OutlineSelectorToggle
-          name="None"
-          disabled={selectors.getNoneSelected(outline)}
-          onClick={() => showOutlineForNone()}
-        />
-      </div>
-    </div>
-  );
-};
+      })}
+    </ul>
+  </div>
+);
 
-_OutlineSelector.propTypes = {
-  outline: PropTypes.object.isRequired,
-  toggleOutline: PropTypes.func.isRequired,
-  showOutlineForNone: PropTypes.func.isRequired,
-  showOutlineForAll: PropTypes.func.isRequired
+OutlineSelector.propTypes = {
+  elements: PropTypes.array.isRequired,
+  isVisible: PropTypes.func.isRequired,
+  isAvailable: PropTypes.func.isRequired,
+  toggle: PropTypes.func
 };
 
 const mapStateToProps = state => {
   return {
-    outline: state.outline
+    isVisible: x => selectors.isVisible(state, x),
+    isAvailable: x => selectors.isAvailable(state, x)
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    toggleOutline: x => dispatch(actions.toggleOutline(x)),
-    showOutlineForAll: () => dispatch(actions.showOutlineForAll()),
-    showOutlineForNone: () => dispatch(actions.showOutlineForNone())
+    toggle: x => dispatch(actions.toggleOutline(x))
   };
 };
 
-const OutlineSelector = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(_OutlineSelector);
-
-export default OutlineSelector;
+)(OutlineSelector);

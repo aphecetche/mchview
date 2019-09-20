@@ -3,6 +3,8 @@ import outlineReducer, { selectors as outlineSelectors } from "./ducks/outline";
 import viewReducer, { selectors as viewSelectors } from "./ducks/view";
 import dataReducer, { selectors as dataSelectors } from "./ducks/data";
 import envelopReducer, { selectors as envelopSelectors } from "./ducks/envelop";
+import * as categories from "./categories";
+import { isEqual } from "lodash";
 
 import visibilityReducer, {
   selectors as visibilitySelectors
@@ -32,31 +34,39 @@ export const selectors = {
   currentElement: state => viewSelectors.currentElement(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
-  isVisible: state => partName =>
-    outlineSelectors.isVisible(state.outline, partName),
-  outlineStyle: state => partName =>
-    outlineSelectors.style(state.outline, partName),
+  isVisible: (state, category) =>
+    outlineSelectors.isVisible(state.outline, category),
+  outlineStyle: (state, category) =>
+    outlineSelectors.style(state.outline, category),
   isFetchingDualSampas: state =>
     envelopSelectors.isFetchingDualSampas(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
     ),
-  isFetchingDEPlane: state =>
-    envelopSelectors.isFetchingDE(
-      state.envelop,
-      selectors.deid(state),
-      selectors.bending(state)
-    ),
-  isFetchingDE: state =>
-    envelopSelectors.isFetchingDE(state.envelop, selectors.deid(state), true) ||
-    envelopSelectors.isFetchingDE(state.envelop, selectors.deid(state), false),
+  isFetchingDePlane: (state, deid, bending) =>
+    envelopSelectors.isFetchingDePlane(state.envelop, deid, bending),
   degeo: state =>
     envelopSelectors.deplane(
       state.envelop,
       selectors.deid(state),
       selectors.bending(state)
     ),
+  hasDe: (state, deid) => envelopSelectors.hasDe(state.envelop, deid),
+  hasDePlane: (state, deid, bending) =>
+    envelopSelectors.hasDePlane(state.envelop, deid, bending),
   deplane: (state, deid, bending) =>
-    envelopSelectors.deplane(state.envelop, deid, bending)
+    envelopSelectors.deplane(state.envelop, deid, bending),
+  isAvailable: (state, category) => {
+    if (isEqual(categories.de, category)) {
+      return envelopSelectors.hasDe(selectors.deid(state));
+    }
+    if (isEqual(categories.deplane, category)) {
+      return envelopSelectors.hasDePlane(
+        selectors.deid(state),
+        selectors.bending(state)
+      );
+    }
+    return false;
+  }
 };

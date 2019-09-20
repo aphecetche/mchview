@@ -18,11 +18,15 @@ const MchViewPort = () => {
     <div className={styles.mchviewport}>
       <Router>
         <Switch>
-          <Route exact path="/" render={() => <Redirect to="/de" />} />
+          <Route exact path="/" render={() => <Redirect to="/deplane" />} />
           <Route exact path="/deplane" component={DEPlaneView} />
           <Route exact path="/de" component={DEView} />
           <Route exact path="/all" component={AllView} />
-          <Route exact path="/debug" component={DebugView} />
+          <Route
+            exact
+            path="/debug"
+            render={() => <DebugView deid={819} bending={false} />}
+          />
           <Route exact path="/display" component={Display} />
           <Route component={NotFound} />
         </Switch>
