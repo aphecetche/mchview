@@ -50,8 +50,9 @@ export const actions = {
           }
         });
       }
-      let p1 = dispatch(envelopActions.fetchDualSampas(deid, bending));
-      let p2 = dispatch(envelopActions.fetchDE(deid, bending));
+      const id = { deid, bending };
+      let p1 = dispatch(envelopActions.fetchDualSampas(id));
+      let p2 = dispatch(envelopActions.fetchDePlane(id));
       Promise.all([p1, p2]).then(() => {
         return dispatch({
           type: types.SET_DETECTION_ELEMENT,

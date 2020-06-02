@@ -4,8 +4,8 @@ import { actions as viewActions } from "./ducks/view";
 const startup = () => {
   return [
     // viewActions.setDetectionElement(501, true),
-    // viewActions.setDetectionElement(501, false)
-    //    outlineActions.toggleOutline("de")
+    viewActions.setDetectionElement(501, false)
+    //outlineActions.toggleOutline("de")
   ];
 };
 

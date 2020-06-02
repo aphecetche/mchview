@@ -8,15 +8,14 @@ import { selectors } from "../../reducers";
 
 const DebugView = ({
   state,
-  deid,
-  bending,
+  id,
   fetchDePlane,
   hasDePlane,
   isFetchingDePlane
 }) => {
-  if (!hasDePlane(deid, bending)) {
-    if (!isFetchingDePlane(deid, bending)) {
-      fetchDePlane(deid, bending);
+  if (!hasDePlane(id)) {
+    if (!isFetchingDePlane(id)) {
+      fetchDePlane(id);
     }
   }
   // if (!selectors.hasDePlane(state, deid, bending)) {
@@ -24,6 +23,7 @@ const DebugView = ({
   //     fetchDePlane(deid, bending);
   //   }
   // }
+  const { deid, bending } = id;
   return (
     <div className="allview">
       <OutlineSelector elements={[categories.deplane]} />
@@ -46,8 +46,7 @@ const DebugView = ({
 
 DebugView.propTypes = {
   state: PropTypes.object.isRequired,
-  deid: PropTypes.number.isRequired,
-  bending: PropTypes.bool.isRequired,
+  id: PropTypes.object.isRequired,
   fetchDePlane: PropTypes.func
 };
 

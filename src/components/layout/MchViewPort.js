@@ -5,8 +5,8 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
-import DEView from "../views/DEView";
-import DEPlaneView from "../views/DEPlaneView";
+import DeView from "../views/DeView";
+import DePlaneView from "../views/DePlaneView";
 import AllView from "../views/AllView";
 import DebugView from "../views/DebugView";
 import Display from "../views/Display";
@@ -19,13 +19,13 @@ const MchViewPort = () => {
       <Router>
         <Switch>
           <Route exact path="/" render={() => <Redirect to="/deplane" />} />
-          <Route exact path="/deplane" component={DEPlaneView} />
-          <Route exact path="/de" component={DEView} />
+          <Route exact path="/deplane" component={DePlaneView} />
+          <Route exact path="/de" component={DeView} />
           <Route exact path="/all" component={AllView} />
           <Route
             exact
             path="/debug"
-            render={() => <DebugView deid={819} bending={false} />}
+            render={() => <DebugView id={{ deid: 501, bending: false }} />}
           />
           <Route exact path="/display" component={Display} />
           <Route component={NotFound} />

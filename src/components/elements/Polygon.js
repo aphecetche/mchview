@@ -4,29 +4,34 @@ import { actions as viewActions } from "../../ducks/view";
 import { connect } from "react-redux";
 import { encode } from "../../categories";
 
-const PolygonView = ({ poly, fillColor, classname, setCurrentElement }) => {
+const Polygon = ({ poly, fillColor, classname, setCurrentElement }) => {
   const st = {
     fill: fillColor ? fillColor : "red",
     fillOpacity: fillColor ? 1 : 0
   };
-  return (
-    <polygon
-      className={classname}
-      id={encode(poly.id)}
-      data-value={poly.value}
-      points={poly.vertices.map(v => [v.x, v.y].join(","))}
-      style={st}
-      onMouseEnter={() => {
-        setCurrentElement(poly.id, poly.value);
-      }}
-      onMouseOut={() => {
-        setCurrentElement(undefined, undefined);
-      }}
-    />
-  );
-};
 
-PolygonView.propTypes = {
+  let comp = <p>Polygon is not defined</p>;
+
+  if (poly) {
+    comp = (
+      <polygon
+        className={classname}
+        id={encode(poly.id)}
+        data-value={poly.value}
+        points={poly.vertices.map(v => [v.x, v.y].join(","))}
+        style={st}
+        onMouseEnter={() => {
+          setCurrentElement(poly.id, poly.value);
+        }}
+        onMouseOut={() => {
+          setCurrentElement(undefined, undefined);
+        }}
+      />
+    );
+  }
+  return comp;
+};
+Polygon.propTypes = {
   poly: PropTypes.shape({
     id: PropTypes.Object,
     vertices: PropTypes.arrayOf(
@@ -50,4 +55,4 @@ export default connect(
         dispatch(viewActions.setCurrentElement(id, value))
     };
   }
-)(PolygonView);
+)(Polygon);

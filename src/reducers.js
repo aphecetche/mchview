@@ -29,8 +29,10 @@ export const selectors = {
   isModalVisible: state => visibilitySelectors.isModalVisible(state.visibility),
   isRightPanelVisible: state =>
     visibilitySelectors.isRightPanelVisible(state.visibility),
-  deid: state => viewSelectors.deid(state.view),
-  bending: state => viewSelectors.bending(state.view),
+  dePlaneId: state => ({
+    deid: viewSelectors.deid(state.view),
+    bending: viewSelectors.bending(state.view)
+  }),
   currentElement: state => viewSelectors.currentElement(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),
@@ -38,34 +40,28 @@ export const selectors = {
     outlineSelectors.isVisible(state.outline, category),
   outlineStyle: (state, category) =>
     outlineSelectors.style(state.outline, category),
+  isFetching: state =>
+    selectors.isFetchingDePlane(state, selectors.dePlaneId(state)) ||
+    selectors.isFetchingDualSampas(state),
   isFetchingDualSampas: state =>
     envelopSelectors.isFetchingDualSampas(
       state.envelop,
-      selectors.deid(state),
-      selectors.bending(state)
+      selectors.dePlaneId(state)
     ),
-  isFetchingDePlane: (state, deid, bending) =>
-    envelopSelectors.isFetchingDePlane(state.envelop, deid, bending),
+  isFetchingDe: () => false,
+  isFetchingDePlane: (state, id) =>
+    envelopSelectors.isFetchingDePlane(state.envelop, id),
   degeo: state =>
-    envelopSelectors.deplane(
-      state.envelop,
-      selectors.deid(state),
-      selectors.bending(state)
-    ),
+    envelopSelectors.deplane(state.envelop, selectors.dePlaneId(state)),
   hasDe: (state, deid) => envelopSelectors.hasDe(state.envelop, deid),
-  hasDePlane: (state, deid, bending) =>
-    envelopSelectors.hasDePlane(state.envelop, deid, bending),
-  deplane: (state, deid, bending) =>
-    envelopSelectors.deplane(state.envelop, deid, bending),
+  hasDePlane: (state, id) => envelopSelectors.hasDePlane(state.envelop, id),
+  deplane: (state, id) => envelopSelectors.deplane(state.envelop, id),
   isAvailable: (state, category) => {
     if (isEqual(categories.de, category)) {
       return envelopSelectors.hasDe(selectors.deid(state));
     }
     if (isEqual(categories.deplane, category)) {
-      return envelopSelectors.hasDePlane(
-        selectors.deid(state),
-        selectors.bending(state)
-      );
+      return envelopSelectors.hasDePlane(selectors.dePlaneId(state));
     }
     return false;
   }

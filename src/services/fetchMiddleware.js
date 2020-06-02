@@ -17,8 +17,7 @@ const fetchMiddleware = store => next => action => {
       type: "FETCH_" + action.type,
       payload: {
         url: action.payload.request.url,
-        deid: action.payload.request.deid,
-        bending: action.payload.request.bending
+        id: action.payload.request.id
       }
     };
   };
@@ -31,16 +30,15 @@ const fetchMiddleware = store => next => action => {
         const nextAction = {
           type: "RECEIVE_" + action.type,
           payload: {
-            response: {
-              ...response.data,
-              id: {
-                deid: response.data.id,
-                bending: action.payload.request.bending
-              }
-            }
+            id: action.payload.request.id,
+            response: response.data
           }
         };
-        console.log(nextAction.payload.response);
+        console.log(
+          "fetchMiddleware for " + action.payload.request.url,
+          "is:",
+          nextAction.payload
+        );
         next(nextAction);
       })
       .catch(error => {
@@ -52,7 +50,7 @@ const fetchMiddleware = store => next => action => {
         };
         next(nextAction);
       });
-  }, 5000);
+  }, 10 /*3000*/);
 };
 
 export default fetchMiddleware;

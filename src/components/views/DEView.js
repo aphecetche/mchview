@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./deview.css";
-import PolygonView from "./PolygonView";
+import Polygon from "../elements/Polygon";
 import { connect } from "react-redux";
 import { selectors } from "../../reducers";
 import Loader from "react-loader-spinner";
 
-const DEView = ({ bending, nonBending, isFetching }) => {
+const DeView = ({ bending, nonBending, isFetching }) => {
   console.log(
     "bending=",
     bending,
@@ -25,10 +25,10 @@ const DEView = ({ bending, nonBending, isFetching }) => {
       viewBox="0 0 300 100"
     >
       <g transform="translate(80 20)">
-        <PolygonView poly={bending} />
+        <Polygon poly={bending} />
       </g>
       <g transform="translate(80 80)">
-        <PolygonView poly={nonBending} />
+        <Polygon poly={nonBending} />
       </g>
     </svg>
   );
@@ -36,10 +36,10 @@ const DEView = ({ bending, nonBending, isFetching }) => {
 
 const mapStateToProps = state => ({
   isFetching:
-    selectors.isFetchingDE(state, selectors.deid(state), true) ||
-    selectors.isFetchingDE(state, selectors.deid(state), false),
+    selectors.isFetchingDe(state, selectors.deid(state), true) ||
+    selectors.isFetchingDe(state, selectors.deid(state), false),
   bending: selectors.deplane(state, selectors.deid(state), true),
   nonBending: selectors.deplane(state, selectors.deid(state), false)
 });
 
-export default connect(mapStateToProps)(DEView);
+export default connect(mapStateToProps)(DeView);

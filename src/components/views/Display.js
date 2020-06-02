@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./display.css";
-import PolygonView from "./PolygonView";
+import Polygon from "../elements/Polygon";
 import SVGView from "./SVGView";
 
 const Rect = ({ cn, x = 0, y = 0, w, h, setViewBox, currentViewBox }) => (
@@ -79,7 +79,7 @@ const Display = () => {
           {/* <Rect cn="lime" x={0} y={0} w="100%" h="100%" /> */}
           <g transform="translate(80,40)">
             {/* <Rect cn="gray" x={-80} y={-40} w={250} h={250} /> */}
-            <PolygonView poly={de} />
+            <Polygon poly={de} />
           </g>
         </svg>
       </svg>
