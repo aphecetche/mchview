@@ -3,14 +3,10 @@ import { connect } from "react-redux";
 import { selectors } from "../../reducers";
 import PropTypes from "prop-types";
 import SVGView from "./SVGView";
-import Polygon from "../elements/Polygon";
 import styles from "./deview.css";
 import AreaView from "./AreaView";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import { scaleSequential } from "d3-scale";
-import { interpolateViridis } from "d3-scale-chromatic";
-import { encode } from "../../categories";
 import DePlane from "../elements/DePlane";
 import DualSampas from "../elements/DualSampas";
 
@@ -56,7 +52,8 @@ DePlaneView.propTypes = {
 
 const mapStateToProps = state => ({
   isFetching: selectors.isFetching(state),
-  deplane: selectors.degeo(state)
+  deplane: selectors.degeo(state),
+  ds: selectors.dualsampas(state)
 });
 
 export default connect(mapStateToProps)(DePlaneView);

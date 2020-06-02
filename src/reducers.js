@@ -53,6 +53,8 @@ export const selectors = {
     envelopSelectors.isFetchingDePlane(state.envelop, id),
   degeo: state =>
     envelopSelectors.deplane(state.envelop, selectors.dePlaneId(state)),
+  dualsampas: state =>
+    envelopSelectors.dualsampas(state.envelop, selectors.dePlaneId(state)),
   hasDe: (state, deid) => envelopSelectors.hasDe(state.envelop, deid),
   hasDePlane: (state, id) => envelopSelectors.hasDePlane(state.envelop, id),
   deplane: (state, id) => envelopSelectors.deplane(state.envelop, id),

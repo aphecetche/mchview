@@ -46,6 +46,32 @@ export default (state = initialState, action) => {
   if (action.type == "FETCH_DUALSAMPAS") {
     return fetch("DualSampas", state, action.payload.id, true);
   }
+  if (action.type == "ERROR_DUALSAMPAS") {
+    return fetch("DualSampas", state, action.payload.id, false);
+  }
+
+  if (action.type == "RECEIVE_DUALSAMPAS") {
+    console.log("original data=", action.payload.response);
+    const dep = action.payload.id;
+    const dualsampa = new schema.Entity("dualsampas", undefined, {
+      // append the deid to the dualsampa object
+      processStrategy: entity =>
+        Object.assign(
+          {},
+          {
+            ...entity,
+            id: { deid: dep.deid, bending: dep.bending, dsid: entity.id }
+          }
+        )
+    });
+    const normalizedData = normalize(action.payload.response, [dualsampa]);
+    const newdata = {
+      dualsampas: normalizedData.entities.dualsampas,
+      dsids: normalizedData.result
+    };
+    console.log("receive dual sampas =>", newdata);
+    return fetch("DualSampas", state, action.payload.id, false, newdata);
+  }
 
   if (action.type == "FETCH_DEPLANE") {
     return fetch("DePlane", state, action.payload.id, true);
@@ -97,48 +123,6 @@ export const actions = {
       }
     };
   }
-
-  // fetchDualSampas: (deid, bending) => {
-  //   const dualsampa = new schema.Entity("dualsampas", undefined, {
-  //     // append the deid to the dualsampa object
-  //     processStrategy: entity =>
-  //       Object.assign({}, { ...entity, id: { deid, bending, dsid: entity.id } })
-  //   });
-  //   let url =
-  //     mappingServer() + "/dualsampas?deid=" + deid + "&bending=" + bending;
-  //   return dispatch => {
-  //     dispatch(actions.requestDualSampas(deid, bending));
-  //     return axios
-  //       .get(url)
-  //       .then(response => {
-  //         let normalizedData = {};
-  //         if (
-  //           !(
-  //             Object.entries(response.data).length === 0 &&
-  //             response.data.construtor === Object
-  //           )
-  //         ) {
-  //           // ensure we are not normalizing and empty data
-  //           normalizedData = normalize(response.data, [dualsampa]);
-  //         } else {
-  //           return dispatch(
-  //             actions.failedToFetchDualSampas(
-  //               "got empty dualsampa data for deid" + deid
-  //             )
-  //           );
-  //         }
-  //         return dispatch(
-  //           actions.receiveDualSampas(deid, bending, {
-  //             dualsampas: normalizedData.entities.dualsampas,
-  //             dsids: normalizedData.result
-  //           })
-  //         );
-  //       })
-  //       .catch(error => {
-  //         return dispatch(actions.failedToFetchDualSampas(error));
-  //       });
-  //   };
-  // },
 };
 
 // selectors
@@ -149,6 +133,19 @@ export const selectors = {
     }
     if (state.des && state.des[id.deid]) {
       return state.des[id.deid][bendingPlaneName(id.bending)];
+    }
+    return undefined;
+  },
+  dualsampas: (state, id) => {
+    if (state.des === undefined) {
+      return undefined;
+    }
+    if (
+      state.des &&
+      state.des[id.deid] &&
+      state.des[id.deid][bendingPlaneName(id.bending)].dualsampas
+    ) {
+      return state.des[id.deid][bendingPlaneName(id.bending)].dualsampas;
     }
     return undefined;
   },
@@ -163,10 +160,9 @@ export const selectors = {
       : false;
   },
   hasDePlane: (state, id) => {
-    const dp = selectors.deplane(state, id);
-    if (dp !== undefined) {
+    const dep = selectors.deplane(state, id);
+    if (dep !== undefined) {
       return true;
-      // return dp.vertices !== undefined;
     }
     return false;
   },

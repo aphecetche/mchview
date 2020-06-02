@@ -36,7 +36,7 @@ const DualSampas = ({ ds, outlineStyle }) => {
 };
 
 DualSampas.propTypes = {
-  ds: PropTypes.array,
+  ds: PropTypes.object,
   outlineStyle: PropTypes.object
 };
 
