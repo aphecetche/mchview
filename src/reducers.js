@@ -29,10 +29,6 @@ export const selectors = {
   isModalVisible: state => visibilitySelectors.isModalVisible(state.visibility),
   isRightPanelVisible: state =>
     visibilitySelectors.isRightPanelVisible(state.visibility),
-  dePlaneId: state => ({
-    deid: viewSelectors.deid(state.view),
-    bending: viewSelectors.bending(state.view)
-  }),
   currentElement: state => viewSelectors.currentElement(state.view),
   area: state => state.area,
   dsValue: (state, dsid) => dataSelectors.dsValue(state.data, dsid),

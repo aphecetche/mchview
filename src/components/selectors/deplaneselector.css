@@ -1,10 +1,11 @@
 @import "../layout/app.css";
 
-.elementselector {
+.deplaneselector {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 0 0 10px;
+  padding-left: 1em;
+  background: var(--background-color);
 
   & input {
     display: flex;
@@ -34,6 +35,6 @@
   }
 }
 
-#deplaneselector {
+#planeselector {
   display: none;
 }

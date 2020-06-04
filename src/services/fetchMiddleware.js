@@ -23,6 +23,8 @@ const fetchMiddleware = store => next => action => {
   };
   next(makeFetchAction(action));
 
+  const debugTimeOut = 0;
+
   setTimeout(() => {
     axios
       .get(action.payload.request.url)
@@ -34,11 +36,6 @@ const fetchMiddleware = store => next => action => {
             response: response.data
           }
         };
-        console.log(
-          "fetchMiddleware for " + action.payload.request.url,
-          "is:",
-          nextAction.payload
-        );
         next(nextAction);
       })
       .catch(error => {
@@ -50,7 +47,7 @@ const fetchMiddleware = store => next => action => {
         };
         next(nextAction);
       });
-  }, 10 /*3000*/);
+  }, debugTimeOut);
 };
 
 export default fetchMiddleware;

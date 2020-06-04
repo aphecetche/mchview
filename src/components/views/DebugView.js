@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import OutlineSelector from "../selectors/OutlineSelector";
 import * as categories from "../../categories";
-import { actions } from "../../ducks/envelop";
-import { selectors } from "../../reducers";
+import { actions, selectors } from "../../ducks/envelop";
 
 const DebugView = ({
   state,
@@ -18,22 +17,18 @@ const DebugView = ({
       fetchDePlane(id);
     }
   }
-  // if (!selectors.hasDePlane(state, deid, bending)) {
-  //   if (!selectors.isFetchingDePlane(state, deid, bending)) {
-  //     fetchDePlane(deid, bending);
-  //   }
-  // }
   const { deid, bending } = id;
   return (
     <div className="allview">
+      <p>DebugView {JSON.stringify(id)}</p>
       <OutlineSelector elements={[categories.deplane]} />
       <ul>
         <li>deid={deid}</li>
-        <li>bending={bending ? "true" : "false"}</li>
-        <li>hasDePlane={hasDePlane(deid, bending) ? "yes" : "no"}</li>
+        <li>bending={bending === true ? "true" : "false"}</li>
+        <li>hasDePlane={hasDePlane(id) ? "yes" : "no"}</li>
         <li>
           isFetching=
-          {isFetchingDePlane(deid, bending) ? "yes" : "no"}
+          {isFetchingDePlane(id) ? "yes" : "no"}
         </li>
         <li>
           state.envelop=
@@ -47,26 +42,23 @@ const DebugView = ({
 DebugView.propTypes = {
   state: PropTypes.object.isRequired,
   id: PropTypes.object.isRequired,
-  fetchDePlane: PropTypes.func
+  fetchDePlane: PropTypes.func,
+  hasDePlane: PropTypes.func,
+  isFetchingDePlane: PropTypes.func
 };
 
 const mapStateToProps = state => {
   return {
     state: state.envelop,
-    isFetchingDePlane: (deid, bending) =>
-      selectors.isFetchingDePlane(state, deid, bending),
-    hasDePlane: (deid, bending) => selectors.hasDePlane(state, deid, bending)
+    isFetchingDePlane: id => selectors.isFetchingDePlane(state.envelop, id),
+    hasDePlane: id => selectors.hasDePlane(state.envelop, id)
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDePlane: (deid, bending) =>
-      dispatch(actions.fetchDePlane(deid, bending))
+    fetchDePlane: id => dispatch(actions.fetchDePlane(id))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DebugView);
+export default connect(mapStateToProps, mapDispatchToProps)(DebugView);

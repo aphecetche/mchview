@@ -1,34 +1,54 @@
-import React from "react";
-import { connect } from "react-redux";
-import { selectors } from "../../reducers";
-import PropTypes from "prop-types";
-import SVGView from "./SVGView";
-import styles from "./deview.css";
-import AreaView from "./AreaView";
-import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import DePlane from "../elements/DePlane";
-import DualSampas from "../elements/DualSampas";
+import DePlaneSelector from "../selectors/DePlaneSelector";
+import Loader from "react-loader-spinner";
+import PropTypes from "prop-types";
+import React from "react";
+import SVGView from "./SVGView";
+import styles from "./deview.css";
+import { actions, envelopSelectors } from "../../ducks/envelop";
+import { selectors } from "../../reducers";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
-// const addAreaLayer = (area, de, outlineStyle) => {
-//   return makeGroup(
-//     "area",
-//     outlineStyle("area"),
-//     <AreaView key={"AREA"} clip={de} area={area} />
-//   );
-// };
-//
-// const colorDS = scaleSequential()
-//   .domain([0, 1500])
-//   .interpolator(interpolateViridis);
+const DePlaneView = ({ id }) => {
+  const hasDePlane = useSelector(state => selectors.hasDePlane(state, id));
 
-const DePlaneView = ({ isFetching, deplane, ds }) => {
-  if (isFetching) {
+  let isFetchingDePlane = useSelector(state =>
+    selectors.isFetchingDePlane(state, id)
+  );
+  const deplane = useSelector(state => selectors.deplane(state, id));
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  if (!hasDePlane) {
+    if (!isFetchingDePlane) {
+      dispatch(actions.fetchDePlane(id));
+    }
+  }
+
+  if (isFetchingDePlane === true) {
     return <Loader key="loader" type="Watch" color="blue" />;
   }
 
+  // if (!deplane) {
+  //   return null;
+  // }
+
   return (
     <div className={styles.deview}>
+      {/* {msg} */}
+      <DePlaneSelector
+        id={id}
+          setDEID={(deid, bending) => {
+                  console.log("setDEID: deid="+deid+"bending="+bending);
+          history.push({
+            pathname: "/deplane",
+            search: "?deid=" + deid + "&bending=" + bending
+          })
+          }
+        }
+      />
       <main>
         <SVGView
           geo={deplane}
@@ -36,7 +56,7 @@ const DePlaneView = ({ isFetching, deplane, ds }) => {
           offset={{ left: 5, right: 5, top: 5, bottom: 5 }}
         >
           <DePlane deplane={deplane} />
-          <DualSampas ds={ds} />
+          {/* <DualSampas ds={ds} /> */}
           {/* <Area /> */}
         </SVGView>
       </main>
@@ -45,15 +65,7 @@ const DePlaneView = ({ isFetching, deplane, ds }) => {
 };
 
 DePlaneView.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
-  deplane: PropTypes.object,
-  ds: PropTypes.object
+  id: PropTypes.object.isRequired
 };
 
-const mapStateToProps = state => ({
-  isFetching: selectors.isFetching(state),
-  deplane: selectors.degeo(state),
-  ds: selectors.dualsampas(state)
-});
-
-export default connect(mapStateToProps)(DePlaneView);
+export default DePlaneView;

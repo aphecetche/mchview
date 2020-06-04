@@ -41,8 +41,6 @@
     }
   },
   "view": {
-    "deid": 501,
-    "bending": false,
     "currentElement": null
   },
   "data": {
@@ -83,4 +81,5 @@
   "envelop": {
     "entities": {}
   }
+
 }

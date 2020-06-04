@@ -1,23 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { actions } from "../../ducks/view.js";
-import { selectors } from "../../reducers";
 
-import styles from "./viewselector.css";
+import styles from "./deplaneselector.css";
 import { isValidDeId, listOfValidDeIds } from "../../categories";
+import * as envelop from "../../ducks/envelop";
 
 const deListPattern = () => {
   const rv = listOfValidDeIds.join("|");
   return rv;
 };
 
-const _ViewSelector = ({ deid, bending, setDEID }) => {
+const DePlaneSelector = ({ id, setDEID }) => {
+  const { deid, bending } = id;
   if (!isValidDeId(deid)) {
     return "Invalid DE";
   }
+    const label = envelop.dePlaneName(bending);
+    console.log("bending="+bending+" label="+label)
   return (
-    <div className={styles.elementselector}>
+    <div className={styles.deplaneselector}>
       <label htmlFor={styles.denumberselector}>DE</label>
       <input
         id={styles.denumberselector}
@@ -31,11 +32,11 @@ const _ViewSelector = ({ deid, bending, setDEID }) => {
           }
         }}
       />
-      <label htmlFor={styles.deplaneselector}>
-        {bending === true ? "bending" : "non-bending"}
+      <label htmlFor={styles.planeselector}>
+      {label}
       </label>
       <input
-        id={styles.deplaneselector}
+        id={styles.planeselector}
         type="checkbox"
         defaultChecked={bending}
         onChange={e => {
@@ -46,26 +47,9 @@ const _ViewSelector = ({ deid, bending, setDEID }) => {
   );
 };
 
-_ViewSelector.propTypes = {
-  deid: PropTypes.number.isRequired,
-  bending: PropTypes.bool.isRequired,
+DePlaneSelector.propTypes = {
+  id: PropTypes.object.isRequired,
   setDEID: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  deid: selectors.deid(state),
-  bending: selectors.bending(state)
-});
-
-const mapDispatchToProps = dispatch => ({
-  setDEID: (deid, bending) => {
-    dispatch(actions.setDetectionElement(deid, bending));
-  }
-});
-
-const ViewSelector = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(_ViewSelector);
-
-export default ViewSelector;
+export default DePlaneSelector;

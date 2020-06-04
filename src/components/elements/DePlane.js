@@ -7,7 +7,6 @@ import { encode } from "../../categories";
 import PropTypes from "prop-types";
 
 const DePlane = ({ deplane, outlineStyle }) => {
-  console.log("DePlane component : deplane=", deplane);
   const color = scaleSequential()
     .domain([100, 1025])
     .interpolator(interpolateViridis);

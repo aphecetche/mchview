@@ -1,10 +1,7 @@
-import { actions as outlineActions } from "./ducks/outline";
-import { actions as viewActions } from "./ducks/view";
+//import { actions as outlineActions } from "./ducks/outline";
 
 const startup = () => {
   return [
-    // viewActions.setDetectionElement(501, true),
-    viewActions.setDetectionElement(301, true)
     //outlineActions.toggleOutline("de")
   ];
 };

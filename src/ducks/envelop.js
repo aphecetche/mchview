@@ -4,19 +4,21 @@ import { merge, cloneDeep, isEqual } from "lodash";
 
 const mappingServer = () => "http://localhost:8080/v2";
 
-const bendingPlaneName = bending => (bending ? "bending" : "non-bending");
+export const dePlaneName = bending =>
+  bending == 'true' ? "bending": "non-bending";
 
 // initial state
 export const initialState = {};
 
 export const assertDE = (state, { deid, bending }) => {
   let newState = cloneDeep(state);
-  if (!state.des || !state.des[deid] || !state.des[deid][bending]) {
+  const planeName = dePlaneName(bending);
+  if (!state.des || !state.des[deid] || !state.des[deid][planeName]) {
     let de = {
       des: {
         [deid]: {
           id: { deid: deid },
-          [bendingPlaneName(bending)]: {
+          [planeName]: {
             isFetchingDualSampas: false
           }
         }
@@ -51,7 +53,6 @@ export default (state = initialState, action) => {
   }
 
   if (action.type == "RECEIVE_DUALSAMPAS") {
-    console.log("original data=", action.payload.response);
     const dep = action.payload.id;
     const dualsampa = new schema.Entity("dualsampas", undefined, {
       // append the deid to the dualsampa object
@@ -69,7 +70,6 @@ export default (state = initialState, action) => {
       dualsampas: normalizedData.entities.dualsampas,
       dsids: normalizedData.result
     };
-    console.log("receive dual sampas =>", newdata);
     return fetch("DualSampas", state, action.payload.id, false, newdata);
   }
 
@@ -132,7 +132,7 @@ export const selectors = {
       return undefined;
     }
     if (state.des && state.des[id.deid]) {
-      return state.des[id.deid][bendingPlaneName(id.bending)];
+      return state.des[id.deid][dePlaneName(id.bending)];
     }
     return undefined;
   },
@@ -143,9 +143,9 @@ export const selectors = {
     if (
       state.des &&
       state.des[id.deid] &&
-      state.des[id.deid][bendingPlaneName(id.bending)].dualsampas
+      state.des[id.deid][dePlaneName(id.bending)].dualsampas
     ) {
-      return state.des[id.deid][bendingPlaneName(id.bending)].dualsampas;
+      return state.des[id.deid][dePlaneName(id.bending)].dualsampas;
     }
     return undefined;
   },
