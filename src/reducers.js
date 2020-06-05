@@ -51,16 +51,14 @@ export const selectors = {
     envelopSelectors.deplane(state.envelop, selectors.dePlaneId(state)),
   dualsampas: state =>
     envelopSelectors.dualsampas(state.envelop, selectors.dePlaneId(state)),
-  hasDe: (state, deid) => envelopSelectors.hasDe(state.envelop, deid),
-  hasDePlane: (state, id) => envelopSelectors.hasDePlane(state.envelop, id),
-  deplane: (state, id) => envelopSelectors.deplane(state.envelop, id),
-  isAvailable: (state, category) => {
-    if (isEqual(categories.de, category)) {
-      return envelopSelectors.hasDe(selectors.deid(state));
-    }
-    if (isEqual(categories.deplane, category)) {
-      return envelopSelectors.hasDePlane(selectors.dePlaneId(state));
-    }
-    return false;
-  }
+  envelop: (state, id) => envelopSelectors.envelop(state.envelop, id)
+  // isAvailable: (state, category) => {
+  //   if (isEqual(categories.de, category)) {
+  //     return envelopSelectors.hasDe(selectors.deid(state));
+  //   }
+  //   if (isEqual(categories.deplane, category)) {
+  //     return envelopSelectors.hasDePlane(selectors.dePlaneId(state));
+  //   }
+  //   return false;
+  // }
 };

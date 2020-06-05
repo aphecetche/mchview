@@ -38,6 +38,23 @@ export const isValidCategory = c => {
   );
 };
 
+export const isSpecific = id => {
+  const w = whatis(id);
+  if (w === undefined) {
+    return false;
+  }
+  switch (w) {
+    case de:
+      return id.deid !== null;
+    case deplane:
+      return id.bending !== null;
+    case ds:
+      return id.dsid !== null;
+    default:
+      throw "not implemented";
+  }
+};
+
 export const whatis = id => {
   if (id === undefined) {
     return undefined;

@@ -1,4 +1,4 @@
-import reducer, { selectors, actions, initialState, assertDE } from "./envelop";
+import reducer, { selectors, initialState, assertDE } from "./envelop";
 import expect from "expect";
 
 describe("ctor", () => {
@@ -14,7 +14,7 @@ describe("envelop reducer", () => {
       300: {
         id: { deid: 300 },
         bending: {
-          isFetchingDualSampas: true
+          isLoading: true
         }
       }
     }
@@ -24,22 +24,41 @@ describe("envelop reducer", () => {
       100: {
         id: { deid: 100 },
         "non-bending": {
-          isFetchingDualSampas: true
+          isLoading: true
         }
       },
       300: {
         id: { deid: 300 },
         bending: {
-          isFetchingDualSampas: true
+          isLoading: true
         }
       }
     }
   };
-  let state1 = reducer({}, actions.requestDualSampas(300, true));
+  let state1 = reducer(
+    {},
+    {
+      type: "FETCH_DUALSAMPAS",
+      payload: {
+        id: {
+          deid: 300,
+          bending: true
+        }
+      }
+    }
+  );
   it("should add DE 300,bending to empty state", () => {
     expect(state1).toEqual(expected1);
   });
-  let state2 = reducer(state1, actions.requestDualSampas(100, false));
+  let state2 = reducer(state1, {
+    type: "FETCH_DUALSAMPAS",
+    payload: {
+      id: {
+        deid: 100,
+        bending: false
+      }
+    }
+  });
   it("should add DE 100,non-bending to previous state", () => {
     expect(state2).toEqual(expected2);
   });
@@ -51,12 +70,36 @@ describe("assert DE", () => {
       100: {
         id: { deid: 100 },
         bending: {
-          isFetchingDualSampas: false
+          isLoading: false
         }
       }
     }
   };
   it("should return single des key starting from empty state", () => {
-    expect(assertDE({}, 100, true)).toEqual(expected);
+    const got = assertDE({}, { deid: 100, bending: true });
+    expect(got).toEqual(expected);
+  });
+});
+
+describe("envelop selector", () => {
+  const expected = "unrealistic";
+  const state = {
+    des: {
+      819: {
+        id: { deid: 819 },
+        "non-bending": {
+          isLoading: expected
+        }
+      }
+    }
+  };
+  it("should return expected value", () => {
+    expect(selectors.isLoading(state, { deid: 819, bending: false })).toBe(
+      expected
+    );
+  });
+  it("should return same as before", () => {
+    const e = selectors.envelop(state, { deid: 819, bending: false });
+    expect(e.isLoading).toBe(expected);
   });
 });

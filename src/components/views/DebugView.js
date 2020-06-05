@@ -57,7 +57,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDePlane: id => dispatch(actions.fetchDePlane(id))
+    fetchDePlane: id => {
+      dispatch(actions.fetch(id));
+    }
   };
 };
 

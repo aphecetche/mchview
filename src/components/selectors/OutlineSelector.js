@@ -49,7 +49,7 @@ OutlineSelector.propTypes = {
 const mapStateToProps = state => {
   return {
     isVisible: x => selectors.isVisible(state, x),
-    isAvailable: x => selectors.isAvailable(state, x)
+    isAvailable: true //x => selectors.isAvailable(state, x) FIXME: revisit the logic for this part
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -58,7 +58,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(OutlineSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(OutlineSelector);

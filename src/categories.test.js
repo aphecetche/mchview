@@ -15,6 +15,9 @@ describe("isValidCategory", () => {
 describe("whatis", () => {
   it("deid should be de", () => {
     expect(categories.whatis({ deid: null })).toBe(categories.de);
+    expect(categories.whatis({ deid: undefined })).toBe(categories.de);
+    expect(categories.whatis({ deid: "toto" })).toBe(categories.de);
+    expect(categories.whatis({ deid: 1025 })).toBe(categories.de);
   });
   it("deid,bending should be detection element plane", () => {
     expect(categories.whatis({ deid: null, bending: null })).toBe(
@@ -95,5 +98,25 @@ describe("describe", () => {
 describe("replace", () => {
   it("shoud replace space", () => {
     expect("a b c".replace(/ /g, "-")).toBe("a-b-c");
+  });
+
+  describe("isSpecific", () => {
+    it("deid:null should not be specific", () => {
+      expect(categories.isSpecific({ deid: null })).toBe(false);
+    });
+    it("deid:501 should be specific", () => {
+      expect(categories.isSpecific({ deid: 501 })).toBe(true);
+    });
+    it("deid:501 bending:null should not be specific", () => {
+      expect(categories.isSpecific({ deid: 501, bending: null })).toBe(false);
+    });
+    it("deid:501 bending:true should be specific", () => {
+      expect(categories.isSpecific({ deid: 501, bending: true })).toBe(true);
+    });
+    it("deid:501 bending:false dsid should not be specific", () => {
+      expect(
+        categories.isSpecific({ deid: 501, bending: false, dsid: null })
+      ).toBe(false);
+    });
   });
 });

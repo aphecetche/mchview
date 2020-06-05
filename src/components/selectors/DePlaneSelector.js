@@ -15,8 +15,7 @@ const DePlaneSelector = ({ id, setDEID }) => {
   if (!isValidDeId(deid)) {
     return "Invalid DE";
   }
-    const label = envelop.dePlaneName(bending);
-    console.log("bending="+bending+" label="+label)
+  const label = envelop.dePlaneName(bending);
   return (
     <div className={styles.deplaneselector}>
       <label htmlFor={styles.denumberselector}>DE</label>
@@ -32,9 +31,7 @@ const DePlaneSelector = ({ id, setDEID }) => {
           }
         }}
       />
-      <label htmlFor={styles.planeselector}>
-      {label}
-      </label>
+      <label htmlFor={styles.planeselector}>{label}</label>
       <input
         id={styles.planeselector}
         type="checkbox"

@@ -5,6 +5,16 @@ import reduxThunk from "redux-thunk";
 import startup from "./startup";
 import fetchMiddleware from "./services/fetchMiddleware";
 
+// const logger = store => next => action => {
+//   console.log("dispatching", action);
+//   let result = next(action);
+//   console.log("next state", store.getState().envelop.des);
+//   return result;
+// };
+//
+// const middleware = [reduxThunk, fetchMiddleware, logger];
+//
+
 const middleware = [reduxThunk, fetchMiddleware];
 
 const configureStore = () => {
