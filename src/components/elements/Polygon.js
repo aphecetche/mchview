@@ -1,10 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { actions as viewActions } from "../../ducks/view";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 import { encode } from "../../categories";
 
-const Polygon = ({ poly, fillColor, classname, setCurrentElement }) => {
+const Polygon = ({ poly, fillColor, classname }) => {
+  const dispatch = useDispatch();
+
   const st = {
     fill: fillColor ? fillColor : "red",
     fillOpacity: fillColor ? 1 : 0
@@ -17,14 +19,15 @@ const Polygon = ({ poly, fillColor, classname, setCurrentElement }) => {
       <polygon
         className={classname}
         id={encode(poly.id)}
+        key={encode(poly.id)}
         data-value={poly.value}
         points={poly.vertices.map(v => [v.x, v.y].join(","))}
         style={st}
         onMouseEnter={() => {
-          setCurrentElement(poly.id, poly.value);
+          dispatch(viewActions.setCurrentElement(poly));
         }}
         onMouseOut={() => {
-          setCurrentElement(undefined, undefined);
+          dispatch(viewActions.setCurrentElement(null));
         }}
       />
     );
@@ -43,16 +46,7 @@ Polygon.propTypes = {
     value: PropTypes.number
   }),
   fillColor: PropTypes.string,
-  classname: PropTypes.string,
-  setCurrentElement: PropTypes.func
+  classname: PropTypes.string
 };
 
-export default connect(
-  state => state,
-  dispatch => {
-    return {
-      setCurrentElement: (id, value) =>
-        dispatch(viewActions.setCurrentElement(id, value))
-    };
-  }
-)(Polygon);
+export default Polygon;

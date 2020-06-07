@@ -27,12 +27,11 @@ export default (state = initialState, action) => {
 
 // action creators
 export const actions = {
-  setCurrentElement: (id, value) => {
+  setCurrentElement: element => {
     return {
       type: types.SET_CURRENT_ELEMENT,
       payload: {
-        id,
-        value
+        ...element
       }
     };
   }

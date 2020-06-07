@@ -10,6 +10,7 @@ import styles from "./deview.css";
 import * as envelop from "../../ducks/envelop";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import SVGHighlighter from "../ui/SVGHighlighter";
 
 const useEnvelop = id => {
   const dispatch = useDispatch();
@@ -69,6 +70,7 @@ const DePlaneView = ({ id }) => {
           <DePlane deplane={deplane} />
           {ds ? <DualSampas ds={ds.dualsampas} /> : null}
           {/* <Area /> */}
+          <SVGHighlighter color="red" />
         </SVGView>
         {deplane ? null : <h1>something is wrong</h1>}
       </main>

@@ -26,6 +26,12 @@ const SVGView = ({ geo, classname, children, offset }) => {
     vx += offset.left + offset.right;
     vy += offset.top + offset.bottom;
   }
+
+  // vx *= 0.5;
+  // vy *= 0.5;
+  vx *= 1.2;
+  vy *= 1.2;
+
   return (
     <svg width={w} height={h} viewBox={left + " " + top + " " + vx + " " + vy}>
       <g
