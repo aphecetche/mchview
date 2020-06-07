@@ -1,10 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const SVGView = ({ geo, classname, children, offset }) => {
-  if (!geo) {
-    return null;
-  }
+export const computeBBox = (geo, offset) => {
   let xleft = -(geo.x - geo.sx / 2.0);
   let ytop = -(geo.y - geo.sy / 2.0);
 
@@ -26,6 +23,15 @@ const SVGView = ({ geo, classname, children, offset }) => {
     vx += offset.left + offset.right;
     vy += offset.top + offset.bottom;
   }
+
+  return { w, h, left, top, vx, vy, xleft, ytop };
+};
+
+const SVGView = ({ geo, classname, children, offset }) => {
+  if (!geo) {
+    return null;
+  }
+  const { w, h, left, top, vx, vy, xleft, ytop } = computeBBox(geo, offset);
   return (
     <svg width={w} height={h} viewBox={left + " " + top + " " + vx + " " + vy}>
       <g

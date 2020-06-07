@@ -11,6 +11,9 @@ const DePlane = ({ deplane, outlineStyle }) => {
     .domain([100, 1025])
     .interpolator(interpolateViridis);
 
+  if (!deplane) {
+    return null;
+  }
   return (
     <SVGGroup groupname="deplane" style={outlineStyle}>
       <Polygon
