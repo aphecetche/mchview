@@ -38,6 +38,7 @@ const useEnvelop = id => {
 };
 
 const DePlaneView = ({ id }) => {
+  console.log("DePlaneView:id=", id);
   const history = useHistory();
 
   const { isLoading: isFetchingDePlane, geo: deplane } = useEnvelop(id);
@@ -65,12 +66,13 @@ const DePlaneView = ({ id }) => {
         <SVGView
           geo={deplane}
           classname={styles.deview}
-          offset={{ left: 5, right: 5, top: 5, bottom: 5 }}
+          offset={{ x: 0, y: 0 }}
+          zoom={0.5}
         >
           <DePlane deplane={deplane} />
           {ds ? <DualSampas ds={ds.dualsampas} /> : null}
           {/* <Area /> */}
-          <SVGHighlighter color="red" />
+          <SVGHighlighter id={id} color="red" />
         </SVGView>
         {deplane ? null : <h1>something is wrong</h1>}
       </main>

@@ -12,16 +12,20 @@ const MchViewPort = () => {
   let location = useLocation();
   let searchParams = new URLSearchParams(location.search);
   let id = null;
+  if (searchParams.has("deid")) {
+    id = {
+      deid: searchParams.get("deid")
+    };
+  }
   if (searchParams.has("deid") && searchParams.has("bending")) {
     id = {
       deid: searchParams.get("deid"),
       bending: searchParams.get("bending")
     };
   }
-
+  console.log("MchViewPort: id=", id);
   return (
     <div className={styles.mchviewport}>
-      <p>zobid={JSON.stringify(id)}</p>
       <Switch>
         <Route
           exact
@@ -29,7 +33,7 @@ const MchViewPort = () => {
           render={() => <Redirect to="/deplane?deid=500&bending=false" />}
         />
         <Route path="/deplane" render={() => <DePlaneView id={id} />} />
-        <Route exact path="/de" component={DeView} />
+        <Route exact path="/de" render={() => <DeView id={id} />} />
         <Route exact path="/all/:a/:b" component={AllView} />
         <Route
           exact
