@@ -51,6 +51,14 @@ const DePlaneView = ({ id }) => {
     return <Loader key="loader" type="Watch" color="blue" />;
   }
 
+  let xoff = deplane ? -(deplane.x - deplane.sx / 2.0) : 0;
+  let yoff = deplane ? -(deplane.y - deplane.sy / 2.0) : 0;
+
+  // if (deplane && id.deid < 500) {
+  //   xoff += deplane.sx / 2.0;
+  //   yoff += deplane.sy / 2.0;
+  // }
+
   return (
     <div className={styles.deview}>
       <DePlaneSelector
@@ -66,8 +74,8 @@ const DePlaneView = ({ id }) => {
         <SVGView
           geo={deplane}
           classname={styles.deview}
-          offset={{ x: 0, y: 0 }}
-          zoom={0.5}
+          initialOffset={{ x: xoff, y: yoff }}
+          initialZoom={0.95}
         >
           <DePlane deplane={deplane} />
           {ds ? <DualSampas ds={ds.dualsampas} /> : null}
