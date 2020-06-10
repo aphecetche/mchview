@@ -35,11 +35,7 @@ const MchViewPort = () => {
         <Route path="/deplane" render={() => <DePlaneView id={id} />} />
         <Route exact path="/de" render={() => <DeView id={id} />} />
         <Route exact path="/all/:a/:b" component={AllView} />
-        <Route
-          exact
-          path="/debug"
-          render={() => <DebugView id={{ deid: 501, bending: false }} />}
-        />
+        <Route exact path="/debug" render={() => <DebugView />} />
         <Route exact path="/debug2" render={() => <DebugView id={id} />} />
         <Route exact path="/display" component={Display} />
         <Route component={NotFound} />

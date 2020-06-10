@@ -75,7 +75,7 @@ const DePlaneView = ({ id }) => {
           geo={deplane}
           classname={styles.deview}
           initialOffset={{ x: xoff, y: yoff }}
-          initialZoom={0.95}
+          initialZoom={1.0}
         >
           <DePlane deplane={deplane} />
           {ds ? <DualSampas ds={ds.dualsampas} /> : null}

@@ -2,11 +2,15 @@ import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
 import Target from "./Target";
 
-const cursorPoint = (event, svg) => {
+const svgPoint = (x, y, svg) => {
   const point = svg.createSVGPoint();
-  point.x = event.clientX;
-  point.y = event.clientY;
+  point.x = x;
+  point.y = y;
   return point.matrixTransform(svg.getScreenCTM().inverse());
+};
+
+const cursorPoint = (event, svg) => {
+  return svgPoint(event.clientX, event.clientY, svg);
 };
 
 const SVGView = ({
@@ -17,16 +21,24 @@ const SVGView = ({
   initialZoom = 1
 }) => {
   const [point, setPoint] = useState(null);
+  const [panStart, setPanStart] = useState(null);
   const [zoom, setZoom] = useState(initialZoom);
   const [translation, setTranslation] = useState({
     x: initialOffset.x,
     y: initialOffset.y
   });
-  const [isPanning, setIsPanning] = useState(false);
+  const isPanning = () => panStart != null;
 
-  console.log("point=", point);
-  console.log("zoom=", zoom);
-  console.log("translation=", translation);
+  console.log(
+    "zoom=",
+    zoom,
+    "translation=",
+    translation,
+    "isPanning=",
+    isPanning(),
+    "point=",
+    point
+  );
   const svgRef = useRef();
   if (!geo) {
     return null;
@@ -46,7 +58,7 @@ const SVGView = ({
   let vx = geo.sx;
   let vy = geo.sy;
 
-  const transform = `translate(${translation.x},${translation.y}) scale(${zoom})`;
+  const transform = `scale(${zoom}) translate(${translation.x},${translation.y})`;
 
   console.log("transform=", transform);
   return (
@@ -56,7 +68,7 @@ const SVGView = ({
       height={h}
       viewBox={`0 0 ${vx} ${vy}`}
       onWheel={event => {
-        if (isPanning) {
+        if (isPanning()) {
           return;
         }
         if (!point) {
@@ -64,32 +76,39 @@ const SVGView = ({
         }
         let z = zoom + event.deltaY * -0.01;
         z = Math.min(Math.max(0.1, z), 10);
-        setZoom(z);
+        console.log(event.nativeEvent);
         setTranslation({
-          x: -translation.x * (zoom - 1),
-          y: -translation.y * (zoom - 1)
+          x: (point.x / zoom) * z - translation.x / zoom,
+          y: (point.y / zoom) * z - translation.y / zoom
         });
+        setZoom(z);
       }}
       onMouseLeave={() => setPoint(null)}
+      onContextMenu={event => {
+        event.preventDefault();
+        console.log("contextmenu");
+      }}
       onMouseDown={event => {
         event.preventDefault();
-        setIsPanning(true);
+        setPanStart({ x: point.x - translation.x, y: point.y - translation.y });
       }}
       onMouseUp={event => {
         event.preventDefault();
-        setIsPanning(false);
+        setPanStart(null);
       }}
       onMouseMove={event => {
         event.preventDefault();
         const p = cursorPoint(event, svgRef.current);
         setPoint(p);
-        if (!isPanning) {
+        if (!isPanning()) {
           return;
         }
-        setTranslation({
-          x: p.x,
-          y: p.y
-        });
+        if (p) {
+          setTranslation({
+            x: p.x - panStart.x,
+            y: p.y - panStart.y
+          });
+        }
       }}
     >
       <g className={classname} transform={transform}>

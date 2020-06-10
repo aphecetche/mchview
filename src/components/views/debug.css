@@ -1,0 +1,11 @@
+.debug {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2em;
+  background: #aaa;
+}
+
+svg {
+  background: #666;
+}
