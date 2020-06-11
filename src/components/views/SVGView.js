@@ -29,16 +29,8 @@ const SVGView = ({
   });
   const isPanning = () => panStart != null;
 
-  console.log(
-    "zoom=",
-    zoom,
-    "translation=",
-    translation,
-    "isPanning=",
-    isPanning(),
-    "point=",
-    point
-  );
+  const limitZoomRange = z => Math.min(Math.max(0.1, z), 10);
+
   const svgRef = useRef();
   if (!geo) {
     return null;
@@ -58,9 +50,8 @@ const SVGView = ({
   let vx = geo.sx;
   let vy = geo.sy;
 
-  const transform = `scale(${zoom}) translate(${translation.x},${translation.y})`;
+  const transform = `translate(${translation.x},${translation.y}) scale(${zoom})`;
 
-  console.log("transform=", transform);
   return (
     <svg
       ref={svgRef}
@@ -74,19 +65,19 @@ const SVGView = ({
         if (!point) {
           return;
         }
-        let z = zoom + event.deltaY * -0.01;
-        z = Math.min(Math.max(0.1, z), 10);
-        console.log(event.nativeEvent);
-        setTranslation({
-          x: (point.x / zoom) * z - translation.x / zoom,
-          y: (point.y / zoom) * z - translation.y / zoom
+        let newZoom = zoom + event.deltaY * -0.01;
+        newZoom = limitZoomRange(newZoom);
+        setTranslation(({ x, y }) => {
+          return {
+            x: point.x - (newZoom * (point.x - x)) / zoom,
+            y: point.y - (newZoom * (point.y - y)) / zoom
+          };
         });
-        setZoom(z);
+        setZoom(newZoom);
       }}
       onMouseLeave={() => setPoint(null)}
       onContextMenu={event => {
         event.preventDefault();
-        console.log("contextmenu");
       }}
       onMouseDown={event => {
         event.preventDefault();

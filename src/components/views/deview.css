@@ -1,9 +1,9 @@
 .deview {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   /* box-sizing: border-box; */
-  width: 100%;
   height: 100%;
   stroke: pink;
   stroke-width: 0.6;

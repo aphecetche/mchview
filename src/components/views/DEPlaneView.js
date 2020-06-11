@@ -38,7 +38,6 @@ const useEnvelop = id => {
 };
 
 const DePlaneView = ({ id }) => {
-  console.log("DePlaneView:id=", id);
   const history = useHistory();
 
   const { isLoading: isFetchingDePlane, geo: deplane } = useEnvelop(id);
@@ -53,11 +52,6 @@ const DePlaneView = ({ id }) => {
 
   let xoff = deplane ? -(deplane.x - deplane.sx / 2.0) : 0;
   let yoff = deplane ? -(deplane.y - deplane.sy / 2.0) : 0;
-
-  // if (deplane && id.deid < 500) {
-  //   xoff += deplane.sx / 2.0;
-  //   yoff += deplane.sy / 2.0;
-  // }
 
   return (
     <div className={styles.deview}>

@@ -23,7 +23,6 @@ const MchViewPort = () => {
       bending: searchParams.get("bending")
     };
   }
-  console.log("MchViewPort: id=", id);
   return (
     <div className={styles.mchviewport}>
       <Switch>

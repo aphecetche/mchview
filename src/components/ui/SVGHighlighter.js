@@ -25,17 +25,13 @@ const SVGHighlighter = ({ id, color = "yellow" }) => {
 
   const style = {
     stroke: color,
-    strokeWidth: 1,
+    strokeWidth: 0.7,
     fill: "none"
   };
   if (!poly.vertices) {
     return null;
   }
-  const a = categories.encode(id);
-  const b = categories.encode(poly.id);
   if (!isWithin(id, poly.id)) {
-    console.log("id=", id, "is not equal to id=", id);
-    console.log(a, b);
     return null;
   }
   return (
