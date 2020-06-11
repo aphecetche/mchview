@@ -286,7 +286,14 @@ export const describe = id => {
     rv += " " + id.deid;
   }
   if (w === deplane) {
-    rv += " " + id.deid + " (" + (id.bending ? "Bending" : "Non-Bending") + ")";
+    rv +=
+      " " +
+      id.deid +
+      " (" +
+      (id.bending == "true" || id.bending === true
+        ? "Bending"
+        : "Non-Bending") +
+      ")";
   }
   if (w === ds) {
     rv =

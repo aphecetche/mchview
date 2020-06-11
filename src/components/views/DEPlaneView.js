@@ -4,38 +4,12 @@ import DualSampas from "../elements/DualSampas";
 import DePlaneSelector from "../selectors/DePlaneSelector";
 import Loader from "react-loader-spinner";
 import PropTypes from "prop-types";
-import React, { useEffect } from "react";
+import React from "react";
 import SVGView from "./SVGView";
 import styles from "./deview.css";
-import * as envelop from "../../ducks/envelop";
-import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SVGHighlighter from "../ui/SVGHighlighter";
-
-const useEnvelop = id => {
-  const dispatch = useDispatch();
-
-  let isLoading = useSelector(state => {
-    return envelop.selectors.isLoading(state.envelop, id);
-  });
-
-  const geo = useSelector(state =>
-    envelop.selectors.envelop(state.envelop, id)
-  );
-
-  useEffect(() => {
-    if (!geo) {
-      if (!isLoading) {
-        dispatch(envelop.actions.fetch(id));
-      }
-    }
-  }, [geo, isLoading, id]);
-
-  return {
-    isLoading,
-    geo
-  };
-};
+import useEnvelop from "../../hooks/useEnvelop";
 
 const DePlaneView = ({ id }) => {
   const history = useHistory();
