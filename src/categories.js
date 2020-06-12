@@ -312,3 +312,4 @@ export const encode = id =>
     .replace(/ /g, "-");
 
 export { de, deplane, chamber, area, cluster, ds, pad };
+export const all = [de, deplane, chamber, area, cluster, ds, pad];

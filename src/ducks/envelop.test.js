@@ -1,4 +1,8 @@
-import reducer, { selectors, initialState, assertDE } from "./envelop";
+import reducer, {
+  selectors,
+  initialState,
+  assertDePlaneState
+} from "./envelop";
 import expect from "expect";
 
 describe("ctor", () => {
@@ -14,7 +18,10 @@ describe("envelop reducer", () => {
       300: {
         id: { deid: 300 },
         bending: {
-          isLoading: true
+          isLoading: true,
+          dualsampas: {
+            isLoading: false
+          }
         }
       }
     }
@@ -24,13 +31,19 @@ describe("envelop reducer", () => {
       100: {
         id: { deid: 100 },
         "non-bending": {
-          isLoading: true
+          isLoading: true,
+          dualsampas: {
+            isLoading: false
+          }
         }
       },
       300: {
         id: { deid: 300 },
         bending: {
-          isLoading: true
+          isLoading: true,
+          dualsampas: {
+            isLoading: false
+          }
         }
       }
     }
@@ -64,19 +77,22 @@ describe("envelop reducer", () => {
   });
 });
 
-describe("assert DE", () => {
+describe("assert DePlaneState", () => {
   const expected = {
     des: {
       100: {
         id: { deid: 100 },
         bending: {
-          isLoading: false
+          isLoading: false,
+          dualsampas: {
+            isLoading: false
+          }
         }
       }
     }
   };
   it("should return single des key starting from empty state", () => {
-    const got = assertDE({}, { deid: 100, bending: true });
+    const got = assertDePlaneState({}, { deid: 100, bending: true });
     expect(got).toEqual(expected);
   });
 });

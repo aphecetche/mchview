@@ -46,15 +46,15 @@ export default (state = initialState, action) => {
   }
   if (action.type === types.ALL) {
     let ns = cloneDeep(state);
-    Object.keys(categories).map(x => {
-      ns[x].show = true;
+    categories.all.map(x => {
+      ns[x.key].show = true;
     });
     return ns;
   }
   if (action.type === types.NONE) {
     let ns = cloneDeep(state);
-    Object.keys(categories).map(x => {
-      ns[x].show = false;
+    categories.all.map(x => {
+      ns[x.key].show = false;
     });
     return ns;
   }
@@ -93,10 +93,10 @@ export const selectors = {
     if (categories.isValidCategory(category)) {
       return state[category.key];
     }
-    return null;
+    return {};
   },
   getAllSelected: state =>
-    Object.keys(categories).every(x => state[x].show === true),
+    categories.all.every(x => state[x.key].show === true),
   getNoneSelected: state =>
-    Object.keys(categories).every(x => state[x].show === false)
+    categories.all.every(x => state[x.key].show === false)
 };

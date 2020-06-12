@@ -4,8 +4,8 @@ import { cloneDeep } from "lodash";
 import * as categories from "../categories";
 
 describe("actions", () => {
-  Object.keys(categories).map(x => {
-    const c = categories[x];
+  Object.keys(categories.all).map(x => {
+    const c = categories.all[x];
     it("should create an action to toggle outline of " + c.name, () => {
       const expected = {
         type: types.TOGGLE,
@@ -60,7 +60,7 @@ describe("selectors", () => {
           show: false
         }
       },
-      "de"
+      categories.de
     );
     expect(t).toEqual({ show: true, stroke: "#123456", strokeWidth: 0.42 });
   });

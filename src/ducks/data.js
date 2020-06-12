@@ -1,5 +1,3 @@
-import { selectors as globalSelectors } from "../reducers";
-
 // action types
 export const types = {
   SET: "DATA/SET",

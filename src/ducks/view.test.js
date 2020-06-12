@@ -12,7 +12,7 @@ describe("view reducer", () => {
   });
 
   it("should return a state with modified currentElement", () => {
-    const s = viewReducer(ini, actions.setCurrentElement({ a: 1, b: 2 }, "c"));
+    const s = viewReducer(ini, actions.setCurrentElement(ce));
     expect(s.currentElement).toEqual(ce);
   });
 });
@@ -20,7 +20,7 @@ describe("view reducer", () => {
 describe("view selector", () => {
   const ini = { deid: 501, bending: false };
   it("currentElement should be {id:{a:1,b:2},c}", () => {
-    const s = viewReducer(ini, actions.setCurrentElement({ a: 1, b: 2 }, "c"));
+    const s = viewReducer(ini, actions.setCurrentElement(ce));
     expect(selectors.currentElement(s)).toEqual(ce);
   });
 });

@@ -1,6 +1,4 @@
-import { actions as envelopActions } from "./envelop";
 import { cloneDeep } from "lodash";
-import * as categories from "../categories";
 
 // action types
 export const types = {
