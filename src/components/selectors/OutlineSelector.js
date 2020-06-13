@@ -1,9 +1,6 @@
 import React from "react";
 import styles from "./outlineselector.css";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { actions } from "../../ducks/outline.js";
-import { selectors } from "../../reducers";
 import OutlineSelectorButton from "./OutlineSelectorButton";
 
 const OutlineSelectorToggle = props => {
@@ -20,7 +17,7 @@ OutlineSelectorToggle.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
-const OutlineSelector = ({ elements, isVisible, isAvailable, toggle }) => (
+const OutlineSelector = ({ elements }) => (
   <div className={styles.outlineselector}>
     <ul>
       {elements.map(x => {
@@ -28,9 +25,9 @@ const OutlineSelector = ({ elements, isVisible, isAvailable, toggle }) => (
           <li key={x.name}>
             <OutlineSelectorButton
               label={x.name}
-              value={isVisible(x)}
-              onClick={() => (toggle ? toggle(x) : null)}
-              avail={isAvailable(x)}
+              value={x.visible}
+              onClick={() => (x.toggle ? x.toggle() : null)}
+              avail={x.available}
             />
           </li>
         );
@@ -40,22 +37,14 @@ const OutlineSelector = ({ elements, isVisible, isAvailable, toggle }) => (
 );
 
 OutlineSelector.propTypes = {
-  elements: PropTypes.array.isRequired,
-  isVisible: PropTypes.func.isRequired,
-  isAvailable: PropTypes.func.isRequired,
-  toggle: PropTypes.func
+  elements: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      visible: PropTypes.bool.isRequired,
+      available: PropTypes.bool.isRequired,
+      toggle: PropTypes.func
+    })
+  )
 };
 
-const mapStateToProps = state => {
-  return {
-    isVisible: x => selectors.isVisible(state, x),
-    isAvailable: true //x => selectors.isAvailable(state, x) FIXME: revisit the logic for this part
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    toggle: x => dispatch(actions.toggleOutline(x))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(OutlineSelector);
+export default OutlineSelector;

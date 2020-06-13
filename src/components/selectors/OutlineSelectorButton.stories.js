@@ -1,37 +1,43 @@
 import React from "react";
-import { storiesOf } from "@storybook/react";
 import OutlineSelectorButton from "./OutlineSelectorButton";
 
-storiesOf("OutlineSelectorButton", module)
-  .addDecorator(story => <div style={{ padding: "10px" }}>{story()}</div>)
-  .add("unselected, data unavail", () => (
-    <OutlineSelectorButton
-      label="An unchecked button"
-      value={false}
-      onClick={() => {}}
-    />
-  ))
-  .add("unselected, data avail", () => (
-    <OutlineSelectorButton
-      label="A checked button"
-      value={false}
-      onClick={() => {}}
-      avail={true}
-    />
-  ))
-  .add("selected, data avail", () => (
-    <OutlineSelectorButton
-      label="A checked button"
-      value={true}
-      onClick={() => {}}
-      avail={true}
-    />
-  ))
-  .add("selected, data unavail (=invalid state)", () => (
-    <OutlineSelectorButton
-      label="A checked button"
-      value={true}
-      onClick={() => {}}
-      avail={false}
-    />
-  ));
+export default {
+  component: OutlineSelectorButton,
+  title: "Outline/SelectorButton",
+  decorators: [storyFn => <div style={{ padding: "10px" }}>{storyFn()}</div>]
+};
+
+export const UnselectedDataUnvail = () => (
+  <OutlineSelectorButton
+    label="An unchecked button"
+    value={false}
+    onClick={() => {}}
+  />
+);
+
+export const UnselectedDataAvail = () => (
+  <OutlineSelectorButton
+    label="A checked button"
+    value={false}
+    onClick={() => {}}
+    avail={true}
+  />
+);
+
+export const SelectedDataAvail = () => (
+  <OutlineSelectorButton
+    label="A checked button"
+    value={true}
+    onClick={() => {}}
+    avail={true}
+  />
+);
+
+export const SelectedDataUnvail = () => (
+  <OutlineSelectorButton
+    label="A checked button"
+    value={true}
+    onClick={() => {}}
+    avail={false}
+  />
+);

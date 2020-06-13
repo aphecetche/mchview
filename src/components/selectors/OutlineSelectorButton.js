@@ -2,6 +2,10 @@ import React from "react";
 import styles from "./outlineselectorbutton.css";
 import PropTypes from "prop-types";
 
+/**
+ * Use `OutlineSelectorButton` to control the look of the outline
+ * of one detector part
+ */
 const OutlineSelectorButton = ({ label, value, onClick, avail }) => {
   if (value == true && avail == false) {
     return <p>Invalid OutlineSelectorButton state</p>;

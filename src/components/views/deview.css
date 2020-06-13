@@ -29,6 +29,10 @@
 .loader {
   margin: 1rem auto;
 
+  & svg {
+    background: transparent;
+  }
+
   & line {
     stroke: var(--text-color);
   }
