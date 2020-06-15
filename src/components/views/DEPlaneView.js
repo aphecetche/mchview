@@ -12,6 +12,7 @@ import SVGHighlighter from "../ui/SVGHighlighter";
 import useEnvelop from "../../hooks/useEnvelop";
 import OutlineSelector from "../selectors/OutlineSelector";
 import * as categories from "../../categories";
+import OutlineStyleSelector from "../selectors/OutlineStyleSelector";
 
 const DePlaneView = ({ id }) => {
   const history = useHistory();
@@ -20,6 +21,16 @@ const DePlaneView = ({ id }) => {
   const { isLoading: isFetchingDualSampas, geo: ds } = useEnvelop({
     ...id,
     dsid: null
+  });
+
+  const [deOutlineStyle, setDeOutlineStyle] = useState({
+    stroke: "blue",
+    strokeWidth: 1
+  });
+
+  const [dsOutlineStyle, setDsOutlineStyle] = useState({
+    stroke: "yellow",
+    strokeWidth: 1
   });
 
   const dsAvailable =
@@ -53,6 +64,18 @@ const DePlaneView = ({ id }) => {
   return (
     <div className={styles.deview}>
       <OutlineSelector elements={elements} />
+      <OutlineStyleSelector
+        value={deOutlineStyle.strokeWidth}
+        onChange={value => {
+          setDeOutlineStyle({ ...deOutlineStyle, strokeWidth: value });
+        }}
+      />
+      <OutlineStyleSelector
+        value={dsOutlineStyle.strokeWidth}
+        onChange={value => {
+          setDsOutlineStyle({ ...dsOutlineStyle, strokeWidth: value });
+        }}
+      />
       <DePlaneSelector
         id={id}
         setDEID={(deid, bending) => {
@@ -69,9 +92,9 @@ const DePlaneView = ({ id }) => {
           initialOffset={{ x: xoff, y: yoff }}
           initialZoom={1.0}
         >
-          <DePlane deplane={deplane} />
+          <DePlane outlineStyle={deOutlineStyle} deplane={deplane} />
           {isDsVisible && dsAvailable ? (
-            <DualSampas ds={ds.dualsampas} />
+            <DualSampas outlineStyle={dsOutlineStyle} ds={ds.dualsampas} />
           ) : null}
           {/* <Area /> */}
           <SVGHighlighter id={id} color="red" />

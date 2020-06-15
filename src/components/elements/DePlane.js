@@ -14,7 +14,6 @@ const DePlane = ({ deplane, outlineStyle }) => {
   return (
     <SVGGroup groupname="deplane" style={outlineStyle}>
       <Polygon
-        classname="deplane"
         key={encode(deplane.id)}
         prefix="DE"
         poly={deplane}

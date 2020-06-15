@@ -23,7 +23,7 @@ const fetchMiddleware = store => next => action => {
   };
   next(makeFetchAction(action));
 
-  const debugTimeOut = 1000;
+  const debugTimeOut = 0;
 
   setTimeout(() => {
     axios
