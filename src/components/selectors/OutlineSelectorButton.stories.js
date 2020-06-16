@@ -1,43 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import OutlineSelectorButton from "./OutlineSelectorButton";
+
+const onChangeDefault = () => {};
 
 export default {
   component: OutlineSelectorButton,
   title: "Outline/SelectorButton",
-  decorators: [storyFn => <div style={{ padding: "10px" }}>{storyFn()}</div>]
+  decorators: [
+    storyFn => (
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        {storyFn()}
+      </div>
+    )
+  ]
 };
 
-export const UnselectedDataUnvail = () => (
+export const UncheckedDisabled = () => (
   <OutlineSelectorButton
     label="An unchecked button"
     value={false}
-    onClick={() => {}}
+    onChange={onChangeDefault}
+    disabled
   />
 );
 
-export const UnselectedDataAvail = () => (
-  <OutlineSelectorButton
-    label="A checked button"
-    value={false}
-    onClick={() => {}}
-    avail={true}
-  />
-);
+const label = value => `A ${value ? "checked" : "unchecked"}  button`;
 
-export const SelectedDataAvail = () => (
+export const Unchecked = () => {
+  const [value, setValue] = useState(false);
+
+  return (
+    <OutlineSelectorButton
+      label={label(value)}
+      value={value}
+      onChange={event => {
+        setValue(event.target.checked);
+      }}
+    />
+  );
+};
+
+export const Checked = () => {
+  const [value, setValue] = useState(true);
+  return (
+    <OutlineSelectorButton
+      label={label(value)}
+      value={value}
+      onChange={event => {
+        setValue(event.target.checked);
+      }}
+    />
+  );
+};
+
+export const CheckedDisabled = () => (
   <OutlineSelectorButton
     label="A checked button"
     value={true}
-    onClick={() => {}}
-    avail={true}
-  />
-);
-
-export const SelectedDataUnvail = () => (
-  <OutlineSelectorButton
-    label="A checked button"
-    value={true}
-    onClick={() => {}}
-    avail={false}
+    onChange={onChangeDefault}
+    disabled
   />
 );

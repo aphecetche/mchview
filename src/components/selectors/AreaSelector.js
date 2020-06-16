@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import styles from "./areaselector.css";
 import { selectors } from "../../reducers";
 import { actions } from "../../ducks/area";
 
@@ -10,17 +9,9 @@ const ValueSelector = ({ name, value, setValue }) => {
     setValue(e.target.value);
   };
   return (
-    <div className={styles.valueselector}>
-      <label htmlFor={name} className={styles.valuelabel}>
-        {name}
-      </label>
-      <input
-        className={styles.valueinput}
-        id={name}
-        value={value}
-        type="text"
-        onChange={onChange}
-      />
+    <div>
+      <label htmlFor={name}>{name}</label>
+      <input id={name} value={value} type="text" onChange={onChange} />
     </div>
   );
 };
@@ -28,7 +19,7 @@ const ValueSelector = ({ name, value, setValue }) => {
 const AreaSelector = ({ area, setXmin, setXmax, setYmin, setYmax }) => {
   return (
     <>
-      <form className={styles.valueselector} noValidate>
+      <form noValidate>
         <ValueSelector name="xmin" value={area.xmin} setValue={setXmin} />
         <ValueSelector name="ymin" value={area.ymin} setValue={setYmin} />
         <ValueSelector name="xmax" value={area.xmax} setValue={setXmax} />
@@ -56,7 +47,4 @@ const mapDispathToProps = dispatch => ({
   setYmax: value => dispatch(actions.setYmax(value))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispathToProps
-)(AreaSelector);
+export default connect(mapStateToProps, mapDispathToProps)(AreaSelector);

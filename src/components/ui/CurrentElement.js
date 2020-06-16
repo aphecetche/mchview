@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./currentelement.css";
 import { connect } from "react-redux";
 import { selectors } from "../../reducers";
 import { describe, isvalid } from "../../categories";
@@ -8,21 +7,17 @@ import PropTypes from "prop-types";
 export const PureCurrentElement = ({ id, value }) => {
   if (!id) {
     return (
-      <div className={styles.currentelement}>
+      <div>
         <p>No current element under the (mouse) cursor.</p>
       </div>
     );
   }
   return (
-    <div className={styles.currentelement}>
+    <div>
       <ul>
         <li>
           {describe(id)}
-          {isvalid(id) ? (
-            ""
-          ) : (
-            <span className={styles.invalid}>[ Invalid ID ]</span>
-          )}
+          {isvalid(id) ? "" : <span>[ Invalid ID ]</span>}
         </li>
         {value ? (
           <li>

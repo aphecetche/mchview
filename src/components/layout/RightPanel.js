@@ -1,19 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import styles from "./rightpanel.css";
 import { selectors } from "../../reducers";
 import { actions } from "../../ducks/visibility";
 import VerticalOpenCloseButton from "../ui/VerticalOpenCloseButton";
 
 const RightPanel = ({ visible, toggleVisibility, children }) => {
   return (
-    <div className={styles.rightpanel}>
+    <div>
       <VerticalOpenCloseButton
         isOpening={!visible}
         onClick={() => toggleVisibility()}
       />
-      {visible ? <div className={styles.panelcontent}>{children}</div> : null}
+      {visible ? <div>{children}</div> : null}
     </div>
   );
 };
@@ -33,7 +32,4 @@ const mapDispatchToProps = dispatch => {
     toggleVisibility: () => dispatch(actions.toggleRightPanel())
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RightPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(RightPanel);

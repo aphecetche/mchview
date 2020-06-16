@@ -4,10 +4,19 @@ import DeView from "../views/DeView";
 import DePlaneView from "../views/DePlaneView";
 import AllView from "../views/AllView";
 import DebugView from "../views/DebugView";
-import Display from "../views/Display";
-import styles from "./mchviewport.css";
+import { makeStyles } from "@material-ui/core/styles";
 
+const useStyles = makeStyles({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    boxSizing: "border-box",
+    width: "100%",
+    height: "100%"
+  }
+});
 const NotFound = () => <h1>404... Boooh</h1>;
+
 const MchViewPort = () => {
   let location = useLocation();
   let searchParams = new URLSearchParams(location.search);
@@ -20,11 +29,12 @@ const MchViewPort = () => {
   if (searchParams.has("deid") && searchParams.has("bending")) {
     id = {
       deid: searchParams.get("deid"),
-      bending: searchParams.get("bending")
+      bending: searchParams.get("bending") === "true"
     };
   }
+  const classes = useStyles();
   return (
-    <div className={styles.mchviewport}>
+    <div className={classes.root}>
       <Switch>
         <Route
           exact
@@ -36,7 +46,6 @@ const MchViewPort = () => {
         <Route exact path="/all/:a/:b" component={AllView} />
         <Route exact path="/debug" render={() => <DebugView />} />
         <Route exact path="/debug2" render={() => <DebugView id={id} />} />
-        <Route exact path="/display" component={Display} />
         <Route component={NotFound} />
       </Switch>
     </div>

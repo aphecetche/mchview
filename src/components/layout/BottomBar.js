@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./bottombar.css";
 import CurrentElement from "../ui/CurrentElement";
 
 // import DataSourceCreateButton from "../ui/DataSourceCreateButton";
@@ -12,7 +11,7 @@ import CurrentElement from "../ui/CurrentElement";
 
 const BottomBar = () => {
   return (
-    <div className={styles.bottombar}>
+    <div>
       {/* <DataSourceCreateButton /> */}
       {/* <DataSourceSelector /> */}
       {/* <DataSourceListButton listDataSources={() => listDataSources()} /> */}

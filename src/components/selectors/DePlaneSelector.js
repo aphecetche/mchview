@@ -1,52 +1,69 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import styles from "./deplaneselector.css";
 import { isValidDeId, listOfValidDeIds } from "../../categories";
-import * as envelop from "../../ducks/envelop";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { makeStyles } from "@material-ui/core/styles";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
-const deListPattern = () => {
-  const rv = listOfValidDeIds.join("|");
-  return rv;
+const useStyles = makeStyles({
+  root: {
+    width: "8em"
+  }
+});
+
+const delist = listOfValidDeIds.map(x => x.toString());
+
+const stationId = x => {
+  const chamber = Math.trunc(+x / 100) + 1;
+  const station = Math.trunc(chamber / 2);
+  return "Station " + station;
 };
 
-const DePlaneSelector = ({ id, setDEID }) => {
+const DePlaneSelector = ({ id, setId }) => {
   const { deid, bending } = id;
   if (!isValidDeId(deid)) {
     return "Invalid DE";
   }
-  const label = envelop.dePlaneName(bending);
+  const classes = useStyles();
   return (
-    <div className={styles.deplaneselector}>
-      <label htmlFor={styles.denumberselector}>DE</label>
-      <input
-        id={styles.denumberselector}
-        pattern={deListPattern()}
-        required="required"
-        size="4"
-        defaultValue={deid}
-        onChange={e => {
-          if (e.target.validity.valid) {
-            setDEID(e.target.value, bending);
-          }
-        }}
+    <Box display="flex">
+      <Autocomplete
+        id="deid-selector"
+        options={delist}
+        disableClearable
+        groupBy={stationId}
+        value={deid.toString()}
+        onChange={(event, newValue) => setId({ deid: newValue, bending })}
+        renderInput={params => (
+          <TextField
+            {...params}
+            className={classes.root}
+            variant="outlined"
+            label="DE"
+          />
+        )}
       />
-      <label htmlFor={styles.planeselector}>{label}</label>
-      <input
-        id={styles.planeselector}
-        type="checkbox"
-        defaultChecked={bending}
-        onChange={e => {
-          setDEID(deid, e.target.checked);
-        }}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={bending}
+            onChange={() => setId({ deid: deid, bending: !bending })}
+          />
+        }
+        label="bending"
+        labelPlacement="start"
       />
-    </div>
+    </Box>
   );
 };
 
 DePlaneSelector.propTypes = {
   id: PropTypes.object.isRequired,
-  setDEID: PropTypes.func.isRequired
+  setId: PropTypes.func.isRequired
 };
 
 export default DePlaneSelector;

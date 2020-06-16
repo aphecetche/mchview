@@ -1,41 +1,60 @@
 import React from "react";
-import styles from "./outlineselectorbutton.css";
 import PropTypes from "prop-types";
+import Box from "@material-ui/core/Box";
+import Switch from "@material-ui/core/Switch";
+import IconButton from "@material-ui/core/IconButton";
+import BorderColorIcon from "@material-ui/icons/BorderColor";
+import LineWeightIcon from "@material-ui/icons/LineWeight";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { makeStyles } from "@material-ui/core/styles";
 
 /**
  * Use `OutlineSelectorButton` to control the look of the outline
  * of one detector part
  */
-const OutlineSelectorButton = ({ label, value, onClick, avail }) => {
-  if (value == true && avail == false) {
-    return <p>Invalid OutlineSelectorButton state</p>;
+
+const useStyles = makeStyles({
+  root: {
+    display: "inline-block",
+    "& button": {
+      padding: "5px"
+    }
   }
-  if (value == false && avail == false) {
-    // disable click for invalid state
-    onClick = () => {};
-  }
+});
+
+const OutlineSelectorButton = ({ label, value, onChange, disabled }) => {
+  const classes = useStyles();
   return (
-    <div className={styles.outlineselectorbutton}>
-      <input
-        type="checkbox"
-        id={label}
-        readOnly
-        checked={value}
-        onClick={() => onClick()}
+    <Box className={classes.root}>
+      <IconButton
+        color="primary"
+        disabled={disabled}
+        arial-label="expand outline color panel"
+      >
+        <BorderColorIcon />
+      </IconButton>
+      <IconButton
+        color="primary"
+        disabled={disabled}
+        aria-label="expand outline width panel"
+      >
+        <LineWeightIcon />
+      </IconButton>
+      <FormControlLabel
+        control={
+          <Switch checked={value} onChange={onChange} disabled={disabled} />
+        }
+        label={label}
       />
-      <label htmlFor={label}>
-        {label}
-        <span className={avail ? styles.avail : styles.unavail}></span>
-      </label>
-    </div>
+    </Box>
   );
 };
 
 OutlineSelectorButton.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.bool.isRequired,
-  onClick: PropTypes.func.isRequired,
-  avail: PropTypes.bool
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool
 };
 
 export default OutlineSelectorButton;

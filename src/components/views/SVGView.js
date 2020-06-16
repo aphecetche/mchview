@@ -15,7 +15,6 @@ const cursorPoint = (event, svg) => {
 
 const SVGView = ({
   geo,
-  classname,
   children,
   initialOffset = { x: 0, y: 0 },
   initialZoom = 1
@@ -102,9 +101,7 @@ const SVGView = ({
         }
       }}
     >
-      <g className={classname} transform={transform}>
-        {children}
-      </g>
+      <g transform={transform}>{children}</g>
       <Target x={0} y={0} color="red" />
       <Target x={vx / 2} y={vy / 2} color="green" />
       <Target x={vx} y={vy} color="blue" />
@@ -125,7 +122,6 @@ SVGView.propTypes = {
     y: PropTypes.number
   }),
   initialZoom: PropTypes.number,
-  classname: PropTypes.string.isRequired,
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 

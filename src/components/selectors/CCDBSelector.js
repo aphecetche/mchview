@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import CloseButton from "../ui/CloseButton";
 import FetchButton from "../ui/FetchButton";
-import styles from "./ccdbselector.css";
 import { connect } from "react-redux";
 import { actions as visibilityActions } from "../../ducks/visibility";
 import { selectors } from "../../reducers";
@@ -17,8 +16,8 @@ const CCDBSelector = ({ deid, title, hideModal }) => {
   let url = useRef();
 
   return (
-    <main className={styles.ccdbselector}>
-      <header className={styles.ccdbselector}>
+    <main>
+      <header>
         <h1>{title}</h1>
         <CloseButton />
       </header>
@@ -65,7 +64,4 @@ const mapDispatchToProps = dispatch => {
     hideModal: () => dispatch(visibilityActions.hideModal())
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CCDBSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(CCDBSelector);

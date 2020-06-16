@@ -1,12 +1,11 @@
 /* eslint react/prop-types: 0 */
 
 import React from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 //import OutlineSelector from "../selectors/OutlineSelector";
 //import * as categories from "../../categories";
 
 //      <OutlineSelector elements={[categories.deplane]} />
-import styles from "./debug.css";
 
 const DEFAULT_WIDTH = 600;
 const DEFAULT_HEIGHT = 400;
@@ -42,7 +41,7 @@ const DebugView = () => {
   return (
     <React.Fragment>
       <p>DebugView</p>
-      <div className={styles.debug}>
+      <div>
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`}>
           <g transform=""></g>
           <Rect transform={`scale(${scale})`} />
