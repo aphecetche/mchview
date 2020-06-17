@@ -5,7 +5,7 @@ import DePlaneView from "../views/DePlaneView";
 import AllView from "../views/AllView";
 import DebugView from "../views/DebugView";
 import { makeStyles } from "@material-ui/core/styles";
-
+import WriteEnvelop from "../views/WriteEnvelop";
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -21,15 +21,30 @@ const MchViewPort = () => {
   let location = useLocation();
   let searchParams = new URLSearchParams(location.search);
   let id = null;
+
+  const asInt = name => {
+    const parsed = parseInt(searchParams.get(name), 10);
+    if (isNaN(parsed)) {
+      return null;
+    }
+    return parsed;
+  };
+
   if (searchParams.has("deid")) {
     id = {
-      deid: searchParams.get("deid")
+      deid: asInt("deid")
     };
   }
-  if (searchParams.has("deid") && searchParams.has("bending")) {
+  if (searchParams.has("bending")) {
     id = {
-      deid: searchParams.get("deid"),
+      ...id,
       bending: searchParams.get("bending") === "true"
+    };
+  }
+  if (searchParams.has("deid") && searchParams.has("dsid")) {
+    id = {
+      ...id,
+      dsid: asInt("dsid")
     };
   }
   const classes = useStyles();
@@ -46,6 +61,11 @@ const MchViewPort = () => {
         <Route exact path="/all/:a/:b" component={AllView} />
         <Route exact path="/debug" render={() => <DebugView />} />
         <Route exact path="/debug2" render={() => <DebugView id={id} />} />
+        <Route
+          exact
+          path="/write-envelop"
+          render={() => <WriteEnvelop id={id} />}
+        />
         <Route component={NotFound} />
       </Switch>
     </div>

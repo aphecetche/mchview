@@ -1,6 +1,6 @@
 import viewReducer, { actions, selectors } from "./view.js";
 import expect from "expect";
-import initialState from "../initialState.json";
+import initialState from "../store/initialState.json";
 
 const ce = { id: { a: 1, b: 2 }, value: "c" };
 

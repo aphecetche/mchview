@@ -42,13 +42,13 @@ const DePlaneView = ({ id }) => {
   });
 
   const [deOutlineStyle, setDeOutlineStyle] = useState({
-    stroke: "blue",
-    strokeWidth: 1
+    stroke: "lightpink",
+    strokeWidth: 0.7
   });
 
   const [dsOutlineStyle, setDsOutlineStyle] = useState({
-    stroke: "yellow",
-    strokeWidth: 1
+    stroke: "lightyellow",
+    strokeWidth: 0.5
   });
 
   const dsAvailable =

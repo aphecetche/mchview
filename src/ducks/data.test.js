@@ -1,6 +1,6 @@
 import dataReducer, { actions, types, selectors } from "./data.js";
 import expect from "expect";
-import initialState from "../initialState.json";
+import initialState from "../../initialState.json";
 
 describe("actions", () => {
   it("should create an action to set the data with 2 dsids", () => {

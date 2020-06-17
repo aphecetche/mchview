@@ -1,6 +1,7 @@
 import { normalize, schema } from "normalizr";
 import { merge, cloneDeep } from "lodash";
 import * as categories from "../categories";
+import de100 from "../store/detection-element-100-all-dual-sampas.json";
 
 const mappingServer = () => "http://localhost:8080/v2";
 
@@ -9,7 +10,8 @@ export const dePlaneName = bending => {
 };
 
 // initial state
-export const initialState = {};
+// export const initialState = {};
+export const initialState = { ...de100 };
 
 export const assertDePlaneState = (state, { deid, bending }) => {
   let newState = cloneDeep(state);
@@ -112,6 +114,11 @@ export default (state = initialState, action) => {
 export const actions = {
   fetch: id => {
     switch (categories.whatis(id)) {
+      case categories.de:
+        return [
+          actions.fetch({ deid: id.deid, bending: true }),
+          actions.fetch({ deid: id.deid, bending: false })
+        ];
       case categories.deplane:
         return {
           type: "DEPLANE",
@@ -128,8 +135,22 @@ export const actions = {
           }
         };
       case categories.ds:
+        console.log(
+          "envelop.js fetch id=",
+          id,
+          categories.describe(id),
+          categories.isSpecific(id)
+        );
         if (categories.isSpecific(id)) {
-          throw "not implemented for a given dsid";
+          throw "not implemented for a given dsid=" + JSON.stringify(id);
+        }
+        if (!categories.hasBending(id)) {
+          return [
+            actions.fetch({ deid: id.deid, bending: true }),
+            actions.fetch({ deid: id.deid, bending: false }),
+            actions.fetch({ deid: id.deid, bending: true, dsid: null }),
+            actions.fetch({ deid: id.deid, bending: false, dsid: null })
+          ];
         }
         return {
           type: "DUALSAMPAS",
@@ -158,6 +179,11 @@ export const selectors = {
       return undefined;
     }
     switch (categories.whatis(id)) {
+      case categories.de:
+        if (state.des) {
+          return state.des[id.deid];
+        }
+        return undefined;
       case categories.deplane:
         if (state.des && state.des[id.deid]) {
           return state.des[id.deid][dePlaneName(id.bending)];
@@ -178,6 +204,13 @@ export const selectors = {
     }
   },
   isLoading: (state, id) => {
+    switch (categories.whatis(id)) {
+      case categories.de:
+        return (
+          selectors.isLoading(state, { deid: id.deid, bending: false }) ||
+          selectors.isLoading(state, { deid: id.deid, bending: true })
+        );
+    }
     const envelop = selectors.envelop(state, id);
     if (envelop) {
       return envelop.isLoading;

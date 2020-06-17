@@ -7,7 +7,7 @@ const de = {
   key: "de"
 };
 const deplane = {
-  name: "Detection Element Plane",
+  name: "Plane",
   key: "deplane"
 };
 const ds = {
@@ -40,7 +40,7 @@ export const isValidCategory = c => {
 
 export const isSpecific = id => {
   const w = whatis(id);
-  if (w === undefined) {
+  if (w == null) {
     return false;
   }
   switch (w) {
@@ -49,18 +49,21 @@ export const isSpecific = id => {
     case deplane:
       return id.bending !== null;
     case ds:
-      return id.dsid !== null;
+      return id.dsid !== null && id.bending !== null;
     default:
-      throw "not implemented";
+      throw "isSpecific not implemented for id=" +
+        JSON.stringify(id) +
+        " of category " +
+        w.name;
   }
 };
 
 export const whatis = id => {
-  if (id === undefined) {
-    return undefined;
+  if (id == null) {
+    return null;
   }
   if (isEmpty(id)) {
-    return undefined;
+    return null;
   }
   if (id.hasOwnProperty("clusterid") && id.hasOwnProperty("deid")) {
     return cluster;
@@ -73,11 +76,7 @@ export const whatis = id => {
   ) {
     return pad;
   }
-  if (
-    id.hasOwnProperty("deid") &&
-    id.hasOwnProperty("bending") &&
-    id.hasOwnProperty("dsid")
-  ) {
+  if (id.hasOwnProperty("deid") && id.hasOwnProperty("dsid")) {
     return ds;
   }
   if (id.hasOwnProperty("bending") && id.hasOwnProperty("deid")) {
@@ -89,8 +88,117 @@ export const whatis = id => {
   if (id.hasOwnProperty("chid")) {
     return chamber;
   }
-  return undefined;
+  return null;
 };
+
+export const isValidDeId = deid => {
+  if (isNaN(deid)) {
+    return false;
+  }
+  return listOfValidDeIds.includes(parseInt(deid, 10));
+};
+
+export const isValid = id => {
+  //TODO: get the real values from the mapping API at startup instead
+  const w = whatis(id);
+  if (w === de) {
+    return isValidDeId(id.deid);
+  }
+  if (w === deplane) {
+    return isValidDeId(id.deid) && id.bending !== null;
+  }
+  if (w === ds) {
+    return !(isNaN(id.dsid) || id.dsid === null);
+  }
+  return false;
+};
+
+export const hasBending = id => {
+  return id.bending != null && id.hasOwnProperty("bending");
+};
+
+/* get the parent object of id
+ */
+
+export const parent = id => {
+  const w = whatis(id);
+  switch (w) {
+    case null:
+      return null;
+    case de:
+      return null;
+    case deplane:
+      return { deid: id.deid };
+    case ds:
+      if (hasBending(id)) {
+        return { deid: id.deid, bending: id.bending };
+      }
+      return { deid: id.deid };
+    default:
+      throw "parent(id) must be implemented for id=" +
+        JSON.stringify(id) +
+        " of category " +
+        w.name;
+  }
+};
+
+export const nameAll = id => {
+  const w = whatis(id);
+  if (w == null) {
+    return "";
+  }
+  let rv = "";
+
+  const p = parent(id);
+  if (isSpecific(p)) {
+    rv = describe(p);
+  }
+  if (rv != "") {
+    rv += " ";
+  }
+
+  rv += "All " + whatis(id).name + "s";
+  return rv;
+};
+
+const nameInvalid = w => {
+  return "invalid" + w.name;
+};
+
+export const describe = id => {
+  const w = whatis(id);
+  if (w == null) {
+    return "";
+  }
+  if (!isSpecific(id)) {
+    return nameAll(id);
+  }
+  if (!isValid(id)) {
+    return nameInvalid(id);
+  }
+  switch (w) {
+    case de:
+      return w.name + " " + id.deid;
+    case deplane:
+      return (
+        describe(parent(id)) +
+        " " +
+        (id.bending == "true" || id.bending === true
+          ? "Bending"
+          : "Non-Bending") +
+        " " +
+        w.name
+      );
+    case ds: {
+      return describe(parent(id)) + " " + w.name + " " + id.dsid;
+    }
+  }
+};
+
+export const encode = id =>
+  describe(id)
+    .toLowerCase()
+    .replace(/ /g, "-");
 
 export const listOfValidDeIds = [
   100,
@@ -250,66 +358,6 @@ export const listOfValidDeIds = [
   1024,
   1025
 ];
-
-export const isValidDeId = deid => {
-  if (isNaN(deid)) {
-    return false;
-  }
-  return listOfValidDeIds.includes(parseInt(deid, 10));
-};
-
-export const isvalid = id => {
-  //TODO: get the real values from the mapping API at startup instead
-  const w = whatis(id);
-  if (w === de) {
-    return isValidDeId(id.deid);
-  }
-  if (w === deplane) {
-    return isValidDeId(id.deid) && id.bending !== null;
-  }
-  if (w === ds) {
-    return !(isNaN(id.dsid) || id.dsid === null);
-  }
-  return false;
-};
-
-export const describe = id => {
-  const w = whatis(id);
-  if (w === undefined) {
-    return "undefined id";
-  }
-  let rv = w.name;
-  if (!isvalid(id)) {
-    return rv;
-  }
-  if (w === de) {
-    rv += " " + id.deid;
-  }
-  if (w === deplane) {
-    rv +=
-      " " +
-      id.deid +
-      " (" +
-      (id.bending == "true" || id.bending === true
-        ? "Bending"
-        : "Non-Bending") +
-      ")";
-  }
-  if (w === ds) {
-    rv =
-      describe({ deid: id.deid, bending: id.bending }) +
-      " " +
-      w.name +
-      " " +
-      id.dsid;
-  }
-  return rv;
-};
-
-export const encode = id =>
-  describe(id)
-    .toLowerCase()
-    .replace(/ /g, "-");
 
 export { de, deplane, chamber, area, cluster, ds, pad };
 export const all = [de, deplane, chamber, area, cluster, ds, pad];

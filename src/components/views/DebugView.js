@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 
 import React from "react";
+import { useDispatch } from "react-redux";
 //import PropTypes from "prop-types";
 //import OutlineSelector from "../selectors/OutlineSelector";
 //import * as categories from "../../categories";
@@ -34,10 +35,25 @@ const Rect = ({
   );
 };
 
+const mappingServer = () => "http://localhost:8080/v2";
+
 const DebugView = () => {
   const w = DEFAULT_WIDTH;
   const h = DEFAULT_HEIGHT;
   const scale = 0.5;
+  const dispatch = useDispatch();
+  dispatch({
+    type: "PADLIST",
+    payload: {
+      request: {
+        method: "post",
+        url: mappingServer() + "/padlist",
+        data: {
+          deid: 102
+        }
+      }
+    }
+  });
   return (
     <React.Fragment>
       <p>DebugView</p>

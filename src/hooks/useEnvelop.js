@@ -16,7 +16,12 @@ const useEnvelop = id => {
   useEffect(() => {
     if (!geo) {
       if (!isLoading) {
-        dispatch(envelop.actions.fetch(id));
+        const actions = envelop.actions.fetch(id);
+        if (Array.isArray(actions)) {
+          actions.map(a => dispatch(a));
+        } else {
+          dispatch(actions);
+        }
       }
     }
   }, [geo, isLoading, id]);
