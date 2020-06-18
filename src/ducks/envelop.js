@@ -10,8 +10,8 @@ export const dePlaneName = bending => {
 };
 
 // initial state
-// export const initialState = {};
-export const initialState = { ...de100 };
+export const initialState = {};
+///export const initialState = { ...de100 };
 
 export const assertDePlaneState = (state, { deid, bending }) => {
   let newState = cloneDeep(state);

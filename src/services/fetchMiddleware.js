@@ -8,6 +8,9 @@ import axios from "axios";
 //
 
 const fetchMiddleware = store => next => action => {
+  if (!action.payload) {
+    return next(action);
+  }
   if (!action.payload.request) {
     return next(action);
   }

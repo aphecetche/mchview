@@ -5,7 +5,7 @@ import DePlaneView from "../views/DePlaneView";
 import AllView from "../views/AllView";
 import DebugView from "../views/DebugView";
 import { makeStyles } from "@material-ui/core/styles";
-import WriteEnvelop from "../views/WriteEnvelop";
+
 const useStyles = makeStyles({
   root: {
     display: "flex",
@@ -61,11 +61,6 @@ const MchViewPort = () => {
         <Route exact path="/all/:a/:b" component={AllView} />
         <Route exact path="/debug" render={() => <DebugView />} />
         <Route exact path="/debug2" render={() => <DebugView id={id} />} />
-        <Route
-          exact
-          path="/write-envelop"
-          render={() => <WriteEnvelop id={id} />}
-        />
         <Route component={NotFound} />
       </Switch>
     </div>
