@@ -12,6 +12,7 @@ const colorDS = scaleSequential()
   .interpolator(interpolateViridis);
 
 const DualSampas = ({ ds, outlineStyle }) => {
+  console.log("DualSampas ds=", ds);
   if (ds === undefined) {
     return null;
   }

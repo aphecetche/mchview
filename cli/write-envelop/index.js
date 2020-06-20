@@ -6,8 +6,11 @@ import * as yargs from "yargs";
 
 const store = configureStore();
 
-let id = { deid: yargs.argv.deid, dsid: null };
+let id = { deid: yargs.argv.deid };
 
+if (yargs.argv.dsid) {
+  id = { ...id, dsid: yargs.argv.dsid };
+}
 store.subscribe(() => {
   const state = store.getState().envelop;
   if (!selectors.isLoading(state, id)) {

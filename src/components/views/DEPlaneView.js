@@ -33,6 +33,7 @@ import Box from "@material-ui/core/Box";
 }
 
 const DePlaneView = ({ id }) => {
+  console.log("DePlaneView id=", id);
   const history = useHistory();
 
   const { isLoading: isFetchingDePlane, geo: deplane } = useEnvelop(id);
@@ -51,8 +52,7 @@ const DePlaneView = ({ id }) => {
     strokeWidth: 0.5
   });
 
-  const dsAvailable =
-    isFetchingDualSampas === false && ds != null && ds.dualsampas != null;
+  const dsAvailable = isFetchingDualSampas === false && ds != null;
 
   const dePlaneAvailable = isFetchingDePlane === false && deplane != null;
 
@@ -109,7 +109,7 @@ const DePlaneView = ({ id }) => {
             <DePlane outlineStyle={deOutlineStyle} deplane={deplane} />
           )}
           {isDsVisible && dsAvailable ? (
-            <DualSampas outlineStyle={dsOutlineStyle} ds={ds.dualsampas} />
+            <DualSampas outlineStyle={dsOutlineStyle} ds={ds} />
           ) : null}
           {/* <Area /> */}
           <SVGHighlighter id={id} color="red" />

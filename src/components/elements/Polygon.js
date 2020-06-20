@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { encode } from "../../categories";
 
 const Polygon = ({ poly, fillColor, classname }) => {
+  console.log("poly=", poly);
   const dispatch = useDispatch();
 
   const st = {

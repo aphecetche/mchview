@@ -1,7 +1,9 @@
 import { normalize, schema } from "normalizr";
-import { merge, cloneDeep } from "lodash";
+//import { merge, cloneDeep } from "lodash";
 import * as categories from "../categories";
-import de100 from "../store/detection-element-100-all-dual-sampas.json";
+//import de100 from "../store/detection-element-100-all-dual-sampas.json";
+import { isEqual, omit, defaultsDeep } from "lodash";
+import produce from "immer";
 
 const mappingServer = () => "http://localhost:8080/v2";
 
@@ -11,110 +13,91 @@ export const dePlaneName = bending => {
 
 // initial state
 export const initialState = {};
+
 ///export const initialState = { ...de100 };
 
-export const assertDePlaneState = (state, { deid, bending }) => {
-  let newState = cloneDeep(state);
-  const planeName = dePlaneName(bending);
-  if (!state.des || !state.des[deid] || !state.des[deid][planeName]) {
-    let de = {
-      des: {
-        [deid]: {
-          id: { deid: deid },
-          [planeName]: {
-            isLoading: false,
-            dualsampas: {
-              isLoading: false
-            }
-          }
+export const setIsLoading = (draft, id) => {
+  defaultsDeep(draft, { isLoading: [] });
+  draft.isLoading.push(id);
+};
+
+export const clearIsLoading = (draft, id) => {
+  if (draft.isLoading) {
+    draft.isLoading = draft.isLoading.filter(i => !isEqual(id, i));
+  }
+};
+
+const deIdAndPlaneName = id => {
+  return { deid: id.deid, planeName: dePlaneName(id.bending) };
+};
+
+const reshapeDualSampas = payload => {
+  const dep = payload.id;
+  const dualsampa = new schema.Entity("dualsampas", undefined, {
+    // append the deid to the dualsampa object
+    processStrategy: entity =>
+      Object.assign(
+        {},
+        {
+          ...entity,
+          id: { deid: dep.deid, bending: dep.bending, dsid: entity.id },
+          value: entity.id
         }
-      }
-    };
-    merge(newState, de);
-  }
-  return newState;
-};
-
-const requestSent = (state, id) => {
-  let s = assertDePlaneState(state, id);
-  const envelop = selectors.envelop(s, id);
-  envelop["isLoading"] = true;
-  return s;
-};
-
-const requestFailed = (state, id) => {
-  let s = assertDePlaneState(state, id);
-  const envelop = selectors.envelop(s, id);
-  envelop["isLoading"] = false;
-  return s;
-};
-
-const receive = (state, id, newdata) => {
-  let s = assertDePlaneState(state, id);
-  const envelop = selectors.envelop(s, id);
-  envelop["isLoading"] = false;
-  if (newdata !== undefined) {
-    merge(envelop, newdata);
-  }
-  return s;
+      )
+  });
+  const normalizedData = normalize(payload.response, [dualsampa]);
+  return {
+    dualsampas: normalizedData.entities.dualsampas,
+    dsids: normalizedData.result
+  };
 };
 
 // reducer
-export default (state = initialState, action) => {
-  if (state === undefined) {
-    return initialState;
-  }
-
+export default produce((draft, action) => {
   if (action.type == "FETCH_DUALSAMPAS") {
-    return requestSent(state, action.payload.id);
+    return setIsLoading(draft, action.payload.id);
   }
   if (action.type == "ERROR_DUALSAMPAS") {
-    return requestFailed(state, action.payload.id);
+    return clearIsLoading(draft, action.payload.id);
   }
-
   if (action.type == "RECEIVE_DUALSAMPAS") {
-    const dep = action.payload.id;
-    const dualsampa = new schema.Entity("dualsampas", undefined, {
-      // append the deid to the dualsampa object
-      processStrategy: entity =>
-        Object.assign(
-          {},
-          {
-            ...entity,
-            id: { deid: dep.deid, bending: dep.bending, dsid: entity.id },
-            value: entity.id
-          }
-        )
+    clearIsLoading(draft, action.payload.id);
+    const { deid, planeName } = deIdAndPlaneName(action.payload.id);
+    defaultsDeep(draft, {
+      des: { [deid]: { [planeName]: { dualsampas: {} } } }
     });
-    const normalizedData = normalize(action.payload.response, [dualsampa]);
-    const newdata = {
-      dualsampas: normalizedData.entities.dualsampas,
-      dsids: normalizedData.result
-    };
-    return receive(state, action.payload.id, newdata);
+    if (action.payload.response) {
+      draft.des[deid][planeName].dualsampas = reshapeDualSampas(
+        action.payload
+      ).dualsampas;
+    }
   }
 
   if (action.type == "FETCH_DEPLANE") {
-    return requestSent(state, action.payload.id);
+    return setIsLoading(draft, action.payload.id);
   }
   if (action.type == "ERROR_DEPLANE") {
-    return requestFailed(state, action.payload.id);
+    return clearIsLoading(draft, action.payload.id);
   }
-
   if (action.type == "RECEIVE_DEPLANE") {
-    const id = action.payload.id;
-    const { id: y, bending: x, ...object } = action.payload.response;
-    const newdata = { id, ...object };
-    return receive(state, action.payload.id, newdata);
+    const newdata = omit(action.payload.response, ["id", "bending"]);
+    clearIsLoading(draft, action.payload.id);
+    const { deid, planeName } = deIdAndPlaneName(action.payload.id);
+    defaultsDeep(draft, {
+      des: { [deid]: { [planeName]: {} } }
+    });
+    draft.des[deid][planeName] = newdata;
   }
-  return state;
-};
+}, initialState);
 
 // action creators
 export const actions = {
   fetch: id => {
     switch (categories.whatis(id)) {
       case categories.de:
+        if (!categories.isSpecific(id)) {
+          throw "implement loop over de here";
+        }
         return [
           actions.fetch({ deid: id.deid, bending: true }),
           actions.fetch({ deid: id.deid, bending: false })
@@ -135,12 +118,6 @@ export const actions = {
           }
         };
       case categories.ds:
-        console.log(
-          "envelop.js fetch id=",
-          id,
-          categories.describe(id),
-          categories.isSpecific(id)
-        );
         if (categories.isSpecific(id)) {
           throw "not implemented for a given dsid=" + JSON.stringify(id);
         }
@@ -172,49 +149,52 @@ export const actions = {
   }
 };
 
+/*
+ * Extract from the state a polygon describing the envelop of the given element
+ */
+const extractEnvelop = (state, id) => {
+  if (state.des === undefined) {
+    return undefined;
+  }
+  switch (categories.whatis(id)) {
+    case categories.de:
+      if (state.des) {
+        return state.des[id.deid];
+      }
+      return undefined;
+    case categories.deplane:
+      if (
+        state.des &&
+        state.des[id.deid] &&
+        state.des[id.deid][dePlaneName(id.bending)]
+      ) {
+        return {
+          id,
+          ...state.des[id.deid][dePlaneName(id.bending)]
+        };
+      }
+      return undefined;
+    case categories.ds:
+      if (
+        state.des &&
+        state.des[id.deid] &&
+        state.des[id.deid][dePlaneName(id.bending)] &&
+        state.des[id.deid][dePlaneName(id.bending)].dualsampas
+      ) {
+        return state.des[id.deid][dePlaneName(id.bending)].dualsampas;
+      }
+      return undefined;
+    default:
+      throw "category for " + JSON.stringify(id) + " not handled (yet?)";
+  }
+};
+
 // selectors
 export const selectors = {
-  envelop: (state, id) => {
-    if (state.des === undefined) {
-      return undefined;
-    }
-    switch (categories.whatis(id)) {
-      case categories.de:
-        if (state.des) {
-          return state.des[id.deid];
-        }
-        return undefined;
-      case categories.deplane:
-        if (state.des && state.des[id.deid]) {
-          return state.des[id.deid][dePlaneName(id.bending)];
-        }
-        return undefined;
-      case categories.ds:
-        if (
-          state.des &&
-          state.des[id.deid] &&
-          state.des[id.deid][dePlaneName(id.bending)] &&
-          state.des[id.deid][dePlaneName(id.bending)].dualsampas
-        ) {
-          return state.des[id.deid][dePlaneName(id.bending)].dualsampas;
-        }
-        return undefined;
-      default:
-        throw "category for " + JSON.stringify(id) + " not handled (yet?)";
-    }
-  },
+  envelop: (state, id) => extractEnvelop(state, id),
   isLoading: (state, id) => {
-    switch (categories.whatis(id)) {
-      case categories.de:
-        return (
-          selectors.isLoading(state, { deid: id.deid, bending: false }) ||
-          selectors.isLoading(state, { deid: id.deid, bending: true })
-        );
-    }
-    const envelop = selectors.envelop(state, id);
-    if (envelop) {
-      return envelop.isLoading;
-    }
-    return false;
+    return state.isLoading
+      ? state.isLoading.findIndex(i => isEqual(i, id)) >= 0
+      : false;
   }
 };
