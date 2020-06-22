@@ -13,6 +13,12 @@ const isWithin = (parent, child) => {
   ) {
     return parent.deid == child.deid && parent.bending == child.bending;
   }
+  if (
+    categories.whatis(parent) == categories.deplane &&
+    categories.whatis(child) == categories.pad
+  ) {
+    return parent.deid == child.deid;
+  }
   return false;
 };
 
@@ -22,18 +28,25 @@ const SVGHighlighter = ({ id, color = "yellow" }) => {
   if (!poly) {
     return null;
   }
-
-  const style = {
-    stroke: color,
-    strokeWidth: 0.7,
-    fill: "none"
-  };
   if (!poly.vertices) {
     return null;
   }
   if (!isWithin(id, poly.id)) {
     return null;
   }
+
+  const sizeIncreaseFactor = 1.5;
+
+  const style = {
+    ...poly.style,
+    fill: "none",
+    stroke: color,
+    strokeWidth: Math.max(
+      0.01,
+      parseFloat(poly.style.strokeWidth, 10) * sizeIncreaseFactor
+    )
+  };
+
   return (
     <polygon
       className="toto"

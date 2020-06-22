@@ -16,7 +16,7 @@
     "build:cli": "webpack --config webpack.cli.js",
     "storybook": "start-storybook -p 6006 --ci",
     "build-storybook": "build-storybook",
-    "write-envelop": "node cli/write-envelop"
+    "write-envelop": "node cli/write-envelop/wrap.js"
   },
   "keywords": [],
   "author": "",

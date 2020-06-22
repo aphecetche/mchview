@@ -37,6 +37,33 @@ describe("whatis", () => {
       categories.ds
     );
   });
+  it("deid:null, bending:null, dsid:null, dsch: null should be pad", () => {
+    expect(
+      categories.whatis({ deid: null, bending: null, dsid: null, dsch: null })
+    ).toBe(categories.pad);
+  });
+  it("deid:null, padid: null should be pad", () => {
+    expect(categories.whatis({ deid: null, padid: null })).toBe(categories.pad);
+  });
+});
+
+describe("parent", () => {
+  it("deid:819 dsid:1 parent should be deid:819", () => {
+    expect(categories.parent({ deid: 819, dsid: 1 })).toStrictEqual({
+      deid: 819
+    });
+  });
+  it("deid:819 padid:1 parent should be deid:819 ", () => {
+    expect(categories.parent({ deid: 819, padid: 1 })).toStrictEqual({
+      deid: 819
+    });
+  });
+  it("deid:819 dsid:1 dsch:1 parent should be deid:819 dsid:1", () => {
+    expect(categories.parent({ deid: 819, dsid: 1, dsch: 1 })).toStrictEqual({
+      deid: 819,
+      dsid: 1
+    });
+  });
 });
 
 describe("isValid", () => {
@@ -62,6 +89,12 @@ describe("isValid", () => {
       true
     );
   });
+  it("deid:501,dsid:2,dsch:3 should be valid", () => {
+    expect(categories.isValid({ deid: 501, dsid: 2, dsch: 3 })).toBe(true);
+  });
+  it("deid:501,padid:3 should be valid", () => {
+    expect(categories.isValid({ deid: 501, padid: 3 })).toBe(true);
+  });
 });
 
 describe("nameAll", () => {
@@ -86,6 +119,30 @@ describe("nameAll", () => {
   it("deid:510 dsid:null should be Detection Element 510 All Dual Sampas", () => {
     expect(categories.nameAll({ deid: 510, dsid: null })).toBe(
       "Detection Element 510 All Dual Sampas"
+    );
+  });
+
+  it("deid:510 dsid:1 dsch:null should be Detection Element 510 Dual Sampa 1 All Pads", () => {
+    expect(categories.nameAll({ deid: 510, dsid: 1, dsch: null })).toBe(
+      "Detection Element 510 Dual Sampa 1 All Pads"
+    );
+  });
+
+  it("deid:510 padid:null should be Detection Element 510 All Pads", () => {
+    expect(categories.nameAll({ deid: 510, padid: null })).toBe(
+      "Detection Element 510 All Pads"
+    );
+  });
+
+  it("deid:510 bending:true padid:null should be Detection Element 510 Bending Plane All Pads", () => {
+    expect(categories.nameAll({ deid: 510, bending: true, padid: null })).toBe(
+      "Detection Element 510 Bending Plane All Pads"
+    );
+  });
+
+  it("deid:510 bending:false padid:null should be Detection Element 510 Non-Bending Plane All Pads", () => {
+    expect(categories.nameAll({ deid: 510, bending: false, padid: null })).toBe(
+      "Detection Element 510 Non-Bending Plane All Pads"
     );
   });
 });
@@ -127,6 +184,16 @@ describe("describe", () => {
       "Detection Element 501 Bending Plane Dual Sampa 2"
     );
   });
+  it("deid:501,dsid:2,dsch:3 should be Detection Element Plane 501 Bending Plane Dual Sampa 2 Channel 3", () => {
+    expect(categories.describe({ deid: 501, dsid: 2, dsch: 3 })).toBe(
+      "Detection Element 501 Dual Sampa 2 Channel 3"
+    );
+  });
+  it("deid:501,padid:1 should be Detection Element Plane 501 Bending Plane PadId 1", () => {
+    expect(categories.describe({ deid: 501, padid: 1 })).toBe(
+      "Detection Element 501 PadId 1"
+    );
+  });
 });
 
 describe("replace", () => {
@@ -158,5 +225,18 @@ describe("isSpecific", () => {
   });
   it("deid:501 dsid:1024 should be specific", () => {
     expect(categories.isSpecific({ deid: 501, dsid: 1024 })).toBe(true);
+  });
+  it("deid:501 padid:1 should be specific", () => {
+    expect(categories.isSpecific({ deid: 501, padid: 1 })).toBe(true);
+  });
+  it("deid:501 padid:null should not be specific", () => {
+    expect(categories.isSpecific({ deid: 501, padid: null })).toBe(false);
+  });
+});
+
+describe("decode", () => {
+  it("decode 1-2-3 should yield id={deid:1,dsid:2,dsch:3}", () => {
+    const expected = { deid: 1, dsid: 2, dsch: 3 };
+    expect(categories.decode("1-2-3")).toStrictEqual(expected);
   });
 });

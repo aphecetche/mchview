@@ -15,7 +15,6 @@ const useEnvelop = id => {
     envelop.selectors.envelop(state.envelop, id)
   );
 
-  console.log("id", id, "isLoading", isLoading, "geo", geo);
   useEffect(() => {
     if (!geo) {
       if (!isLoading && count < 10) {

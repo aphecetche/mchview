@@ -9,7 +9,7 @@ const store = configureStore();
 let id = { deid: yargs.argv.deid };
 
 if (yargs.argv.dsid) {
-  id = { ...id, dsid: yargs.argv.dsid };
+  id = { ...id, dsid: yargs.argv.dsid === "null" ? null : yargs.argv.dsid };
 }
 store.subscribe(() => {
   const state = store.getState().envelop;
@@ -19,8 +19,11 @@ store.subscribe(() => {
       describe(id)
         .toLowerCase()
         .replace(/ /g, "-") + ".json";
-    console.log(filename, json.length);
-    fs.writeFileSync(filename, json);
+    console.log(filename, json.length, state.isLoading.length);
+    if (state.isLoading.length == 0) {
+      console.log("write");
+      fs.writeFileSync(filename, json);
+    }
   }
 });
 const fa = actions.fetch(id);

@@ -80,7 +80,10 @@ const SVGView = ({
       }}
       onMouseDown={event => {
         event.preventDefault();
-        setPanStart({ x: point.x - translation.x, y: point.y - translation.y });
+        setPanStart({
+          x: point.x - translation.x,
+          y: point.y - translation.y
+        });
       }}
       onMouseUp={event => {
         event.preventDefault();

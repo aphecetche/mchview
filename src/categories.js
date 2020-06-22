@@ -50,6 +50,11 @@ export const isSpecific = id => {
       return id.bending !== null;
     case ds:
       return id.dsid !== null && id.bending !== null;
+    case pad:
+      if (id.hasOwnProperty("padid")) {
+        return id.padid !== null;
+      }
+      return id.dsch !== null;
     default:
       throw "isSpecific not implemented for id=" +
         JSON.stringify(id) +
@@ -68,11 +73,13 @@ export const whatis = id => {
   if (id.hasOwnProperty("clusterid") && id.hasOwnProperty("deid")) {
     return cluster;
   }
+  if (id.hasOwnProperty("deid") && id.hasOwnProperty("padid")) {
+    return pad;
+  }
   if (
     id.hasOwnProperty("deid") &&
-    id.hasOwnProperty("bending") &&
     id.hasOwnProperty("dsid") &&
-    id.hasOwnProperty("padid")
+    id.hasOwnProperty("dsch")
   ) {
     return pad;
   }
@@ -105,10 +112,16 @@ export const isValid = id => {
     return isValidDeId(id.deid);
   }
   if (w === deplane) {
-    return isValidDeId(id.deid) && id.bending !== null;
+    return isValid(parent(id)) && id.bending !== null;
   }
   if (w === ds) {
-    return !(isNaN(id.dsid) || id.dsid === null);
+    return isValid(parent(id)) && !(isNaN(id.dsid) || id.dsid === null);
+  }
+  if (w === pad) {
+    if (id.hasOwnProperty("padid")) {
+      return isValid(parent(id)) && !isNaN(id.padid);
+    }
+    return isValid(parent(id)) && !isNaN(id.dsch);
   }
   return false;
 };
@@ -134,6 +147,16 @@ export const parent = id => {
         return { deid: id.deid, bending: id.bending };
       }
       return { deid: id.deid };
+    case pad: {
+      let p = { deid: id.deid };
+      if (id.hasOwnProperty("bending")) {
+        p = { deid: id.deid, bending: id.bending };
+      }
+      if (id.hasOwnProperty("dsid")) {
+        p = { deid: id.deid, dsid: id.dsid };
+      }
+      return p;
+    }
     default:
       throw "parent(id) must be implemented for id=" +
         JSON.stringify(id) +
@@ -192,6 +215,12 @@ export const describe = id => {
     case ds: {
       return describe(parent(id)) + " " + w.name + " " + id.dsid;
     }
+    case pad: {
+      if (id.hasOwnProperty("padid")) {
+        return describe(parent(id)) + " " + "PadId " + id.padid;
+      }
+      return describe(parent(id)) + " Channel " + id.dsch;
+    }
   }
 };
 
@@ -199,6 +228,18 @@ export const encode = id =>
   describe(id)
     .toLowerCase()
     .replace(/ /g, "-");
+
+/* Return { deid:X, dsid: Y, dsch: Z } for id="X-Y-Z"
+ */
+export const decode = s => {
+  let a = s.split("-");
+  const id = {
+    deid: Number(a[0]),
+    dsid: Number(a[1]),
+    dsch: Number(a[2])
+  };
+  return id;
+};
 
 export const listOfValidDeIds = [
   100,

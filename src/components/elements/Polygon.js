@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import { actions as viewActions } from "../../ducks/view";
 import { useDispatch } from "react-redux";
 import { encode } from "../../categories";
+import { pickBy } from "lodash";
 
 const Polygon = ({ poly, fillColor, classname }) => {
-  console.log("poly=", poly);
   const dispatch = useDispatch();
+  const element = useRef(null);
 
   const st = {
     fill: fillColor ? fillColor : "red",
@@ -16,16 +17,27 @@ const Polygon = ({ poly, fillColor, classname }) => {
   let comp = <p>Polygon is not defined</p>;
 
   if (poly) {
+    //window.getComputedStyle()
+    //
     comp = (
       <polygon
         className={classname}
+        ref={element}
         id={encode(poly.id)}
         key={encode(poly.id)}
         data-value={poly.value}
         points={poly.vertices.map(v => [v.x, v.y].join(","))}
         style={st}
         onMouseEnter={() => {
-          dispatch(viewActions.setCurrentElement(poly));
+          dispatch(
+            viewActions.setCurrentElement({
+              ...poly,
+              style: pickBy(
+                window.getComputedStyle(element.current),
+                (value, key) => key.startsWith("stroke")
+              )
+            })
+          );
         }}
         onMouseOut={() => {
           dispatch(viewActions.setCurrentElement(null));

@@ -12,6 +12,8 @@ import * as categories from "../../categories";
 //import OutlineStyleSelector from "../selectors/OutlineStyleSelector";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
+import Cluster from "../elements/Cluster";
+import pads from "../../store/cluster.json";
 
 {
   /* <OutlineStyleSelector */
@@ -32,8 +34,11 @@ import Box from "@material-ui/core/Box";
   /* /> */
 }
 
+const cluster = {
+  ...pads
+};
+
 const DePlaneView = ({ id }) => {
-  console.log("DePlaneView id=", id);
   const history = useHistory();
 
   const { isLoading: isFetchingDePlane, geo: deplane } = useEnvelop(id);
@@ -48,7 +53,7 @@ const DePlaneView = ({ id }) => {
   });
 
   const [dsOutlineStyle, setDsOutlineStyle] = useState({
-    stroke: "lightyellow",
+    stroke: "lightblue",
     strokeWidth: 0.5
   });
 
@@ -56,8 +61,11 @@ const DePlaneView = ({ id }) => {
 
   const dePlaneAvailable = isFetchingDePlane === false && deplane != null;
 
+  const clusterAvailable = true;
+
   const [isDsVisible, setIsDsVisible] = useState(false);
   const [isDePlaneVisible, setIsDePlaneVisible] = useState(true);
+  const [isClusterVisible, setIsClusterVisible] = useState(true);
 
   if (isFetchingDePlane === true || isFetchingDualSampas === true) {
     return <CircularProgress />;
@@ -82,6 +90,15 @@ const DePlaneView = ({ id }) => {
     available: dsAvailable,
     toggle: () => {
       setIsDsVisible(v => !v);
+    }
+  });
+
+  elements.push({
+    name: categories.cluster.name,
+    visible: isClusterVisible && clusterAvailable,
+    available: clusterAvailable,
+    toggle: () => {
+      setIsClusterVisible(v => !v);
     }
   });
 
@@ -110,6 +127,12 @@ const DePlaneView = ({ id }) => {
           )}
           {isDsVisible && dsAvailable ? (
             <DualSampas outlineStyle={dsOutlineStyle} ds={ds} />
+          ) : null}
+          {isClusterVisible && clusterAvailable ? (
+            <>
+              <Cluster bending={id.bending} cluster={cluster} />
+              <Cluster bending={!id.bending} cluster={cluster} />
+            </>
           ) : null}
           {/* <Area /> */}
           <SVGHighlighter id={id} color="red" />
