@@ -55,6 +55,8 @@ export const isSpecific = id => {
         return id.padid !== null;
       }
       return id.dsch !== null;
+    case cluster:
+      return id.clusteri !== null;
     default:
       throw "isSpecific not implemented for id=" +
         JSON.stringify(id) +
@@ -123,6 +125,9 @@ export const isValid = id => {
     }
     return isValid(parent(id)) && !isNaN(id.dsch);
   }
+  if (w === cluster) {
+    return true;
+  }
   return false;
 };
 
@@ -156,6 +161,9 @@ export const parent = id => {
         p = { deid: id.deid, dsid: id.dsid };
       }
       return p;
+    }
+    case cluster: {
+      return { deid: id.deid };
     }
     default:
       throw "parent(id) must be implemented for id=" +
@@ -220,6 +228,9 @@ export const describe = id => {
         return describe(parent(id)) + " " + "PadId " + id.padid;
       }
       return describe(parent(id)) + " Channel " + id.dsch;
+    }
+    case cluster: {
+      return describe(parent(id)) + " " + w.name + " " + id.clusterid;
     }
   }
 };
