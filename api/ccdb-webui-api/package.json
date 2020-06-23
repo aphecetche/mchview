@@ -1,0 +1,8 @@
+{
+  "name": "ccdb-webui",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "webpack --config webpack.backend.js --watch",
+    "build": "webpack --config webpack.backend.js"
+  }
+}
