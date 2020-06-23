@@ -7,7 +7,7 @@
     "postinstall": "run-p install:api install:app",
     "install:api": "cd api && npm install",
     "install:app": "cd app && npm install",
-    "start": "run -p start:api start:app",
+    "start": "run-p start:api start:app",
     "start:api": "npm run start --prefix api",
     "start:app": "npm run start --prefix app",
     "build": "run-p build:api build:app",

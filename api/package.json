@@ -1,0 +1,20 @@
+{
+  "name": "mchview-ccdb-webuis",
+  "version": "1.0.0",
+  "private": true,
+  "license": "ISC",
+  "scripts": {
+    "postinstall": "run-p install:clusters",
+    "install:ccdb-webui": "cd ccdb-webui && npm install",
+    "install:clusters": "cd clusters && npm install",
+    "start": "run-p start:clusters",
+    "start:ccdb-webui": "npm run start --prefix ccdb-webui",
+    "start:clusters": "npm run start --prefix clusters",
+    "build": "run-p build:clusters",
+    "build:ccdb-webui": "cd ccdb-webui && npm run build && cd..",
+    "build:clusters": "cd clusters && npm run build && cd.."
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
