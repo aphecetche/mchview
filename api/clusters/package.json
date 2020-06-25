@@ -1,17 +1,19 @@
 {
   "name": "clusters",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "webpack-dev-server --open"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sprintf-js": "^1.1.2",
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
@@ -19,6 +21,7 @@
     "@babel/register": "^7.10.3",
     "@std/esm": "^0.26.0",
     "@webpack-cli/init": "^0.3.0",
+    "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "eslint": "^7.3.1",
@@ -26,6 +29,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "html-webpack-plugin": "^4.3.0",
+    "jest": "^26.1.0",
     "nodemon-webpack-plugin": "^4.3.2",
     "prettier-eslint-cli": "^5.0.0",
     "terser-webpack-plugin": "^3.0.6",
