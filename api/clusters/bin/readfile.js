@@ -1,6 +1,8 @@
+#!/usr/bin/env node
+
 import fs from "fs";
-import * as aliceo2 from "./aliceo2.js";
-import * as mch from "./mch.js";
+import * as aliceo2 from "../src/aliceo2.js";
+import * as mch from "../src/mch.js";
 import { strict as assert } from "assert"
 import yargs from "yargs";
 

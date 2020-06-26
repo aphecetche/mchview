@@ -8,6 +8,9 @@
     "test": "jest",
     "start": "webpack-dev-server --open"
   },
+  "bin": {
+          "youpi": "./bin/readfile.js"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
