@@ -11,11 +11,18 @@ const useEnvelop = id => {
     envelop.selectors.isLoading(state.envelop, id)
   );
 
+  let isError = useSelector(state =>
+    envelop.selectors.isError(state.envelop, id)
+  );
+
   const geo = useSelector(state =>
     envelop.selectors.envelop(state.envelop, id)
   );
 
   useEffect(() => {
+    if (isError) {
+      return;
+    }
     if (!geo) {
       if (!isLoading && count < 10) {
         setCount(count => count + 1);
@@ -31,6 +38,7 @@ const useEnvelop = id => {
 
   return {
     isLoading,
+    isError,
     geo
   };
 };

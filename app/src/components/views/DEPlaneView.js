@@ -14,6 +14,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
 import Cluster from "../elements/Cluster";
 import pads from "../../store/cluster.json";
+import Alert from "@material-ui/lab/Alert";
 
 {
   /* <OutlineStyleSelector */
@@ -38,11 +39,21 @@ const cluster = {
   ...pads
 };
 
+const ErrorMessage = ({ message }) => <Alert severity="error">{message}</Alert>;
+
 const DePlaneView = ({ id }) => {
   const history = useHistory();
 
-  const { isLoading: isFetchingDePlane, geo: deplane } = useEnvelop(id);
-  const { isLoading: isFetchingDualSampas, geo: ds } = useEnvelop({
+  const {
+    isLoading: isFetchingDePlane,
+    isError: isErrorDePlane,
+    geo: deplane
+  } = useEnvelop(id);
+  const {
+    isLoading: isFetchingDualSampas,
+    isError: isErrorDualSampas,
+    geo: ds
+  } = useEnvelop({
     ...id,
     dsid: null
   });
@@ -66,6 +77,12 @@ const DePlaneView = ({ id }) => {
   const [isDsVisible, setIsDsVisible] = useState(false);
   const [isDePlaneVisible, setIsDePlaneVisible] = useState(true);
   const [isClusterVisible, setIsClusterVisible] = useState(true);
+
+  if (isErrorDePlane === true || isErrorDualSampas === true) {
+    return (
+      <ErrorMessage message="Could not get data : is the mapping API alive ?" />
+    );
+  }
 
   if (isFetchingDePlane === true || isFetchingDualSampas === true) {
     return <CircularProgress />;

@@ -19,11 +19,24 @@ export const initialState = {};
 export const setIsLoading = (draft, id) => {
   defaultsDeep(draft, { isLoading: [] });
   draft.isLoading.push(id);
+  clearIsError(draft, id);
+};
+
+export const setIsError = (draft, id) => {
+  defaultsDeep(draft, { isError: [] });
+  draft.isError.push(id);
+  clearIsLoading(draft, id);
 };
 
 export const clearIsLoading = (draft, id) => {
   if (draft.isLoading) {
     draft.isLoading = draft.isLoading.filter(i => !isEqual(id, i));
+  }
+};
+
+export const clearIsError = (draft, id) => {
+  if (draft.isError) {
+    draft.isError = draft.isError.filter(i => !isEqual(id, i));
   }
 };
 
@@ -57,8 +70,8 @@ export default produce((draft, action) => {
   if (action.type == "FETCH_DUALSAMPAS") {
     return setIsLoading(draft, action.payload.id);
   }
-  if (action.type == "ERROR_DUALSAMPAS") {
-    return clearIsLoading(draft, action.payload.id);
+  if (action.type == "ERROR_FETCH_DUALSAMPAS") {
+    return setIsError(draft, action.payload.id);
   }
   if (action.type == "RECEIVE_DUALSAMPAS") {
     clearIsLoading(draft, action.payload.id);
@@ -76,8 +89,8 @@ export default produce((draft, action) => {
   if (action.type == "FETCH_DEPLANE") {
     return setIsLoading(draft, action.payload.id);
   }
-  if (action.type == "ERROR_DEPLANE") {
-    return clearIsLoading(draft, action.payload.id);
+  if (action.type == "ERROR_FETCH_DEPLANE") {
+    return setIsError(draft, action.payload.id);
   }
   if (action.type == "RECEIVE_DEPLANE") {
     const newdata = omit(action.payload.response, ["id", "bending"]);
@@ -195,6 +208,11 @@ export const selectors = {
   isLoading: (state, id) => {
     return state.isLoading
       ? state.isLoading.findIndex(i => isEqual(i, id)) >= 0
+      : false;
+  },
+  isError: (state, id) => {
+    return state.isError
+      ? state.isError.findIndex(i => isEqual(i, id)) >= 0
       : false;
   }
 };

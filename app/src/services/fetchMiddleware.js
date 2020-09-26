@@ -45,7 +45,8 @@ const fetchMiddleware = store => next => action => {
         const nextAction = {
           type: "ERROR_FETCH_" + action.type,
           payload: {
-            message: error
+            message: error,
+            id: action.payload.request.id
           }
         };
         next(nextAction);
